@@ -161,15 +161,54 @@ Item {
         font.bold: true
     }
 
+    Text {
+        id: resetMeasureText
+        visible: false
+        text: typeof I18n !== "undefined" ? I18n.t("music.audio.reset", "Reset") : "Reset"
+        font.family: ThemeBackend.fontFamily
+        font.pixelSize: root.s(11.5)
+        font.bold: true
+    }
+
     property real actionBtnMorph: 0.0
+    property real audioHeaderProgress: 0.0
     property real presetSlideProgress: 0.0
 
     readonly property real eqActionBtnWidth: Math.max(root.s(68), eqMeasureText.implicitWidth + root.s(26))
+    readonly property real audioActionBtnWidth: Math.max(root.s(88), resetMeasureText.implicitWidth + root.s(44))
     readonly property real lyricsActionBtnWidth: Math.max(root.s(116), lyricsMeasureText.implicitWidth + root.s(44))
-    readonly property real actionBtnCurrentWidth: eqActionBtnWidth + (lyricsActionBtnWidth - eqActionBtnWidth) * actionBtnMorph
+    readonly property real actionBtnCurrentWidth: actionBtnMorph <= 1.0
+        ? eqActionBtnWidth + (audioActionBtnWidth - eqActionBtnWidth) * actionBtnMorph
+        : audioActionBtnWidth + (lyricsActionBtnWidth - audioActionBtnWidth) * (actionBtnMorph - 1.0)
 
     ParallelAnimation {
         id: toLyricsAnim
+        running: false
+        NumberAnimation {
+            target: root
+            property: "actionBtnMorph"
+            to: 2.0
+            duration: 420
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            target: root
+            property: "presetSlideProgress"
+            to: 1.0
+            duration: 400
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            target: root
+            property: "audioHeaderProgress"
+            to: 0.0
+            duration: 320
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    ParallelAnimation {
+        id: toAudioAnim
         running: false
         NumberAnimation {
             target: root
@@ -183,6 +222,13 @@ Item {
             property: "presetSlideProgress"
             to: 1.0
             duration: 400
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            target: root
+            property: "audioHeaderProgress"
+            to: 1.0
+            duration: 320
             easing.type: Easing.OutCubic
         }
     }
@@ -202,6 +248,13 @@ Item {
             property: "presetSlideProgress"
             to: 0.0
             duration: 400
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            target: root
+            property: "audioHeaderProgress"
+            to: 0.0
+            duration: 320
             easing.type: Easing.OutCubic
         }
     }
@@ -1481,16 +1534,17 @@ Item {
                                 root.updateLyricsSubscription();
                                 if (currentIndex === 2) {
                                     toEqAnim.stop();
+                                    toAudioAnim.stop();
                                     toLyricsAnim.restart();
                                     root.restoreLastSavedEqualizer();
                                 } else if (currentIndex === 1) {
                                     toEqAnim.stop();
                                     toLyricsAnim.stop();
-                                    root.actionBtnMorph = 0.0;
-                                    root.presetSlideProgress = 1.0;
+                                    toAudioAnim.restart();
                                     root.restoreLastSavedEqualizer();
                                 } else {
                                     toLyricsAnim.stop();
+                                    toAudioAnim.stop();
                                     root.restoreLastSavedEqualizer();
                                     toEqAnim.restart();
                                 }
@@ -1502,41 +1556,69 @@ Item {
 
                         Item { Layout.fillWidth: true }
 
+                        Item {
+                            id: audioHeaderContainer
+                            Layout.preferredHeight: root.s(26)
+                            Layout.preferredWidth: (audioHeaderText.implicitWidth + root.s(12)) * root.audioHeaderProgress
+                            implicitWidth: Layout.preferredWidth
+                            opacity: root.audioHeaderProgress
+                            clip: true
+
+                            Text {
+                                id: audioHeaderText
+                                anchors.verticalCenter: parent.verticalCenter
+                                x: root.s(12) * (1.0 - root.audioHeaderProgress)
+                                text: typeof I18n !== "undefined" ? I18n.t("music.audio.balance", "Channel balance") : "Channel balance"
+                                color: ThemeBackend.subtext0 || "#a6adc8"
+                                font.family: ThemeBackend.fontFamily
+                                font.pixelSize: root.s(13)
+                                font.bold: true
+                            }
+                        }
+
                         ClickButton {
                             id: actionBtn
-                            visible: bottomSectionSwitch.currentIndex !== 1
                             Layout.preferredHeight: root.s(26)
-                            Layout.preferredWidth: visible ? root.actionBtnCurrentWidth : 0
+                            Layout.preferredWidth: root.actionBtnCurrentWidth
                             implicitWidth: root.actionBtnCurrentWidth
                             cornerRadius: ThemeBackend.borderRadius
                             horizontalPadding: root.s(12)
-                            buttonIcon: bottomSectionSwitch.currentIndex === 2 && root.actionBtnMorph > 0.45 ? "󰈔" : ""
+                            buttonIcon: bottomSectionSwitch.currentIndex === 2
+                                ? "󰈔"
+                                : (bottomSectionSwitch.currentIndex === 1 ? "󰑐" : "")
                             buttonText: {
-                                if (bottomSectionSwitch.currentIndex === 2 && root.actionBtnMorph > 0.35) {
+                                if (bottomSectionSwitch.currentIndex === 2) {
                                     return typeof I18n !== "undefined" ? I18n.t("music.select_local_file", "Select file") : "Select file";
+                                }
+                                if (bottomSectionSwitch.currentIndex === 1) {
+                                    return typeof I18n !== "undefined" ? I18n.t("music.audio.reset", "Reset") : "Reset";
                                 }
                                 return root.eqData && root.eqData.pending ? I18n.t("music.eq.apply") : I18n.t("music.eq.saved");
                             }
                             textFontSize: root.s(11.5)
                             iconFontSize: root.s(13)
                             accentColor: {
-                                if (root.actionBtnMorph >= 0.5) {
+                                if (bottomSectionSwitch.currentIndex !== 0) {
                                     return ThemeBackend.surface0 || "#313244";
                                 }
                                 return root.eqData && root.eqData.pending ? (ThemeBackend.mauve || "#cba6f7") : (ThemeBackend.surface0 || "#313244");
                             }
                             textColor: {
-                                if (root.actionBtnMorph >= 0.5) {
+                                if (bottomSectionSwitch.currentIndex !== 0) {
                                     return ThemeBackend.text || "#cdd6f4";
                                 }
                                 return root.eqData && root.eqData.pending ? (ThemeBackend.base || "#1e1e2e") : (ThemeBackend.text || "#cdd6f4");
                             }
                             enabled: bottomSectionSwitch.currentIndex === 2
                                 ? (root.hasTargetPlayer && !Lyrics.loading)
-                                : true
+                                : (bottomSectionSwitch.currentIndex === 1
+                                    ? Math.abs(balanceSlider.value) >= 0.005
+                                    : true)
                             opacity: bottomSectionSwitch.currentIndex === 2
                                 ? (root.hasTargetPlayer && !Lyrics.loading ? 1.0 : 0.45)
-                                : 1.0
+                                : (bottomSectionSwitch.currentIndex === 1
+                                    ? (enabled ? 1.0 : 0.45)
+                                    : 1.0)
                             Behavior on opacity { NumberAnimation { duration: 300 } }
                             Behavior on accentColor { ColorAnimation { duration: 320 } }
                             Behavior on textColor { ColorAnimation { duration: 320 } }
@@ -1544,6 +1626,8 @@ Item {
                                 if (bottomSectionSwitch.currentIndex === 2) {
                                     lyricsPickerPopup.targetScreen = (root.Window && root.Window.window) ? root.Window.window.screen : null;
                                     lyricsPickerPopup.openPicker();
+                                } else if (bottomSectionSwitch.currentIndex === 1) {
+                                    root.setBalance(0);
                                 } else if (root.eqData && root.eqData.pending) {
                                     var temp = Object.assign({}, root.eqData);
                                     temp.pending = false;
@@ -1983,35 +2067,6 @@ Item {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 width: Math.min(parent.width - root.s(32), root.s(520))
                                 spacing: root.s(13)
-
-                                RowLayout {
-                                    Layout.fillWidth: true
-
-                                    Text {
-                                        text: typeof I18n !== "undefined" ? I18n.t("music.audio.balance", "Channel balance") : "Channel balance"
-                                        color: ThemeBackend.text || "#cdd6f4"
-                                        font.family: ThemeBackend.fontFamily
-                                        font.pixelSize: root.s(15)
-                                        font.bold: true
-                                    }
-
-                                    Item { Layout.fillWidth: true }
-
-                                    ClickButton {
-                                        Layout.preferredHeight: root.s(28)
-                                        Layout.preferredWidth: root.s(104)
-                                        cornerRadius: ThemeBackend.borderRadius
-                                        buttonIcon: "󰑐"
-                                        buttonText: typeof I18n !== "undefined" ? I18n.t("music.audio.reset", "Reset") : "Reset"
-                                        textFontSize: root.s(11.5)
-                                        iconFontSize: root.s(12)
-                                        accentColor: ThemeBackend.surface0 || "#313244"
-                                        textColor: ThemeBackend.text || "#cdd6f4"
-                                        enabled: Math.abs(balanceSlider.value) >= 0.005
-                                        opacity: enabled ? 1.0 : 0.45
-                                        onClicked: root.setBalance(0)
-                                    }
-                                }
 
                                 Rectangle {
                                     Layout.fillWidth: true
