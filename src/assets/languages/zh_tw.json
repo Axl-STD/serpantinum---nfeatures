@@ -981,7 +981,19 @@
     "searching_lyrics": "正在搜尋歌詞...",
     "no_lyrics": "找不到歌詞",
     "select_local_file": "選取本機檔案",
-    "lyrics": "歌詞"
+    "lyrics": "歌詞",
+    "audio": {
+      "title": "音訊",
+      "balance": "聲道平衡",
+      "reset": "重設",
+      "centered": "置中",
+      "left_slightly_favored": "稍微偏左",
+      "right_slightly_favored": "稍微偏右",
+      "left_only": "僅左聲道",
+      "right_only": "僅右聲道",
+      "left_favored": "偏左",
+      "right_favored": "偏右"
+    }
   },
   "network": {
     "tabs": {

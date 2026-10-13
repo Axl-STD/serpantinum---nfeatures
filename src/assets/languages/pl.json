@@ -113,7 +113,19 @@
     "searching_lyrics": "Szukanie tekstu utworu...",
     "no_lyrics": "Nie znaleziono tekstu utworu",
     "select_local_file": "Wybierz plik lokalny",
-    "lyrics": "Tekst utworu"
+    "lyrics": "Tekst utworu",
+    "audio": {
+      "title": "Dźwięk",
+      "balance": "Balans kanałów",
+      "reset": "Resetuj",
+      "centered": "Wyśrodkowany",
+      "left_slightly_favored": "Lekko w lewo",
+      "right_slightly_favored": "Lekko w prawo",
+      "left_only": "Tylko lewy kanał",
+      "right_only": "Tylko prawy kanał",
+      "left_favored": "Przewaga lewego kanału",
+      "right_favored": "Przewaga prawego kanału"
+    }
   },
   "network": {
     "tabs": {

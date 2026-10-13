@@ -981,7 +981,19 @@
     "searching_lyrics": "Songteksten zoeken...",
     "no_lyrics": "Geen songtekst gevonden",
     "select_local_file": "Lokaal bestand selecteren",
-    "lyrics": "Songtekst"
+    "lyrics": "Songtekst",
+    "audio": {
+      "title": "Audio",
+      "balance": "Kanaalbalans",
+      "reset": "Resetten",
+      "centered": "Gecentreerd",
+      "left_slightly_favored": "Iets meer links",
+      "right_slightly_favored": "Iets meer rechts",
+      "left_only": "Alleen links",
+      "right_only": "Alleen rechts",
+      "left_favored": "Meer links",
+      "right_favored": "Meer rechts"
+    }
   },
   "network": {
     "tabs": {

@@ -981,7 +981,19 @@
     "searching_lyrics": "正在搜索歌词...",
     "no_lyrics": "未找到歌词",
     "select_local_file": "选择本地文件",
-    "lyrics": "歌词"
+    "lyrics": "歌词",
+    "audio": {
+      "title": "音频",
+      "balance": "声道平衡",
+      "reset": "重置",
+      "centered": "居中",
+      "left_slightly_favored": "略偏左",
+      "right_slightly_favored": "略偏右",
+      "left_only": "仅左声道",
+      "right_only": "仅右声道",
+      "left_favored": "偏左",
+      "right_favored": "偏右"
+    }
   },
   "network": {
     "tabs": {

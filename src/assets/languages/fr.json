@@ -981,7 +981,19 @@
     "searching_lyrics": "Recherche des paroles...",
     "no_lyrics": "Aucune parole trouvée",
     "select_local_file": "Sélectionner un fichier local",
-    "lyrics": "Paroles"
+    "lyrics": "Paroles",
+    "audio": {
+      "title": "Audio",
+      "balance": "Balance des canaux",
+      "reset": "Réinitialiser",
+      "centered": "Centré",
+      "left_slightly_favored": "Légèrement à gauche",
+      "right_slightly_favored": "Légèrement à droite",
+      "left_only": "Gauche uniquement",
+      "right_only": "Droite uniquement",
+      "left_favored": "Gauche favorisée",
+      "right_favored": "Droite favorisée"
+    }
   },
   "network": {
     "tabs": {

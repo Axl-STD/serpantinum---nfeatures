@@ -981,7 +981,19 @@
     "searching_lyrics": "गीत के बोल खोजे जा रहे हैं...",
     "no_lyrics": "कोई बोल नहीं मिले",
     "select_local_file": "स्थानीय फ़ाइल चुनें",
-    "lyrics": "बोल"
+    "lyrics": "बोल",
+    "audio": {
+      "title": "ऑडियो",
+      "balance": "चैनल संतुलन",
+      "reset": "रीसेट",
+      "centered": "केंद्रित",
+      "left_slightly_favored": "बाईं ओर थोड़ा झुकाव",
+      "right_slightly_favored": "दाईं ओर थोड़ा झुकाव",
+      "left_only": "केवल बायाँ चैनल",
+      "right_only": "केवल दायाँ चैनल",
+      "left_favored": "बाईं ओर झुकाव",
+      "right_favored": "दाईं ओर झुकाव"
+    }
   },
   "network": {
     "tabs": {

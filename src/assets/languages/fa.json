@@ -981,7 +981,19 @@
     "searching_lyrics": "در حال جست‌وجوی متن ترانه...",
     "no_lyrics": "متن ترانه‌ای یافت نشد",
     "select_local_file": "انتخاب پرونده محلی",
-    "lyrics": "متن ترانه"
+    "lyrics": "متن ترانه",
+    "audio": {
+      "title": "صدا",
+      "balance": "تعادل کانال‌ها",
+      "reset": "بازنشانی",
+      "centered": "متعادل",
+      "left_slightly_favored": "کمی متمایل به چپ",
+      "right_slightly_favored": "کمی متمایل به راست",
+      "left_only": "فقط کانال چپ",
+      "right_only": "فقط کانال راست",
+      "left_favored": "متمایل به چپ",
+      "right_favored": "متمایل به راست"
+    }
   },
   "network": {
     "tabs": {

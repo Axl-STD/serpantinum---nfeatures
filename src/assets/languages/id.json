@@ -981,7 +981,19 @@
     "searching_lyrics": "Mencari lirik...",
     "no_lyrics": "Lirik tidak ditemukan",
     "select_local_file": "Pilih berkas lokal",
-    "lyrics": "Lirik"
+    "lyrics": "Lirik",
+    "audio": {
+      "title": "Audio",
+      "balance": "Keseimbangan kanal",
+      "reset": "Atur ulang",
+      "centered": "Seimbang",
+      "left_slightly_favored": "Sedikit condong ke kiri",
+      "right_slightly_favored": "Sedikit condong ke kanan",
+      "left_only": "Hanya kanal kiri",
+      "right_only": "Hanya kanal kanan",
+      "left_favored": "Condong ke kiri",
+      "right_favored": "Condong ke kanan"
+    }
   },
   "network": {
     "tabs": {

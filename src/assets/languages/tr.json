@@ -981,7 +981,19 @@
     "searching_lyrics": "Şarkı sözleri aranıyor...",
     "no_lyrics": "Şarkı sözü bulunamadı",
     "select_local_file": "Yerel bir dosya seçin",
-    "lyrics": "Şarkı Sözleri"
+    "lyrics": "Şarkı Sözleri",
+    "audio": {
+      "title": "Ses",
+      "balance": "Kanal dengesi",
+      "reset": "Sıfırla",
+      "centered": "Ortalanmış",
+      "left_slightly_favored": "Hafifçe sola ağırlıklı",
+      "right_slightly_favored": "Hafifçe sağa ağırlıklı",
+      "left_only": "Yalnızca sol kanal",
+      "right_only": "Yalnızca sağ kanal",
+      "left_favored": "Sola ağırlıklı",
+      "right_favored": "Sağa ağırlıklı"
+    }
   },
   "network": {
     "tabs": {

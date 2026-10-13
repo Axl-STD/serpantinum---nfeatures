@@ -110,7 +110,19 @@
     "searching_lyrics": "歌詞を検索中...",
     "no_lyrics": "歌詞が見つかりません",
     "select_local_file": "ローカルファイルを選択",
-    "lyrics": "歌詞"
+    "lyrics": "歌詞",
+    "audio": {
+      "title": "オーディオ",
+      "balance": "チャンネルバランス",
+      "reset": "リセット",
+      "centered": "中央",
+      "left_slightly_favored": "やや左寄り",
+      "right_slightly_favored": "やや右寄り",
+      "left_only": "左チャンネルのみ",
+      "right_only": "右チャンネルのみ",
+      "left_favored": "左寄り",
+      "right_favored": "右寄り"
+    }
   },
   "network": {
     "tabs": {
