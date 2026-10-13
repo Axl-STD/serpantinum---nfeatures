@@ -981,7 +981,19 @@
     "searching_lyrics": "Търсене на текст...",
     "no_lyrics": "Няма намерен текст",
     "select_local_file": "Избор на локален файл",
-    "lyrics": "Текст"
+    "lyrics": "Текст",
+    "audio": {
+      "title": "Аудио",
+      "balance": "Баланс на каналите",
+      "reset": "Нулиране",
+      "centered": "Центрирано",
+      "left_slightly_favored": "Леко наляво",
+      "right_slightly_favored": "Леко надясно",
+      "left_only": "Само ляв канал",
+      "right_only": "Само десен канал",
+      "left_favored": "Преобладава ляв канал",
+      "right_favored": "Преобладава десен канал"
+    }
   },
   "network": {
     "tabs": {
