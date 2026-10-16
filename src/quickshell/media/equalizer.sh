@@ -99,10 +99,12 @@ try:
         float(data['b10'])
     ]
 
-    balance = max(-1.0, min(1.0, float(data.get('balance', 0.0))))
-    plugin_balance = balance * 100.0
     mono = bool(data.get('mono', False))
     swap = bool(data.get('swap', False))
+    balance = max(-1.0, min(1.0, float(data.get('balance', 0.0))))
+    # Balance describes the physical output channels. Mono temporarily ignores
+    # it, while swapping sources requires reversing the pre-swap EQ balance.
+    plugin_balance = 0.0 if mono else (-balance if swap else balance) * 100.0
     dynamics = str(data.get('dynamics', 'off'))
     if dynamics not in ('off', 'balanced', 'night'):
         dynamics = 'off'
@@ -341,9 +343,21 @@ PY
         target=(--target=easyeffects_sink)
     fi
 
-    pw-play "${target[@]}" \
-        -P '{"application.id":"serpantinum-audio-test","application.name":"Serpantinum audio test","media.role":"music"}' \
-        "$TEST_FILE" >/dev/null 2>&1 &
+    (
+        player_pid=""
+        cleanup_test() {
+            [ -n "$player_pid" ] && kill "$player_pid" >/dev/null 2>&1 || true
+            if [ "$(cat "$TEST_PID_FILE" 2>/dev/null)" = "$BASHPID" ]; then
+                rm -f "$TEST_PID_FILE"
+            fi
+        }
+        trap cleanup_test EXIT TERM INT
+        pw-play "${target[@]}" \
+            -P '{"application.id":"serpantinum-audio-test","application.name":"Serpantinum audio test","media.role":"music"}' \
+            "$TEST_FILE" >/dev/null 2>&1 &
+        player_pid=$!
+        wait "$player_pid"
+    ) &
     echo "$!" > "$TEST_PID_FILE"
 }
 
