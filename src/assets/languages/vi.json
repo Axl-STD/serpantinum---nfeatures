@@ -977,7 +977,15 @@
       "left_only": "Chỉ kênh trái",
       "right_only": "Chỉ kênh phải",
       "left_favored": "Thiên trái",
-      "right_favored": "Thiên phải"
+      "right_favored": "Thiên phải",
+      "test": "Kiểm tra",
+      "stop_test": "Dừng",
+      "mono": "Âm thanh mono",
+      "swap": "Đổi trái/phải",
+      "dynamic_range": "Dải động",
+      "off": "Tắt",
+      "balanced": "Cân bằng",
+      "night": "Ban đêm"
     },
     "presets": {
       "flat": "Phẳng",

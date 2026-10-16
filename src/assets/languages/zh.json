@@ -992,7 +992,15 @@
       "left_only": "仅左声道",
       "right_only": "仅右声道",
       "left_favored": "偏左",
-      "right_favored": "偏右"
+      "right_favored": "偏右",
+      "test": "测试",
+      "stop_test": "停止",
+      "mono": "单声道音频",
+      "swap": "交换左右声道",
+      "dynamic_range": "动态范围",
+      "off": "关闭",
+      "balanced": "均衡",
+      "night": "夜间"
     }
   },
   "network": {

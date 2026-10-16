@@ -124,7 +124,15 @@
       "left_only": "Tylko lewy kanał",
       "right_only": "Tylko prawy kanał",
       "left_favored": "Przewaga lewego kanału",
-      "right_favored": "Przewaga prawego kanału"
+      "right_favored": "Przewaga prawego kanału",
+      "test": "Test",
+      "stop_test": "Zatrzymaj",
+      "mono": "Dźwięk mono",
+      "swap": "Zamień L/P",
+      "dynamic_range": "Zakres dynamiczny",
+      "off": "Wyłączony",
+      "balanced": "Zrównoważony",
+      "night": "Nocny"
     }
   },
   "network": {

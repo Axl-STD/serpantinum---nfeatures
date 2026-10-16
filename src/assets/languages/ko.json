@@ -977,7 +977,15 @@
       "left_only": "왼쪽만",
       "right_only": "오른쪽만",
       "left_favored": "왼쪽 강조",
-      "right_favored": "오른쪽 강조"
+      "right_favored": "오른쪽 강조",
+      "test": "테스트",
+      "stop_test": "중지",
+      "mono": "모노 오디오",
+      "swap": "좌우 바꾸기",
+      "dynamic_range": "다이내믹 레인지",
+      "off": "끔",
+      "balanced": "균형",
+      "night": "야간"
     },
     "presets": {
       "flat": "플랫",

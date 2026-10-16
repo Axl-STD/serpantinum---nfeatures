@@ -992,7 +992,15 @@
       "left_only": "Gauche uniquement",
       "right_only": "Droite uniquement",
       "left_favored": "Gauche favorisée",
-      "right_favored": "Droite favorisée"
+      "right_favored": "Droite favorisée",
+      "test": "Tester",
+      "stop_test": "Arrêter",
+      "mono": "Audio mono",
+      "swap": "Permuter G/D",
+      "dynamic_range": "Plage dynamique",
+      "off": "Désactivé",
+      "balanced": "Équilibré",
+      "night": "Nuit"
     }
   },
   "network": {

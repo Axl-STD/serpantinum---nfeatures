@@ -7,14 +7,16 @@ STATE_FILE="$QS_RUN_MUSIC/eq_state.json"
 PRESET_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/easyeffects/output"
 PRESET_NAME="live_eq"
 PRESET_FILE="$PRESET_DIR/${PRESET_NAME}.json"
+TEST_FILE="$QS_RUN_MUSIC/channel_test.wav"
+TEST_PID_FILE="$QS_RUN_MUSIC/channel_test.pid"
 
 mkdir -p "$PRESET_DIR"
 
 if [ ! -f "$STATE_FILE" ]; then
-    echo '{"b1": 0, "b2": 0, "b3": 0, "b4": 0, "b5": 0, "b6": 0, "b7": 0, "b8": 0, "b9": 0, "b10": 0, "preset": "Flat", "pending": false, "balance": 0}' > "$STATE_FILE"
-elif ! jq -e 'has("balance")' "$STATE_FILE" >/dev/null 2>&1; then
-    jq -c '.balance = 0' "$STATE_FILE" > "$STATE_FILE.tmp.$$" &&
-        mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
+    echo '{"b1": 0, "b2": 0, "b3": 0, "b4": 0, "b5": 0, "b6": 0, "b7": 0, "b8": 0, "b9": 0, "b10": 0, "preset": "Flat", "pending": false, "balance": 0, "mono": false, "swap": false, "dynamics": "off"}' > "$STATE_FILE"
+else
+    jq -c '.balance //= 0 | .mono //= false | .swap //= false | .dynamics //= "off"' \
+        "$STATE_FILE" > "$STATE_FILE.tmp.$$" && mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
 fi
 
 ensure_easyeffects() {
@@ -99,6 +101,11 @@ try:
 
     balance = max(-1.0, min(1.0, float(data.get('balance', 0.0))))
     plugin_balance = balance * 100.0
+    mono = bool(data.get('mono', False))
+    swap = bool(data.get('swap', False))
+    dynamics = str(data.get('dynamics', 'off'))
+    if dynamics not in ('off', 'balanced', 'night'):
+        dynamics = 'off'
 
     bands = {}
 
@@ -122,11 +129,10 @@ try:
             'slope': 'x1'
         }
 
-    preset = {
-        'output': {
-            'blocklist': [],
-            'plugins_order': ['equalizer'],
-            'equalizer': {
+    output = {
+        'blocklist': [],
+        'plugins_order': ['equalizer'],
+        'equalizer': {
                 'balance': plugin_balance,
                 'bypass': False,
                 'input-gain': 0.0,
@@ -136,9 +142,108 @@ try:
                 'mode': 'IIR',
                 'num-bands': 32,
                 'split-channels': False
-            }
         }
     }
+
+    if mono or swap:
+        output['plugins_order'].append('stereo_tools')
+        output['stereo_tools'] = {
+            'balance-in': 0.0,
+            'balance-out': 0.0,
+            'bypass': False,
+            'delay': 0.0,
+            'dry': -100.0,
+            'input-gain': 0.0,
+            'middle-level': 0.0,
+            'middle-panorama': 0.0,
+            'mode': ('LR > L+R (Mono Sum L+R)' if mono
+                     else 'LR > RL (Stereo Flip Channels)'),
+            'mutel': False,
+            'muter': False,
+            'output-gain': -6.0 if mono else 0.0,
+            'phasel': False,
+            'phaser': False,
+            'sc-level': 1.0,
+            'side-balance': 0.0,
+            'side-level': 0.0,
+            'softclip': False,
+            'stereo-base': 0.0,
+            'stereo-phase': 0.0,
+            'wet': 0.0
+        }
+
+    if dynamics != 'off':
+        night = dynamics == 'night'
+        output['plugins_order'].extend(['autogain', 'compressor', 'limiter'])
+        output['autogain'] = {
+            'bypass': False,
+            'input-gain': 0.0,
+            'output-gain': 0.0,
+            'reference': 'Geometric Mean (MSI)',
+            'silence-threshold': -70.0,
+            'maximum-history': 15,
+            'force-silence': True,
+            'target': -23.0 if night else -18.0
+        }
+        output['compressor'] = {
+            'attack': 10.0 if night else 20.0,
+            'boost-amount': 6.0,
+            'boost-threshold': -72.0,
+            'bypass': False,
+            'dry': -100.0,
+            'hpf-frequency': 10.0,
+            'hpf-mode': 'off',
+            'input-gain': 0.0,
+            'knee': -6.0,
+            'lpf-frequency': 20000.0,
+            'lpf-mode': 'off',
+            'makeup': 4.0 if night else 0.0,
+            'mode': 'Downward',
+            'output-gain': 0.0,
+            'ratio': 4.0 if night else 2.0,
+            'release': 260.0 if night else 160.0,
+            'release-threshold': -100.0,
+            'sidechain': {'lookahead': 0.0, 'mode': 'RMS', 'preamp': 0.0, 'reactivity': 10.0, 'source': 'Middle', 'stereo-split-source': 'Left/Right', 'type': 'Feed-forward'},
+            'stereo-split': False,
+            'input-to-sidechain': 0.0,
+            'input-to-link': 0.0,
+            'sidechain-to-input': 0.0,
+            'sidechain-to-link': 0.0,
+            'link-to-input': 0.0,
+            'link-to-sidechain': 0.0,
+            'threshold': -30.0 if night else -18.0,
+            'wet': 0.0
+        }
+        output['limiter'] = {
+            'alr': False,
+            'alr-attack': 5.0,
+            'alr-knee': 0.0,
+            'alr-knee-smooth': 0.0,
+            'alr-release': 50.0,
+            'attack': 5.0,
+            'bypass': False,
+            'dithering': 'None',
+            'external-sidechain': False,
+            'gain-boost': False,
+            'input-gain': 0.0,
+            'lookahead': 5.0,
+            'mode': 'Herm Thin',
+            'output-gain': 0.0,
+            'oversampling': 'None',
+            'release': 50.0,
+            'sidechain-preamp': 0.0,
+            'sidechain-type': 'Feed-forward',
+            'stereo-link': 100.0,
+            'input-to-sidechain': 0.0,
+            'input-to-link': 0.0,
+            'sidechain-to-input': 0.0,
+            'sidechain-to-link': 0.0,
+            'link-to-input': 0.0,
+            'link-to-sidechain': 0.0,
+            'threshold': -1.0
+        }
+
+    preset = {'output': output}
 
     print(json.dumps(preset, indent=4))
 
@@ -154,6 +259,9 @@ except Exception:
 
 save_preset() {
     balance=$(jq -r '.balance // 0' "$STATE_FILE")
+    mono=$(jq -r '.mono // false' "$STATE_FILE")
+    swap=$(jq -r '.swap // false' "$STATE_FILE")
+    dynamics=$(jq -r '.dynamics // "off"' "$STATE_FILE")
 
     jq -n -c \
         --arg b1 "$1" \
@@ -168,6 +276,9 @@ save_preset() {
         --arg b10 "${10}" \
         --arg p "${11}" \
         --argjson balance "$balance" \
+        --argjson mono "$mono" \
+        --argjson swap "$swap" \
+        --arg dynamics "$dynamics" \
         '{
             "b1": $b1,
             "b2": $b2,
@@ -181,8 +292,59 @@ save_preset() {
             "b10": $b10,
             "preset": $p,
             "pending": false,
-            "balance": $balance
+            "balance": $balance,
+            "mono": $mono,
+            "swap": $swap,
+            "dynamics": $dynamics
         }' > "$STATE_FILE"
+}
+
+stop_test() {
+    if [ -f "$TEST_PID_FILE" ]; then
+        pid=$(cat "$TEST_PID_FILE" 2>/dev/null || true)
+        if [[ "$pid" =~ ^[0-9]+$ ]]; then
+            kill "$pid" >/dev/null 2>&1 || true
+        fi
+        rm -f "$TEST_PID_FILE"
+    fi
+}
+
+play_test() {
+    stop_test
+
+    if [ ! -s "$TEST_FILE" ]; then
+        python3 - "$TEST_FILE" <<'PY'
+import math, struct, sys, wave
+
+path = sys.argv[1]
+rate = 48000
+segments = [(0.75, 660, 0), (0.18, 0, 0), (0.75, 0, 880),
+            (0.18, 0, 0), (1.0, 770, 770)]
+with wave.open(path, 'wb') as out:
+    out.setnchannels(2)
+    out.setsampwidth(2)
+    out.setframerate(rate)
+    for duration, left_hz, right_hz in segments:
+        for index in range(int(duration * rate)):
+            fade = min(1.0, index / (rate * 0.015),
+                       (duration * rate - index) / (rate * 0.015))
+            def sample(freq):
+                return int(9000 * fade * math.sin(2 * math.pi * freq * index / rate)) if freq else 0
+            out.writeframesraw(struct.pack('<hh', sample(left_hz), sample(right_hz)))
+PY
+    fi
+
+    ensure_easyeffects
+    target=()
+    if command -v pw-dump >/dev/null 2>&1 &&
+       pw-dump 2>/dev/null | jq -e 'any(.[]; .info.props["node.name"] == "easyeffects_sink")' >/dev/null 2>&1; then
+        target=(--target=easyeffects_sink)
+    fi
+
+    pw-play "${target[@]}" \
+        -P '{"application.id":"serpantinum-audio-test","application.name":"Serpantinum audio test","media.role":"music"}' \
+        "$TEST_FILE" >/dev/null 2>&1 &
+    echo "$!" > "$TEST_PID_FILE"
 }
 
 cmd=$1
@@ -228,6 +390,39 @@ case $cmd in
 
         echo "$updated" > "$STATE_FILE"
         apply_eq
+        ;;
+
+    "set_mono"|"set_swap")
+        [ "$arg1" = "true" ] || [ "$arg1" = "false" ] || exit 1
+        key=${cmd#set_}
+        jq -c --arg key "$key" --argjson val "$arg1" '.[$key] = $val' \
+            "$STATE_FILE" > "$STATE_FILE.tmp.$$" || exit 1
+        mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
+        apply_eq
+        ;;
+
+    "set_dynamics")
+        case "$arg1" in off|balanced|night) ;; *) exit 1 ;; esac
+        jq -c --arg val "$arg1" '.dynamics = $val' \
+            "$STATE_FILE" > "$STATE_FILE.tmp.$$" || exit 1
+        mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
+        apply_eq
+        ;;
+
+    "reset_audio")
+        jq -c '.balance = 0 | .mono = false | .swap = false | .dynamics = "off"' \
+            "$STATE_FILE" > "$STATE_FILE.tmp.$$" || exit 1
+        mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
+        stop_test
+        apply_eq
+        ;;
+
+    "test")
+        play_test
+        ;;
+
+    "stop_test")
+        stop_test
         ;;
 
     "preset")

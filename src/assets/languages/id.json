@@ -992,7 +992,15 @@
       "left_only": "Hanya kanal kiri",
       "right_only": "Hanya kanal kanan",
       "left_favored": "Condong ke kiri",
-      "right_favored": "Condong ke kanan"
+      "right_favored": "Condong ke kanan",
+      "test": "Uji",
+      "stop_test": "Hentikan",
+      "mono": "Audio mono",
+      "swap": "Tukar kiri/kanan",
+      "dynamic_range": "Rentang dinamis",
+      "off": "Mati",
+      "balanced": "Seimbang",
+      "night": "Malam"
     }
   },
   "network": {

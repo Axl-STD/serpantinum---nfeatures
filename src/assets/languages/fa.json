@@ -992,7 +992,15 @@
       "left_only": "فقط کانال چپ",
       "right_only": "فقط کانال راست",
       "left_favored": "متمایل به چپ",
-      "right_favored": "متمایل به راست"
+      "right_favored": "متمایل به راست",
+      "test": "آزمایش",
+      "stop_test": "توقف",
+      "mono": "صدای مونو",
+      "swap": "تعویض چپ/راست",
+      "dynamic_range": "دامنهٔ پویا",
+      "off": "خاموش",
+      "balanced": "متعادل",
+      "night": "شب"
     }
   },
   "network": {

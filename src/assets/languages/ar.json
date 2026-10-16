@@ -1161,7 +1161,15 @@
       "left_only": "اليسار فقط",
       "right_only": "اليمين فقط",
       "left_favored": "تفضيل اليسار",
-      "right_favored": "تفضيل اليمين"
+      "right_favored": "تفضيل اليمين",
+      "test": "اختبار",
+      "stop_test": "إيقاف",
+      "mono": "صوت أحادي",
+      "swap": "تبديل اليسار/اليمين",
+      "dynamic_range": "النطاق الديناميكي",
+      "off": "إيقاف",
+      "balanced": "متوازن",
+      "night": "ليلي"
     },
     "equalizer": "معادل الصوت",
     "loading": "جارٍ التحميل...",

@@ -121,7 +121,15 @@
       "left_only": "左チャンネルのみ",
       "right_only": "右チャンネルのみ",
       "left_favored": "左寄り",
-      "right_favored": "右寄り"
+      "right_favored": "右寄り",
+      "test": "テスト",
+      "stop_test": "停止",
+      "mono": "モノラル音声",
+      "swap": "左右を入れ替え",
+      "dynamic_range": "ダイナミックレンジ",
+      "off": "オフ",
+      "balanced": "バランス",
+      "night": "ナイト"
     }
   },
   "network": {

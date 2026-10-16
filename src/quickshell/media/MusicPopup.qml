@@ -170,12 +170,24 @@ Item {
         font.bold: true
     }
 
+    Text {
+        id: testMeasureText
+        visible: false
+        text: root.audioTestRunning
+            ? (typeof I18n !== "undefined" ? I18n.t("music.audio.stop_test", "Stop") : "Stop")
+            : (typeof I18n !== "undefined" ? I18n.t("music.audio.test", "Test") : "Test")
+        font.family: ThemeBackend.fontFamily
+        font.pixelSize: root.s(11.5)
+        font.bold: true
+    }
+
     property real actionBtnMorph: 0.0
     property real audioHeaderProgress: 0.0
     property real presetSlideProgress: 0.0
 
     readonly property real eqActionBtnWidth: Math.max(root.s(68), eqMeasureText.implicitWidth + root.s(26))
-    readonly property real audioActionBtnWidth: Math.max(root.s(88), resetMeasureText.implicitWidth + root.s(44))
+    readonly property real audioActionBtnWidth: Math.max(root.s(72), Math.min(root.s(96), resetMeasureText.implicitWidth + root.s(34)))
+    readonly property real audioTestBtnWidth: Math.max(root.s(64), Math.min(root.s(82), testMeasureText.implicitWidth + root.s(34)))
     readonly property real lyricsActionBtnWidth: Math.max(root.s(116), lyricsMeasureText.implicitWidth + root.s(44))
     readonly property real actionBtnCurrentWidth: actionBtnMorph <= 1.0
         ? eqActionBtnWidth + (audioActionBtnWidth - eqActionBtnWidth) * actionBtnMorph
@@ -443,14 +455,25 @@ Item {
     property var eqData: {
         "b1": 0, "b2": 0, "b3": 0, "b4": 0, "b5": 0,
         "b6": 0, "b7": 0, "b8": 0, "b9": 0, "b10": 0,
-        "preset": "Flat", "pending": false, "balance": 0
+        "preset": "Flat", "pending": false, "balance": 0,
+        "mono": false, "swap": false, "dynamics": "off"
     }
 
     property var savedEqData: ({
         "b1": 0, "b2": 0, "b3": 0, "b4": 0, "b5": 0,
         "b6": 0, "b7": 0, "b8": 0, "b9": 0, "b10": 0,
-        "preset": "Flat", "pending": false, "balance": 0
+        "preset": "Flat", "pending": false, "balance": 0,
+        "mono": false, "swap": false, "dynamics": "off"
     })
+
+    property bool audioTestRunning: false
+
+    Timer {
+        id: audioTestTimer
+        interval: 3200
+        repeat: false
+        onTriggered: root.audioTestRunning = false
+    }
 
     function restoreLastSavedEqualizer() {
         if (!root.savedEqData) return;
@@ -684,6 +707,52 @@ Item {
         root.savedEqData = Object.assign({}, temp);
         root.lastEqUpdate = Date.now();
         root.execCmd(Caching.qsDir + `/media/equalizer.sh set_balance ${temp.balance}`);
+    }
+
+    function setAudioFlag(name, value) {
+        if (name !== "mono" && name !== "swap") return;
+        var temp = Object.assign({}, root.eqData);
+        temp[name] = value === true;
+        root.eqData = temp;
+        root.savedEqData = Object.assign({}, temp);
+        root.lastEqUpdate = Date.now();
+        root.execCmd(Caching.qsDir + `/media/equalizer.sh set_${name} ${temp[name]}`);
+    }
+
+    function setDynamics(value) {
+        if (["off", "balanced", "night"].indexOf(value) < 0) return;
+        var temp = Object.assign({}, root.eqData);
+        temp.dynamics = value;
+        root.eqData = temp;
+        root.savedEqData = Object.assign({}, temp);
+        root.lastEqUpdate = Date.now();
+        root.execCmd(Caching.qsDir + `/media/equalizer.sh set_dynamics ${value}`);
+    }
+
+    function resetAudio() {
+        var temp = Object.assign({}, root.eqData);
+        temp.balance = 0;
+        temp.mono = false;
+        temp.swap = false;
+        temp.dynamics = "off";
+        root.eqData = temp;
+        root.savedEqData = Object.assign({}, temp);
+        root.audioTestRunning = false;
+        audioTestTimer.stop();
+        root.lastEqUpdate = Date.now();
+        root.execCmd(Caching.qsDir + "/media/equalizer.sh reset_audio");
+    }
+
+    function toggleAudioTest() {
+        if (root.audioTestRunning) {
+            root.execCmd(Caching.qsDir + "/media/equalizer.sh stop_test");
+            root.audioTestRunning = false;
+            audioTestTimer.stop();
+        } else {
+            root.execCmd(Caching.qsDir + "/media/equalizer.sh test");
+            root.audioTestRunning = true;
+            audioTestTimer.restart();
+        }
     }
 
     property bool eqInitDone: false
@@ -1515,9 +1584,11 @@ Item {
                         Switch {
                             id: bottomSectionSwitch
                             Layout.preferredHeight: root.s(26)
-                            Layout.preferredWidth: root.s(260)
+                            Layout.preferredWidth: root.s(224)
+                            Layout.minimumWidth: root.s(168)
+                            Layout.maximumWidth: root.s(224)
                             implicitHeight: root.s(26)
-                            implicitWidth: root.s(260)
+                            implicitWidth: root.s(224)
                             options: [
                                 typeof I18n !== "undefined" ? I18n.t("music.equalizer", "Equalizer") : "Equalizer",
                                 typeof I18n !== "undefined" ? I18n.t("music.audio.title", "Audio") : "Audio",
@@ -1531,6 +1602,9 @@ Item {
                             cornerRadius: ThemeBackend.borderRadius
                             fontPixelSize: root.s(11.5)
                             onCurrentIndexChanged: {
+                                if (currentIndex !== 1 && root.audioTestRunning) {
+                                    root.toggleAudioTest();
+                                }
                                 root.updateLyricsSubscription();
                                 if (currentIndex === 2) {
                                     toEqAnim.stop();
@@ -1559,7 +1633,7 @@ Item {
                         Item {
                             id: audioHeaderContainer
                             Layout.preferredHeight: root.s(26)
-                            Layout.preferredWidth: (audioHeaderText.implicitWidth + root.s(12)) * root.audioHeaderProgress
+                            Layout.preferredWidth: Math.min(root.s(112), audioHeaderText.implicitWidth + root.s(8)) * root.audioHeaderProgress
                             implicitWidth: Layout.preferredWidth
                             opacity: root.audioHeaderProgress
                             clip: true
@@ -1573,7 +1647,34 @@ Item {
                                 font.family: ThemeBackend.fontFamily
                                 font.pixelSize: root.s(13)
                                 font.bold: true
+                                width: parent.width - root.s(4)
+                                elide: Text.ElideRight
                             }
+                        }
+
+                        ClickButton {
+                            id: audioTestBtn
+                            Layout.preferredHeight: root.s(26)
+                            Layout.preferredWidth: root.audioTestBtnWidth * root.audioHeaderProgress
+                            implicitWidth: Layout.preferredWidth
+                            visible: root.audioHeaderProgress > 0.01
+                            opacity: root.audioHeaderProgress
+                            clip: true
+                            cornerRadius: ThemeBackend.borderRadius
+                            horizontalPadding: root.s(8)
+                            buttonIcon: root.audioTestRunning ? "󰓛" : "󰋋"
+                            buttonText: root.audioTestRunning
+                                ? (typeof I18n !== "undefined" ? I18n.t("music.audio.stop_test", "Stop") : "Stop")
+                                : (typeof I18n !== "undefined" ? I18n.t("music.audio.test", "Test") : "Test")
+                            textFontSize: root.s(11.5)
+                            iconFontSize: root.s(12)
+                            accentColor: root.audioTestRunning
+                                ? (ThemeBackend.mauve || "#cba6f7")
+                                : (ThemeBackend.surface0 || "#313244")
+                            textColor: root.audioTestRunning
+                                ? (ThemeBackend.base || "#1e1e2e")
+                                : (ThemeBackend.text || "#cdd6f4")
+                            onClicked: root.toggleAudioTest()
                         }
 
                         ClickButton {
@@ -1612,7 +1713,7 @@ Item {
                             enabled: bottomSectionSwitch.currentIndex === 2
                                 ? (root.hasTargetPlayer && !Lyrics.loading)
                                 : (bottomSectionSwitch.currentIndex === 1
-                                    ? Math.abs(balanceSlider.value) >= 0.005
+                                    ? (Math.abs(balanceSlider.value) >= 0.005 || root.eqData.mono === true || root.eqData.swap === true || String(root.eqData.dynamics || "off") !== "off")
                                     : true)
                             opacity: bottomSectionSwitch.currentIndex === 2
                                 ? (root.hasTargetPlayer && !Lyrics.loading ? 1.0 : 0.45)
@@ -1627,7 +1728,7 @@ Item {
                                     lyricsPickerPopup.targetScreen = (root.Window && root.Window.window) ? root.Window.window.screen : null;
                                     lyricsPickerPopup.openPicker();
                                 } else if (bottomSectionSwitch.currentIndex === 1) {
-                                    root.setBalance(0);
+                                    root.resetAudio();
                                 } else if (root.eqData && root.eqData.pending) {
                                     var temp = Object.assign({}, root.eqData);
                                     temp.pending = false;
@@ -2057,20 +2158,21 @@ Item {
                             }
                             opacity: bottomSectionSwitch.currentIndex === 1 ? 1.0 : 0.0
                             visible: opacity > 0.0
+                            clip: true
 
                             Behavior on x { NumberAnimation { duration: 420; easing.type: Easing.OutQuart } }
                             Behavior on opacity { NumberAnimation { duration: 320; easing.type: Easing.OutCubic } }
 
                             ColumnLayout {
                                 anchors.top: parent.top
-                                anchors.topMargin: root.s(16)
+                                anchors.topMargin: root.s(9)
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                width: Math.min(parent.width - root.s(32), root.s(520))
-                                spacing: root.s(13)
+                                width: Math.min(parent.width - root.s(24), root.s(536))
+                                spacing: root.s(8)
 
                                 Rectangle {
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: root.s(112)
+                                    Layout.preferredHeight: root.s(82)
                                     radius: ThemeBackend.borderRadius
                                     color: ThemeBackend.surface0 || "#313244"
 
@@ -2079,8 +2181,12 @@ Item {
                                         anchors.left: parent.left
                                         anchors.right: parent.right
                                         anchors.top: parent.top
-                                        anchors.margins: root.s(18)
-                                        height: root.s(54)
+                                        anchors.leftMargin: root.s(14)
+                                        anchors.rightMargin: root.s(14)
+                                        anchors.topMargin: root.s(5)
+                                        height: root.s(45)
+                                        opacity: root.eqData.mono === true ? 0.45 : 1.0
+                                        Behavior on opacity { NumberAnimation { duration: 180 } }
 
                                         Repeater {
                                             model: 9
@@ -2099,11 +2205,12 @@ Item {
                                         Slider {
                                             id: balanceSlider
                                             anchors.fill: parent
-                                        from: -1.0
-                                        to: 1.0
-                                        stepSize: 0.01
-                                        value: Number(root.eqData.balance || 0)
-                                        hoverEnabled: true
+                                            from: -1.0
+                                            to: 1.0
+                                            stepSize: 0.01
+                                            value: Number(root.eqData.balance || 0)
+                                            hoverEnabled: true
+                                            enabled: root.eqData.mono !== true
 
                                         Connections {
                                             target: root
@@ -2121,7 +2228,7 @@ Item {
                                                 x: balanceSlider.leftPadding
                                                 y: balanceSlider.topPadding + balanceSlider.availableHeight / 2 - height / 2
                                                 width: balanceSlider.availableWidth
-                                                height: root.s(8)
+                                                height: root.s(6)
 
                                                 Rectangle {
                                                     anchors.fill: parent
@@ -2142,7 +2249,7 @@ Item {
                                             handle: Rectangle {
                                                 x: balanceSlider.leftPadding + balanceSlider.visualPosition * (balanceSlider.availableWidth - width)
                                                 y: balanceSlider.topPadding + balanceSlider.availableHeight / 2 - height / 2
-                                                width: root.s(20)
+                                                width: root.s(18)
                                                 height: width
                                                 radius: width / 2
                                                 color: ThemeBackend.mauve || "#cba6f7"
@@ -2158,7 +2265,9 @@ Item {
                                         anchors.left: parent.left
                                         anchors.right: parent.right
                                         anchors.bottom: parent.bottom
-                                        anchors.margins: root.s(18)
+                                        anchors.leftMargin: root.s(14)
+                                        anchors.rightMargin: root.s(14)
+                                        anchors.bottomMargin: root.s(9)
 
                                         Text {
                                             text: "L  " + Math.round((balanceSlider.value > 0 ? 1 - balanceSlider.value : 1) * 100) + "%"
@@ -2198,6 +2307,125 @@ Item {
                                             font.family: ThemeBackend.fontFamily
                                             font.pixelSize: root.s(11.5)
                                             font.bold: true
+                                        }
+                                    }
+                                }
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: root.s(50)
+                                    spacing: root.s(8)
+
+                                    Repeater {
+                                        model: [
+                                            { key: "mono", icon: "󰍬", label: typeof I18n !== "undefined" ? I18n.t("music.audio.mono", "Mono audio") : "Mono audio" },
+                                            { key: "swap", icon: "󰓡", label: typeof I18n !== "undefined" ? I18n.t("music.audio.swap", "Swap L/R") : "Swap L/R" }
+                                        ]
+
+                                        delegate: Rectangle {
+                                            required property var modelData
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            radius: ThemeBackend.borderRadius
+                                            color: ThemeBackend.surface0 || "#313244"
+
+                                            RowLayout {
+                                                anchors.fill: parent
+                                                anchors.leftMargin: root.s(12)
+                                                anchors.rightMargin: root.s(10)
+                                                spacing: root.s(7)
+
+                                                Text {
+                                                    text: modelData.icon
+                                                    color: ThemeBackend.mauve || "#cba6f7"
+                                                    font.family: "Iosevka Nerd Font"
+                                                    font.pixelSize: root.s(15)
+                                                }
+
+                                                Text {
+                                                    Layout.fillWidth: true
+                                                    text: modelData.label
+                                                    color: ThemeBackend.text || "#cdd6f4"
+                                                    font.family: ThemeBackend.fontFamily
+                                                    font.pixelSize: root.s(11.5)
+                                                    font.bold: true
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    elide: Text.ElideRight
+                                                }
+
+                                                Toggle {
+                                                    id: audioFlagToggle
+                                                    Layout.preferredWidth: root.s(44)
+                                                    Layout.preferredHeight: root.s(24)
+                                                    horizontalPadding: 0
+                                                    checked: root.eqData[modelData.key] === true
+                                                    accentColor: ThemeBackend.mauve || "#cba6f7"
+                                                    baseColor: ThemeBackend.surface2 || "#585b70"
+                                                    handleColor: ThemeBackend.base || "#1e1e2e"
+                                                    handleOffColor: ThemeBackend.text || "#cdd6f4"
+                                                    onToggled: checked => root.setAudioFlag(modelData.key, checked)
+
+                                                    Connections {
+                                                        target: root
+                                                        function onEqDataChanged() {
+                                                            audioFlagToggle.checked = root.eqData[modelData.key] === true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: root.s(78)
+                                    radius: ThemeBackend.borderRadius
+                                    color: ThemeBackend.surface0 || "#313244"
+
+                                    ColumnLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: root.s(10)
+                                        spacing: root.s(7)
+
+                                        Text {
+                                            Layout.fillWidth: true
+                                            text: typeof I18n !== "undefined" ? I18n.t("music.audio.dynamic_range", "Dynamic range") : "Dynamic range"
+                                            color: ThemeBackend.text || "#cdd6f4"
+                                            font.family: ThemeBackend.fontFamily
+                                            font.pixelSize: root.s(11.5)
+                                            font.bold: true
+                                            horizontalAlignment: Text.AlignHCenter
+                                            elide: Text.ElideRight
+                                        }
+
+                                        Switch {
+                                            id: dynamicsSwitch
+                                            Layout.fillWidth: true
+                                            Layout.preferredHeight: root.s(28)
+                                            options: [
+                                                typeof I18n !== "undefined" ? I18n.t("music.audio.off", "Off") : "Off",
+                                                typeof I18n !== "undefined" ? I18n.t("music.audio.balanced", "Balanced") : "Balanced",
+                                                typeof I18n !== "undefined" ? I18n.t("music.audio.night", "Night") : "Night"
+                                            ]
+                                            currentIndex: String(root.eqData.dynamics || "off") === "night" ? 2
+                                                : (String(root.eqData.dynamics || "off") === "balanced" ? 1 : 0)
+                                            accentColor: ThemeBackend.mauve || "#cba6f7"
+                                            baseColor: ThemeBackend.surface2 || "#585b70"
+                                            textColor: ThemeBackend.subtext0 || "#a6adc8"
+                                            activeTextColor: ThemeBackend.base || "#1e1e2e"
+                                            cornerRadius: ThemeBackend.borderRadius
+                                            fontPixelSize: root.s(10.5)
+                                            minFontPixelSize: root.s(7)
+                                            onToggled: index => root.setDynamics(index === 2 ? "night" : (index === 1 ? "balanced" : "off"))
+
+                                            Connections {
+                                                target: root
+                                                function onEqDataChanged() {
+                                                    var value = String(root.eqData.dynamics || "off");
+                                                    dynamicsSwitch.currentIndex = value === "night" ? 2 : (value === "balanced" ? 1 : 0);
+                                                }
+                                            }
                                         }
                                     }
                                 }

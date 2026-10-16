@@ -992,7 +992,15 @@
       "left_only": "Yalnızca sol kanal",
       "right_only": "Yalnızca sağ kanal",
       "left_favored": "Sola ağırlıklı",
-      "right_favored": "Sağa ağırlıklı"
+      "right_favored": "Sağa ağırlıklı",
+      "test": "Test",
+      "stop_test": "Durdur",
+      "mono": "Mono ses",
+      "swap": "Sol/sağ değiştir",
+      "dynamic_range": "Dinamik aralık",
+      "off": "Kapalı",
+      "balanced": "Dengeli",
+      "night": "Gece"
     }
   },
   "network": {

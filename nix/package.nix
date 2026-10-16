@@ -12,6 +12,7 @@
 , brightnessctl
 , ddcutil
 , cava
+, calf
 , cliphist
 , easyeffects
 , fastfetch
@@ -66,6 +67,7 @@ let
     brightnessctl
     ddcutil
     cava
+    calf
     cliphist
     easyeffects
     fastfetch

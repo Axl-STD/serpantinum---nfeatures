@@ -1021,7 +1021,15 @@
       "left_only": "Solo izquierda",
       "right_only": "Solo derecha",
       "left_favored": "Favorece la izquierda",
-      "right_favored": "Favorece la derecha"
+      "right_favored": "Favorece la derecha",
+      "test": "Probar",
+      "stop_test": "Detener",
+      "mono": "Audio mono",
+      "swap": "Intercambiar I/D",
+      "dynamic_range": "Rango dinámico",
+      "off": "Desactivado",
+      "balanced": "Equilibrado",
+      "night": "Nocturno"
     },
     "presets": {
       "flat": "Plano",

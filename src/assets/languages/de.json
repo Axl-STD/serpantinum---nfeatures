@@ -1021,7 +1021,15 @@
       "left_only": "Nur links",
       "right_only": "Nur rechts",
       "left_favored": "Linksbetont",
-      "right_favored": "Rechtsbetont"
+      "right_favored": "Rechtsbetont",
+      "test": "Test",
+      "stop_test": "Stopp",
+      "mono": "Mono-Audio",
+      "swap": "L/R tauschen",
+      "dynamic_range": "Dynamikumfang",
+      "off": "Aus",
+      "balanced": "Ausgewogen",
+      "night": "Nacht"
     },
     "presets": {
       "flat": "Linear",

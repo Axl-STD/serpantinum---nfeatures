@@ -992,7 +992,15 @@
       "left_only": "केवल बायाँ चैनल",
       "right_only": "केवल दायाँ चैनल",
       "left_favored": "बाईं ओर झुकाव",
-      "right_favored": "दाईं ओर झुकाव"
+      "right_favored": "दाईं ओर झुकाव",
+      "test": "परीक्षण",
+      "stop_test": "रोकें",
+      "mono": "मोनो ऑडियो",
+      "swap": "बायाँ/दायाँ बदलें",
+      "dynamic_range": "डायनेमिक रेंज",
+      "off": "बंद",
+      "balanced": "संतुलित",
+      "night": "रात्रि"
     }
   },
   "network": {

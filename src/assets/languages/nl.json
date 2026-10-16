@@ -992,7 +992,15 @@
       "left_only": "Alleen links",
       "right_only": "Alleen rechts",
       "left_favored": "Meer links",
-      "right_favored": "Meer rechts"
+      "right_favored": "Meer rechts",
+      "test": "Test",
+      "stop_test": "Stoppen",
+      "mono": "Mono-audio",
+      "swap": "L/R omwisselen",
+      "dynamic_range": "Dynamisch bereik",
+      "off": "Uit",
+      "balanced": "Gebalanceerd",
+      "night": "Nacht"
     }
   },
   "network": {

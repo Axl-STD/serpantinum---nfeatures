@@ -976,7 +976,15 @@
       "left_only": "Solo sinistra",
       "right_only": "Solo destra",
       "left_favored": "Prevalenza a sinistra",
-      "right_favored": "Prevalenza a destra"
+      "right_favored": "Prevalenza a destra",
+      "test": "Prova",
+      "stop_test": "Ferma",
+      "mono": "Audio mono",
+      "swap": "Scambia S/D",
+      "dynamic_range": "Gamma dinamica",
+      "off": "Disattivato",
+      "balanced": "Bilanciato",
+      "night": "Notte"
     },
     "presets": {
       "flat": "Piatto",

@@ -60,6 +60,7 @@ declare -A PM_PKG_MAP=(
     [wmctrl]="wmctrl"
     [power-profiles-daemon]="ppd-service"
     [easyeffects]="easyeffects"
+    [calf]="calf"
     [lsp-plugins-lv2]="lsp-plugins-lv2"
     [nautilus]="nautilus"
     [qt5-wayland]="qt5-qtwayland"

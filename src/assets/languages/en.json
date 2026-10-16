@@ -980,7 +980,15 @@
       "left_only": "Left only",
       "right_only": "Right only",
       "left_favored": "Left favored",
-      "right_favored": "Right favored"
+      "right_favored": "Right favored",
+      "test": "Test",
+      "stop_test": "Stop",
+      "mono": "Mono audio",
+      "swap": "Swap L/R",
+      "dynamic_range": "Dynamic range",
+      "off": "Off",
+      "balanced": "Balanced",
+      "night": "Night"
     },
     "presets": {
       "flat": "Flat",
