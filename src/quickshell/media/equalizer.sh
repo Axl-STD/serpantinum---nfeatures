@@ -14,9 +14,9 @@ mkdir -p "$PRESET_DIR"
 
 if [ ! -f "$STATE_FILE" ]; then
     echo '{"b1": 0, "b2": 0, "b3": 0, "b4": 0, "b5": 0, "b6": 0, "b7": 0, "b8": 0, "b9": 0, "b10": 0, "preset": "Flat", "pending": false, "balance": 0, "mono": false, "swap": false, "dynamics": "off"}' > "$STATE_FILE"
-else
-    jq -c '.balance //= 0 | .mono //= false | .swap //= false | .dynamics //= "off"' \
-        "$STATE_FILE" > "$STATE_FILE.tmp.$$" && mv -f "$STATE_FILE.tmp.$$" "$STATE_FILE"
+elif ! jq -e 'has("balance") and has("mono") and has("swap") and has("dynamics")' "$STATE_FILE" >/dev/null 2>&1; then
+    updated=$(jq -c '.balance //= 0 | .mono //= false | .swap //= false | .dynamics //= "off"' "$STATE_FILE") &&
+        echo "$updated" > "$STATE_FILE"
 fi
 
 ensure_easyeffects() {
@@ -148,6 +148,10 @@ try:
     }
 
     if mono or swap:
+        # EasyEffects loads Calf's LV2 StereoTools for mono and channel swapping:
+        # http://calf.sourceforge.net/plugins/StereoTools
+        # Keep calf in the installation dependencies; lsp-plugins-lv2 does not
+        # provide this plugin (it provides the compressor and limiter below).
         output['plugins_order'].append('stereo_tools')
         output['stereo_tools'] = {
             'balance-in': 0.0,
