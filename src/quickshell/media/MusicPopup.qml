@@ -2318,7 +2318,7 @@ Item {
 
                                     Repeater {
                                         model: [
-                                            { key: "mono", icon: "󰍬", label: typeof I18n !== "undefined" ? I18n.t("music.audio.mono", "Mono audio") : "Mono audio" },
+                                            { key: "mono", icon: "󰘭", label: typeof I18n !== "undefined" ? I18n.t("music.audio.mono", "Mono audio") : "Mono audio" },
                                             { key: "swap", icon: "󰓡", label: typeof I18n !== "undefined" ? I18n.t("music.audio.swap", "Swap L/R") : "Swap L/R" }
                                         ]
 

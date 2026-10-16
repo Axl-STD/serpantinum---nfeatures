@@ -176,19 +176,11 @@ try:
 
     if dynamics != 'off':
         night = dynamics == 'night'
-        output['plugins_order'].extend(['autogain', 'compressor', 'limiter'])
-        output['autogain'] = {
-            'bypass': False,
-            'input-gain': 0.0,
-            'output-gain': 0.0,
-            'reference': 'Geometric Mean (MSI)',
-            'silence-threshold': -70.0,
-            'maximum-history': 15,
-            'force-silence': True,
-            'target': -23.0 if night else -18.0
-        }
+        # Keep Off as the loudness reference. Dynamic-range modes only reduce
+        # peaks; they must not normalize or add makeup gain when enabled.
+        output['plugins_order'].extend(['compressor', 'limiter'])
         output['compressor'] = {
-            'attack': 10.0 if night else 20.0,
+            'attack': 6.0 if night else 14.0,
             'boost-amount': 6.0,
             'boost-threshold': -72.0,
             'bypass': False,
@@ -196,14 +188,14 @@ try:
             'hpf-frequency': 10.0,
             'hpf-mode': 'off',
             'input-gain': 0.0,
-            'knee': -6.0,
+            'knee': -14.0 if night else -10.0,
             'lpf-frequency': 20000.0,
             'lpf-mode': 'off',
-            'makeup': 4.0 if night else 0.0,
+            'makeup': 0.0,
             'mode': 'Downward',
             'output-gain': 0.0,
-            'ratio': 4.0 if night else 2.0,
-            'release': 260.0 if night else 160.0,
+            'ratio': 6.0 if night else 2.8,
+            'release': 320.0 if night else 200.0,
             'release-threshold': -100.0,
             'sidechain': {'lookahead': 0.0, 'mode': 'RMS', 'preamp': 0.0, 'reactivity': 10.0, 'source': 'Middle', 'stereo-split-source': 'Left/Right', 'type': 'Feed-forward'},
             'stereo-split': False,
@@ -213,7 +205,7 @@ try:
             'sidechain-to-link': 0.0,
             'link-to-input': 0.0,
             'link-to-sidechain': 0.0,
-            'threshold': -30.0 if night else -18.0,
+            'threshold': -36.0 if night else -26.0,
             'wet': 0.0
         }
         output['limiter'] = {
