@@ -252,6 +252,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Ekranların düzülüşü",
+        "preview": "Baxmaq üçün ekran seçin. Yalnız önizləmə."
+      },
       "bluelight": {
         "title": "Mavi işıq süzgəci",
         "desc": "Ekranın isti işıqlandırmasını aç və ya söndür"
@@ -320,6 +324,21 @@
           "follows_hint": "Divar kağızını izləyir",
           "none": "Fon seçilməyib"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

@@ -14,6 +14,56 @@ GuideTab {
 
     property var displaySettings: JSON.parse(JSON.stringify(Config.getSetting("display", defaultDisplaySettings)))
     property var monitorsList: []
+    property string selectedMonitorName: ""
+    // v0.5.40: pending session-only changes. Never applied or persisted.
+    property var pendingDisplayChanges: ({})
+    readonly property int pendingDisplayCount: Object.keys(pendingDisplayChanges).length
+    function stageDisplayChange(monName, key, value) {
+        if (!monName || !monitorsList.some(m => m.name === monName)) return false;
+        if (key !== "powerEnabled" && key !== "scale") return false;
+        if (key === "scale" && (!isFinite(Number(value)) || Number(value) <= 0)) return false;
+        let changes = Object.assign({}, pendingDisplayChanges);
+        let entry = Object.assign({}, changes[monName] || {});
+        entry[key] = value;
+        changes[monName] = entry;
+        pendingDisplayChanges = changes;
+        return true;
+    }
+    function discardDisplayChanges() {
+        pendingDisplayChanges = ({});
+        pendingMonScaleName = "";
+        scaleDebounceTimer.stop();
+    }
+    function pendingDisplayValue(monName, key, fallback) {
+        let entry = pendingDisplayChanges[monName];
+        return entry && entry[key] !== undefined ? entry[key] : fallback;
+    }
+
+    // Session-only display planning. Never write monitor configuration on startup.
+    property string preferredPrimaryMonitor: ""
+    property string previewDisplayMode: "extend"
+    property string previewMirrorSource: ""
+    readonly property var connectedDisplayNames: monitorsList.filter(m => m.active).map(m => m.name)
+    function ensureDisplaySelection() {
+        let names = connectedDisplayNames;
+        if (!names.length) {
+            preferredPrimaryMonitor = "";
+            previewMirrorSource = "";
+            return;
+        }
+        if (names.indexOf(preferredPrimaryMonitor) < 0)
+            preferredPrimaryMonitor = names[0];
+        if (names.indexOf(previewMirrorSource) < 0)
+            previewMirrorSource = preferredPrimaryMonitor;
+    }
+    function choosePrimaryMonitor(name) {
+        if (connectedDisplayNames.indexOf(name) < 0) return;
+        let previous = preferredPrimaryMonitor;
+        preferredPrimaryMonitor = name;
+        if (!previewMirrorSource || previewMirrorSource === previous)
+            previewMirrorSource = name;
+    }
+
 
     readonly property string compositor: {
         let de = (SystemInfo.desktopEnv || "").toLowerCase();
@@ -305,8 +355,8 @@ GuideTab {
                                 let item = data[i];
                                 let name = item.name || "";
                                 let cm = item.current_mode || {};
-                                let w = cm.width || item.rect?.width || 0;
-                                let h = cm.height || item.rect?.height || 0;
+                                let w = cm.width || (item.rect ? item.rect.width : 0) || 0;
+                                let h = cm.height || (item.rect ? item.rect.height : 0) || 0;
                                 let rr = cm.refresh ? Math.round(cm.refresh / 1000) : 60;
                                 let sc = item.scale !== undefined ? item.scale : 1.0;
                                 let isOff = item.active === false;
@@ -332,9 +382,15 @@ GuideTab {
                                 mList.push({
                                     name: name,
                                     dimensions: w + "x" + h,
-                                    framerate: rr.toString(),
+                                    framerate: (item.refreshRate !== undefined ? Number(item.refreshRate).toFixed(2) : rr.toString()),
                                     scale: sc,
-                                    active: !isOff
+                                    active: !isOff,
+                                    x: Number(item.x) || 0,
+                                    y: Number(item.y) || 0,
+                                    transform: Number(item.transform) || 0,
+                                    description: item.description || name,
+                                    availableModes: Array.isArray(item.availableModes) ? item.availableModes : [],
+                                    mirrorOf: item.mirrorOf || "none"
                                 });
                             }
                         }
@@ -343,10 +399,41 @@ GuideTab {
                 }
                 if (mList.length > 0) {
                     displayTabRoot.monitorsList = mList;
+                    displayTabRoot.ensureDisplaySelection();
+                    if (!mList.some(m => m.name === displayTabRoot.selectedMonitorName))
+                        displayTabRoot.selectedMonitorName = mList[0].name;
                     displayTabRoot.refreshDisplaySettings();
                 }
             }
         }
+    }
+
+    // Available modes are read-only until transactional apply/rollback is implemented.
+    function parseAvailableModes(mon) {
+        let modes = [];
+        let seen = {};
+        let raw = mon && mon.availableModes && typeof mon.availableModes.length === "number" ? mon.availableModes : [];
+        for (let i = 0; i < raw.length; i++) {
+            let entry = raw[i];
+            let width = 0, height = 0, hz = 0;
+            if (typeof entry === "string") {
+                let text = String(entry).trim().replace(/Hz$/i, "");
+                let parts = text.split("@");
+                if (parts.length !== 2) continue;
+                let dimensions = parts[0].split("x");
+                if (dimensions.length !== 2) continue;
+                width = Number(dimensions[0]); height = Number(dimensions[1]); hz = Number(parts[1]);
+            } else if (entry && typeof entry === "object") {
+                width = Number(entry.width); height = Number(entry.height);
+                hz = Number(entry.refresh_rate !== undefined ? entry.refresh_rate / 1000 : (entry.refresh !== undefined ? entry.refresh / 1000 : entry.refreshRate));
+            }
+            if (!(width > 0 && height > 0 && hz > 0)) continue;
+            let key = width + "x" + height + "@" + hz.toFixed(2);
+            if (seen[key]) continue;
+            seen[key] = true;
+            modes.push({ width: width, height: height, hz: hz, resolution: width + "x" + height, key: key });
+        }
+        return modes;
     }
 
     function reloadMonitors() {
@@ -381,48 +468,12 @@ GuideTab {
         displayTabRoot.displaySettings = JSON.parse(JSON.stringify(current));
     }
 
+    // Compatibility entrypoints: staging only, across all compositors.
     function applyMonitorPower(monName, enabled) {
-        if (!monName) return;
-        if (displayTabRoot.compositor === "niri") {
-            Quickshell.execDetached(["bash", "-c", enabled ? "niri msg output " + monName + " on" : "niri msg output " + monName + " off"]);
-        } else if (displayTabRoot.compositor === "sway") {
-            Quickshell.execDetached(["bash", "-c", "swaymsg output " + monName + (enabled ? " enable" : " disable")]);
-        } else if (displayTabRoot.compositor === "mango") {
-            Quickshell.execDetached(["mmsg", "dispatch", (enabled ? "wakeup_monitor," : "sleep_monitor,") + monName]);
-        } else {
-            let mon = displayTabRoot.monitorsList.find(m => m.name === monName);
-            let modeStr = mon ? (mon.dimensions + "@" + mon.framerate) : "preferred";
-            let scaleVal = mon ? mon.scale : 1.0;
-            if (enabled) {
-                let luaCmd =
-                    'hl.monitor({' +
-                    ' output = "' + monName + '",' +
-                    ' mode = "' + modeStr + '",' +
-                    ' position = "auto",' +
-                    ' scale = ' + scaleVal.toString() + ',' +
-                    ' disabled = false' +
-                    ' })';
-                Quickshell.execDetached(["bash", "-c", "hyprctl eval '" + luaCmd + "'"]);
-            } else {
-                let luaCmd =
-                    'hl.monitor({ output = "' + monName + '", disabled = true })';
-                Quickshell.execDetached(["bash", "-c", "hyprctl eval '" + luaCmd + "'"]);
-            }
-        }
+        return stageDisplayChange(monName, "powerEnabled", !!enabled);
     }
-
     function applyMonitorScale(monName, scaleVal) {
-        if (!monName || !scaleVal) return;
-        if (displayTabRoot.compositor === "niri") {
-            Quickshell.execDetached(["bash", "-c", "niri msg output " + monName + " scale " + scaleVal.toString()]);
-        } else if (displayTabRoot.compositor === "sway") {
-            Quickshell.execDetached(["bash", "-c", "swaymsg output " + monName + " scale " + scaleVal.toString()]);
-        } else if (displayTabRoot.compositor !== "mango") {
-            let mon = displayTabRoot.monitorsList.find(m => m.name === monName);
-            let modeStr = mon ? (mon.dimensions + "@" + mon.framerate) : "preferred";
-            let luaCmd = 'hl.monitor({ output = "' + monName + '", mode = "' + modeStr + '", position = "auto", scale = ' + scaleVal.toString() + ' })';
-            Quickshell.execDetached(["bash", "-c", "hyprctl eval '" + luaCmd + "' || hyprctl keyword monitor " + monName + "," + modeStr + ",auto," + scaleVal.toString()]);
-        }
+        return stageDisplayChange(monName, "scale", Number(scaleVal));
     }
 
     function updateMonitorSettingDebounced(monName, tempVal) {
@@ -466,7 +517,6 @@ GuideTab {
         onTriggered: {
             if (displayTabRoot.pendingMonScaleName !== "") {
                 displayTabRoot.applyMonitorScale(displayTabRoot.pendingMonScaleName, displayTabRoot.pendingMonScaleVal);
-                displayTabRoot.updateMonitorSetting(displayTabRoot.pendingMonScaleName, "scale", displayTabRoot.pendingMonScaleVal);
                 displayTabRoot.pendingMonScaleName = "";
             }
         }

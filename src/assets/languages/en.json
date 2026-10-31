@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Display arrangement",
+        "preview": "Select a display to inspect it. Arrangement preview only."
+      },
       "bluelight": {
         "title": "Blue light filter",
         "desc": "Toggle warm screen lighting"
@@ -322,6 +326,21 @@
           "follows_hint": "Follows wallpaper",
           "none": "No background selected"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Bố trí màn hình",
+        "preview": "Chọn màn hình để xem. Chỉ xem trước."
+      },
       "bluelight": {
         "title": "Bộ lọc ánh sáng xanh",
         "desc": "Bật/tắt ánh sáng màn hình ấm"
@@ -322,6 +326,21 @@
           "follows_hint": "Đang theo hình nền",
           "none": "Chưa chọn nền"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

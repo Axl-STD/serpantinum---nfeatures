@@ -1082,6 +1082,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Układ ekranów",
+        "preview": "Wybierz ekran do podglądu. Tylko podgląd."
+      },
       "bluelight": {
         "title": "Filtr światła niebieskiego",
         "desc": "Przełącz ciepłe oświetlenie ekranu"
@@ -1150,6 +1154,21 @@
           "follows_hint": "Podąża za tapetą",
           "none": "Nie wybrano tła"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

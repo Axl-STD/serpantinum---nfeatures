@@ -1082,6 +1082,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "ディスプレイの配置",
+        "preview": "確認する画面を選択してください。プレビューのみ。"
+      },
       "bluelight": {
         "title": "ブルーライトフィルター",
         "desc": "画面の暖色照明を切り替えます"
@@ -1150,6 +1154,21 @@
           "follows_hint": "壁紙に従います",
           "none": "背景が選択されていません"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

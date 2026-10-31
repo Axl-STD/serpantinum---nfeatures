@@ -255,6 +255,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Bildschirmanordnung",
+        "preview": "Bildschirm zur Ansicht wählen. Nur Vorschau."
+      },
       "bluelight": {
         "title": "Blaulichtfilter",
         "desc": "Warme Bildschirmfarben umschalten"
@@ -323,6 +327,21 @@
           "follows_hint": "Folgt dem Hintergrundbild",
           "none": "Kein Hintergrund ausgewählt"
         }
+      },
+      "resolution": {
+        "title": "Auflösung"
+      },
+      "refresh": {
+        "title": "Bildwiederholrate"
+      },
+      "arrangement": {
+        "mode": "Anzeigemodus",
+        "extend": "Bildschirme erweitern",
+        "mirror": "Bildschirme duplizieren",
+        "source": "Quellbildschirm",
+        "primary": "Hauptbildschirm",
+        "make_primary": "Als Hauptbildschirm festlegen",
+        "preview": "Nur Vorschau – die Bildschirmeinstellungen wurden nicht geändert."
       }
     },
     "bar": {

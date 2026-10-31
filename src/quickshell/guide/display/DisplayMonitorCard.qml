@@ -18,16 +18,31 @@ Rectangle {
     property string monName: modelData.name
     property var monSettings: (monDelegate.tab && monDelegate.tab.displaySettings && monDelegate.tab.displaySettings.monitors && monDelegate.tab.displaySettings.monitors[monName]) ? monDelegate.tab.displaySettings.monitors[monName] : ({})
 
-    property bool monitorPowered: monSettings && monSettings.powerEnabled !== undefined ? monSettings.powerEnabled : (modelData && modelData.active !== undefined ? modelData.active : true)
+    // Explicit local UI state: avoid evaluating pendingDisplayChanges from a
+    // binding that is also reached through the Toggle's click handler.
+    property bool monitorPowered: true
+    function syncMonitorPower() {
+        if (!monDelegate.tab || !monDelegate.modelData) return;
+        let observed = monDelegate.modelData.active !== undefined ? !!monDelegate.modelData.active : true;
+        let desired = !!monDelegate.tab.pendingDisplayValue(monDelegate.monName, "powerEnabled", observed);
+        if (monDelegate.monitorPowered !== desired)
+            monDelegate.monitorPowered = desired;
+    }
+    Connections {
+        target: monDelegate.tab
+        function onPendingDisplayChangesChanged() { monDelegate.syncMonitorPower(); }
+    }
+    onModelDataChanged: syncMonitorPower()
+    onMonNameChanged: syncMonitorPower()
     property bool filterEnabled: monSettings && monSettings.enabled !== undefined ? monSettings.enabled : false
     property bool filterAuto: monSettings && monSettings.auto !== undefined ? monSettings.auto : false
     property real currentTemp: monSettings && monSettings.temperature !== undefined ? monSettings.temperature : 50
-    property real currentScale: modelData.scale !== undefined ? modelData.scale : 1.0
+    readonly property real currentScale: monDelegate.tab.pendingDisplayValue(monName, "scale", modelData.scale !== undefined ? modelData.scale : 1.0)
 
     readonly property color cardTint: monitorPowered ? Qt.alpha(ThemeBackend.surface0, 0.4) : Qt.darker(Qt.alpha(ThemeBackend.surface0, 0.4), 1.1)
     color: monDelegateGlass.active ? "transparent" : cardTint
-    border.color: monitorPowered ? Qt.alpha(ThemeBackend.surface1, 0.4) : Qt.darker(Qt.alpha(ThemeBackend.surface1, 0.4), 1.1)
-    border.width: ThemeBackend.liquidGlass ? 0 : 1
+    border.color: monDelegate.tab.selectedMonitorName === monName ? ThemeBackend.mauve : (monitorPowered ? Qt.alpha(ThemeBackend.surface1, 0.4) : Qt.darker(Qt.alpha(ThemeBackend.surface1, 0.4), 1.1))
+    border.width: monDelegate.tab.selectedMonitorName === monName ? rootObj.s(2) : (ThemeBackend.liquidGlass ? 0 : 1)
 
     GlassFill {
         id: monDelegateGlass
@@ -51,6 +66,7 @@ Rectangle {
 
     Component.onCompleted: {
         appeared = true;
+        syncMonitorPower();
     }
 
     property var resDims: modelData.dimensions ? modelData.dimensions.split("x") : ["1920", "1080"]
@@ -67,9 +83,6 @@ Rectangle {
 
     onMonSettingsChanged: {
         if (!monSettings) return;
-        if (monSettings.powerEnabled !== undefined) {
-            monitorPowered = monSettings.powerEnabled;
-        }
         filterEnabled = monSettings.enabled !== undefined ? monSettings.enabled : false;
         filterAuto = monSettings.auto !== undefined ? monSettings.auto : false;
         if (monDelegate.tab.pendingMonName !== monName && !temperatureSlider.pressed) {
@@ -77,14 +90,6 @@ Rectangle {
         }
     }
 
-    onModelDataChanged: {
-        if (monSettings.powerEnabled === undefined && modelData.active !== undefined) {
-            monitorPowered = modelData.active;
-        }
-        if (monDelegate.tab.pendingMonScaleName !== monName) {
-            currentScale = modelData.scale !== undefined ? modelData.scale : 1.0;
-        }
-    }
 
     ColumnLayout {
         id: boxLayout
@@ -119,6 +124,11 @@ Rectangle {
             }
         }
 
+        DisplayModePreview {
+            tab: monDelegate.tab
+            monitor: monDelegate.modelData
+        }
+
         SettingsRow {
             visible: monDelegate.tab.monitorsList.length > 1
             rootObj: monDelegate.rootObj
@@ -135,11 +145,11 @@ Rectangle {
                 handleColor: ThemeBackend.crust
                 handleOffColor: ThemeBackend.text
                 onToggled: function(c) {
+                    // User action only. No compositor command is issued.
                     monDelegate.monitorPowered = c;
-                    monDelegate.tab.updateMonitorSetting(monDelegate.monName, "powerEnabled", c);
-                    monDelegate.tab.applyMonitorPower(monDelegate.monName, c);
+                    if (!monDelegate.tab.applyMonitorPower(monDelegate.monName, c))
+                        monDelegate.syncMonitorPower();
                 }
-
                 Binding {
                     target: powerToggle
                     property: "checked"
@@ -209,7 +219,7 @@ Rectangle {
                 Item {
                     id: tempSectionWrapper
                     Layout.fillWidth: true
-                    property bool isOpen: !monDelegate.filterAuto
+                    property bool isOpen: true
                     clip: true
                     visible: implicitHeight > 0
                     opacity: isOpen ? 1.0 : 0.0
@@ -232,6 +242,8 @@ Rectangle {
 
                         Draggable {
                             id: temperatureSlider
+                            enabled: !monDelegate.filterAuto
+                            opacity: enabled ? 1.0 : 0.55
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             Layout.rightMargin: rootObj.s(8)
                             implicitWidth: rootObj.s(220)
@@ -306,20 +318,10 @@ Rectangle {
                     let i = Math.round(idx);
                     let s = monDelegate.validScales[i] !== undefined ? monDelegate.validScales[i] : 1.0;
                     if (monDelegate.currentScale !== s) {
-                        monDelegate.currentScale = s;
-                        monDelegate.tab.pendingMonScaleName = monDelegate.monName;
-                        monDelegate.tab.pendingMonScaleVal = s;
-                        monDelegate.tab.scaleDebounceTimer.restart();
+                        monDelegate.tab.applyMonitorScale(monDelegate.monName, s);
                     }
                 }
-                onDragFinished: {
-                    monDelegate.tab.scaleDebounceTimer.stop();
-                    if (monDelegate.tab.pendingMonScaleName !== "") {
-                        monDelegate.tab.applyMonitorScale(monDelegate.tab.pendingMonScaleName, monDelegate.tab.pendingMonScaleVal);
-                        monDelegate.tab.updateMonitorSetting(monDelegate.tab.pendingMonScaleName, "scale", monDelegate.tab.pendingMonScaleVal);
-                        monDelegate.tab.pendingMonScaleName = "";
-                    }
-                }
+                // Changes are staged on movement; no compositor command is issued.
             }
         }
     }

@@ -519,6 +519,10 @@
       "unavailable": "غير متوفر"
     },
     "display": {
+      "layout": {
+        "title": "ترتيب الشاشات",
+        "preview": "حدد شاشة لعرضها. معاينة الترتيب فقط."
+      },
       "bluelight": {
         "desc": "تبديل إضاءة الشاشة الدافئة",
         "title": "مرشح الضوء الأزرق"
@@ -587,6 +591,21 @@
           "follows_hint": "يتبع الخلفية",
           "none": "لم يتم اختيار خلفية"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "dock": {

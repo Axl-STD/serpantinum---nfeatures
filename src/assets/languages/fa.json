@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "چیدمان نمایشگرها",
+        "preview": "برای مشاهده یک نمایشگر را انتخاب کنید. فقط پیش‌نمایش."
+      },
       "bluelight": {
         "title": "فیلتر نور آبی",
         "desc": "تغییر نور گرم صفحه نمایش"
@@ -322,6 +326,21 @@
           "follows_hint": "از تصویر زمینه پیروی می‌کند",
           "none": "پس‌زمینه‌ای انتخاب نشده"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

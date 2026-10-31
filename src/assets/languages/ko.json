@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "디스플레이 배치",
+        "preview": "확인할 화면을 선택하세요. 미리보기 전용입니다."
+      },
       "bluelight": {
         "title": "블루라이트 필터",
         "desc": "따뜻한 화면 조명을 켜거나 끕니다"
@@ -322,6 +326,21 @@
           "follows_hint": "배경화면을 따라갑니다",
           "none": "선택된 배경 없음"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

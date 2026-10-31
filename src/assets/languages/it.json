@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Disposizione schermi",
+        "preview": "Seleziona uno schermo. Solo anteprima."
+      },
       "bluelight": {
         "title": "Filtro luce blu",
         "desc": "Attiva/disattiva la luce calda dello schermo"
@@ -322,6 +326,21 @@
           "follows_hint": "Segue lo sfondo",
           "none": "Nessuno sfondo selezionato"
         }
+      },
+      "resolution": {
+        "title": "Risoluzione"
+      },
+      "refresh": {
+        "title": "Frequenza di aggiornamento"
+      },
+      "arrangement": {
+        "mode": "Modalità schermo",
+        "extend": "Estendi schermi",
+        "mirror": "Duplica schermi",
+        "source": "Schermo sorgente",
+        "primary": "Schermo principale",
+        "make_primary": "Imposta come principale",
+        "preview": "Solo anteprima: nessuna impostazione dello schermo è stata modificata."
       }
     },
     "bar": {

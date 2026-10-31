@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Disposition des écrans",
+        "preview": "Sélectionnez un écran. Aperçu uniquement."
+      },
       "bluelight": {
         "title": "Filtre de lumière bleue",
         "desc": "Activer l'éclairage chaud de l'écran"
@@ -322,6 +326,21 @@
           "follows_hint": "Suit le fond d'écran",
           "none": "Aucun arrière-plan sélectionné"
         }
+      },
+      "resolution": {
+        "title": "Résolution"
+      },
+      "refresh": {
+        "title": "Fréquence de rafraîchissement"
+      },
+      "arrangement": {
+        "mode": "Mode d’affichage",
+        "extend": "Étendre les écrans",
+        "mirror": "Dupliquer les écrans",
+        "source": "Écran source",
+        "primary": "Écran principal",
+        "make_primary": "Définir comme principal",
+        "preview": "Aperçu uniquement : aucun paramètre d’affichage n’a été modifié."
       }
     },
     "bar": {

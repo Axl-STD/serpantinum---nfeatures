@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Schermindeling",
+        "preview": "Selecteer een scherm. Alleen voorbeeldweergave."
+      },
       "bluelight": {
         "title": "Blauwlichtfilter",
         "desc": "Warme schermverlichting in-/uitschakelen"
@@ -322,6 +326,21 @@
           "follows_hint": "Volgt de achtergrond",
           "none": "Geen achtergrond geselecteerd"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

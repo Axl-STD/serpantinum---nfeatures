@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "顯示器配置",
+        "preview": "選取顯示器以檢視。僅供預覽。"
+      },
       "bluelight": {
         "title": "藍光濾鏡",
         "desc": "切換暖色螢幕光線"
@@ -322,6 +326,21 @@
           "follows_hint": "跟隨桌布",
           "none": "未選擇背景"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

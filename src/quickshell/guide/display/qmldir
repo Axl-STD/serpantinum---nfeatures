@@ -9,3 +9,6 @@ WidgetPresetMiniWidget 1.0 WidgetPresetMiniWidget.qml
 WidgetItemCard 1.0 WidgetItemCard.qml
 DisplayLockscreenState 1.0 DisplayLockscreenState.qml
 LockBackgroundPreview 1.0 LockBackgroundPreview.qml
+DisplayLayoutMap 1.0 DisplayLayoutMap.qml
+DisplayModePreview 1.0 DisplayModePreview.qml
+DisplayArrangementControls 1.0 DisplayArrangementControls.qml

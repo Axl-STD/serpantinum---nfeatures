@@ -255,6 +255,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Distribución de pantallas",
+        "preview": "Selecciona una pantalla para verla. Vista previa de la distribución."
+      },
       "bluelight": {
         "title": "Filtro de luz azul",
         "desc": "Activar iluminación cálida de pantalla"
@@ -323,6 +327,21 @@
           "follows_hint": "Sigue el fondo de pantalla",
           "none": "Ningún fondo seleccionado"
         }
+      },
+      "resolution": {
+        "title": "Resolución"
+      },
+      "refresh": {
+        "title": "Frecuencia de actualización"
+      },
+      "arrangement": {
+        "mode": "Modo de visualización",
+        "extend": "Extender pantallas",
+        "mirror": "Duplicar pantallas",
+        "source": "Pantalla de origen",
+        "primary": "Pantalla principal",
+        "make_primary": "Establecer como principal",
+        "preview": "Solo vista previa: no se ha modificado la configuración de pantallas."
       }
     },
     "bar": {

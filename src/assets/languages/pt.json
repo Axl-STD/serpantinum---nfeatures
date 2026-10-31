@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Disposição dos monitores",
+        "preview": "Selecione um monitor. Apenas pré-visualização."
+      },
       "bluelight": {
         "title": "Filtro de luz azul",
         "desc": "Alterna iluminação quente da tela"
@@ -322,6 +326,21 @@
           "follows_hint": "Segue o papel de parede",
           "none": "Nenhum plano de fundo selecionado"
         }
+      },
+      "resolution": {
+        "title": "Resolução"
+      },
+      "refresh": {
+        "title": "Taxa de atualização"
+      },
+      "arrangement": {
+        "mode": "Modo de exibição",
+        "extend": "Estender telas",
+        "mirror": "Duplicar telas",
+        "source": "Tela de origem",
+        "primary": "Tela principal",
+        "make_primary": "Definir como principal",
+        "preview": "Apenas pré-visualização: nenhuma configuração de tela foi alterada."
       }
     },
     "bar": {

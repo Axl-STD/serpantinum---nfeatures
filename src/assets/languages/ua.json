@@ -252,6 +252,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Розташування екранів",
+        "preview": "Виберіть екран для перегляду. Лише попередній перегляд."
+      },
       "bluelight": {
         "title": "Фільтр синього світла",
         "desc": "Увімкнути теплі кольори екрана"
@@ -320,6 +324,21 @@
           "follows_hint": "Слідує шпалерам",
           "none": "Тло не вибрано"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

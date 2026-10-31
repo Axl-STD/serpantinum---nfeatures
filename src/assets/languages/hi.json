@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "डिस्प्ले व्यवस्था",
+        "preview": "देखने के लिए डिस्प्ले चुनें। केवल पूर्वावलोकन।"
+      },
       "bluelight": {
         "title": "ब्लू लाइट फ़िल्टर",
         "desc": "वार्म स्क्रीन लाइटिंग टॉगल करें"
@@ -322,6 +326,21 @@
           "follows_hint": "वॉलपेपर का अनुसरण करता है",
           "none": "कोई पृष्ठभूमि चयनित नहीं"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

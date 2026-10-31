@@ -254,6 +254,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "显示器布局",
+        "preview": "选择显示器以查看。仅供预览。"
+      },
       "bluelight": {
         "title": "防蓝光护眼",
         "desc": "切换暖色屏幕色温"
@@ -322,6 +326,21 @@
           "follows_hint": "跟随壁纸",
           "none": "未选择背景"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {

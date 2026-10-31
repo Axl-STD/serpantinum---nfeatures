@@ -255,6 +255,10 @@
       }
     },
     "display": {
+      "layout": {
+        "title": "Расположение экранов",
+        "preview": "Выберите экран для просмотра. Только предпросмотр."
+      },
       "bluelight": {
         "title": "Фильтр синего света",
         "desc": "Включить теплые цвета экрана"
@@ -323,6 +327,21 @@
           "follows_hint": "Следует обоям",
           "none": "Фон не выбран"
         }
+      },
+      "resolution": {
+        "title": "Resolution"
+      },
+      "refresh": {
+        "title": "Refresh rate"
+      },
+      "arrangement": {
+        "mode": "Display mode",
+        "extend": "Extend displays",
+        "mirror": "Duplicate displays",
+        "source": "Source display",
+        "primary": "Primary display",
+        "make_primary": "Set as primary",
+        "preview": "Preview only — no display settings have been changed."
       }
     },
     "bar": {
