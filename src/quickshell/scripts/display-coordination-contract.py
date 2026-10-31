@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serpantinum v0.5.50: read-only coordination contract.
+"""Serpantinum v0.5.54: read-only coordination contract.
 
 Diagnostic inspection only. No authorization, locking, recovery or physical actions.
 Snapshots are non-atomic; do not use this result as an execution precheck.
@@ -200,6 +200,95 @@ def inspect_stores(bundle_root=None, journal_root=None, reservation_root=None):
     return classify_stores(b, j, r)
 
 
+
+def observe_stores_twice(bundle_root=None, journal_root=None, reservation_root=None, reader=None):
+    """Compare two sequential validated observations and raw evidence fingerprints.
+
+    Diagnostic only: no atomicity, no locks, no execution authorization. A
+    transient change reverted between observations may remain undetected.
+    """
+    denied = {'version': '0.5.54', 'mode': 'read-only-double-observation',
+              'atomicCrossStoreSnapshot': False, 'evidenceAuthenticated': False,
+              'executionAuthorized': False, 'finalizationAuthorized': False,
+              'reservationReusable': False, 'physicalExecutionEnabled': False,
+              'physicalRollbackVerified': False, 'commandsExecuted': 0}
+    if any(root is None for root in (bundle_root, journal_root, reservation_root)):
+        return {**denied, 'assessment': 'observation-failed', 'observationError': 'missing-root'}
+
+    paths = (Path(bundle_root) / 'serpantinum-display-v0513' / 'bundle.json',
+             Path(journal_root) / JOURNAL,
+             Path(reservation_root) / 'coordination-rehearsal-v0543.json')
+
+    def capture():
+        # The existing contract validates schemas and safety flags. Fingerprints
+        # additionally detect changes in fields omitted from its summaries.
+        summary = inspect_stores(bundle_root, journal_root, reservation_root)
+        fingerprints = []
+        for path in paths:
+            if not path.exists() and not path.is_symlink():
+                fingerprints.append(None)
+                continue
+            data = secure_json(path)
+            canonical = json.dumps(data, sort_keys=True, separators=(',', ':'),
+                                   ensure_ascii=False).encode('utf-8')
+            fingerprints.append(hashlib.sha256(canonical).hexdigest())
+        return summary, tuple(fingerprints)
+
+    try:
+        take = reader if reader is not None else capture
+        first = take()
+        second = take()
+        if (not isinstance(first, tuple) or not isinstance(second, tuple)
+                or len(first) != 2 or len(second) != 2):
+            raise ValueError('Invalid observation')
+        if first != second:
+            return {**denied, 'assessment': 'concurrent-change-detected',
+                    'observationError': None}
+        if not isinstance(first[0], dict):
+            raise ValueError('Invalid observation summary')
+        return {**denied, 'assessment': 'stable-observation',
+                'underlyingAssessment': first[0].get('assessment'),
+                'observationError': None}
+    except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError):
+        return {**denied, 'assessment': 'observation-failed',
+                'observationError': 'read-or-validation-failed'}
+
+
+def selftest_observation():
+    import tempfile
+    token = 'a' * 24
+    summary = classify_stores()
+    stable = (summary, (None, None, None))
+    scenarios = []
+    def test(label, values, expected):
+        iterator = iter(values)
+        out = observe_stores_twice('/unused', '/unused', '/unused', reader=lambda: next(iterator))
+        assert out['assessment'] == expected and out['executionAuthorized'] is False
+        assert out['atomicCrossStoreSnapshot'] is False
+        scenarios.append(label)
+    test('stable', [stable, stable], 'stable-observation')
+    test('changed-phase', [stable, ({**summary, 'assessment': 'incomplete'}, stable[1])], 'concurrent-change-detected')
+    test('changed-evidence-content', [stable, (summary, ('different', None, None))], 'concurrent-change-detected')
+    test('changed-identity', [stable, ({**summary, 'transactionId': token}, stable[1])], 'concurrent-change-detected')
+    def failing():
+        raise ValueError('injected read failure')
+    out = observe_stores_twice('/unused', '/unused', '/unused', reader=failing)
+    assert out['assessment'] == 'observation-failed'; scenarios.append('read-failure')
+    out = observe_stores_twice()
+    assert out['assessment'] == 'observation-failed'; scenarios.append('missing-roots')
+    # Real file observations: a completely absent isolated bundle/reservation
+    # cannot mask a missing journal, and must fail closed.
+    with tempfile.TemporaryDirectory(prefix='serpantinum-v0554-') as tmp:
+        root = Path(tmp)
+        root.chmod(0o700)
+        out = observe_stores_twice(root, root, root)
+        assert out['assessment'] == 'observation-failed'
+        scenarios.append('missing-journal-rejected')
+    return {'version': '0.5.54', 'selftest': 'passed', 'scenarios': scenarios,
+            'executionAuthorized': False, 'physicalExecutionEnabled': False,
+            'physicalRollbackVerified': False, 'commandsExecuted': 0}
+
+
 def selftest_stores():
     token = 'a' * 24
     b = {'phase': 'sealed-read-only', 'transactionId': token, 'integrityVerified': True}
@@ -282,7 +371,7 @@ def selftest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['inspect', 'selftest', 'inspect-stores', 'selftest-stores'])
+    parser.add_argument('command', choices=['inspect', 'selftest', 'inspect-stores', 'selftest-stores', 'observe-stores', 'selftest-observation'])
     parser.add_argument('--bundle-root', type=Path)
     parser.add_argument('--journal-root', type=Path)
     parser.add_argument('--reservation-root', type=Path)
@@ -292,6 +381,10 @@ def main():
             data = selftest()
         elif args.command == 'selftest-stores':
             data = selftest_stores()
+        elif args.command == 'selftest-observation':
+            data = selftest_observation()
+        elif args.command == 'observe-stores':
+            data = observe_stores_twice(args.bundle_root, args.journal_root, args.reservation_root)
         elif args.command == 'inspect-stores':
             data = inspect_stores(args.bundle_root, args.journal_root, args.reservation_root)
         else:
