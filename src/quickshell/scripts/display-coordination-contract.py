@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serpantinum v0.5.41: read-only coordination contract.
+"""Serpantinum v0.5.50: read-only coordination contract.
 
 Diagnostic inspection only. No authorization, locking, recovery or physical actions.
 Snapshots are non-atomic; do not use this result as an execution precheck.
@@ -67,6 +67,67 @@ def inspect(bundle_root=None, journal_root=None):
     return result
 
 
+
+# This function only classifies caller-supplied diagnostic dictionaries. It does
+# not authenticate evidence, take a cross-store lock, or authorize any action.
+DIAGNOSTIC_PHASES = ('empty', 'reserved', 'diagnostic-only', 'unverifiable',
+                     'terminal-observed')
+
+
+def classify_diagnostic(reservation=None, evidence=None):
+    """Normalize offline diagnostic states; unknown/unsafe input fails closed."""
+    if reservation is not None and not isinstance(reservation, dict):
+        raise ValueError('Invalid reservation envelope')
+    if evidence is not None and not isinstance(evidence, dict):
+        raise ValueError('Invalid evidence envelope')
+    for source in (reservation, evidence):
+        if source is None:
+            continue
+        for flag in ('executionAuthorized', 'physicalExecutionEnabled',
+                     'physicalRollbackVerified', 'finalizationAuthorized',
+                     'reservationReusable'):
+            if flag in source and source[flag] is not False:
+                raise ValueError('Unsafe diagnostic flag: ' + flag)
+        if 'commandsExecuted' in source and (type(source['commandsExecuted']) is not int or source['commandsExecuted'] != 0):
+            raise ValueError('Unsafe diagnostic command count')
+    if reservation is None:
+        if evidence is not None:
+            raise ValueError('Unbound evidence without reservation')
+        phase, token = 'empty', None
+    else:
+        token = reservation.get('transactionId')
+        if not isinstance(token, str) or not TOKEN.fullmatch(token):
+            raise ValueError('Invalid reservation identity')
+        if reservation.get('phase') != 'reserved':
+            raise ValueError('Unknown reservation phase')
+        if reservation.get('executionAuthorized') is not False or reservation.get('physicalExecutionEnabled') is not False or reservation.get('commandsExecuted') != 0:
+            raise ValueError('Incomplete reservation safety fields')
+        if evidence is None:
+            phase = 'reserved'
+        else:
+            if evidence.get('transactionId') != token:
+                raise ValueError('Cross-evidence identity mismatch')
+            if evidence.get('executionAuthorized') is not False or evidence.get('physicalExecutionEnabled') is not False or evidence.get('commandsExecuted') != 0:
+                raise ValueError('Incomplete evidence safety fields')
+            assessment = evidence.get('assessment')
+            if assessment == 'evidence-missing-or-unverifiable':
+                phase = 'unverifiable'
+            elif assessment in ('evidence-contradictory', 'retained-test-unit-observed-only'):
+                phase = 'diagnostic-only'
+            elif assessment == 'diagnostic-terminal-observed':
+                # A terminal claim is still only an untrusted observation.
+                phase = 'terminal-observed'
+            else:
+                raise ValueError('Unknown evidence assessment')
+    return {'version': '0.5.50', 'mode': 'offline-diagnostic-classification',
+            'phase': phase, 'transactionId': token,
+            'atomicCrossStoreSnapshot': False, 'evidenceAuthenticated': False,
+            'supervisorsIntegrated': False, 'finalizationAuthorized': False,
+            'reservationReusable': False, 'executionAuthorized': False,
+            'physicalExecutionEnabled': False, 'physicalRollbackVerified': False,
+            'commandsExecuted': 0}
+
+
 def selftest():
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
@@ -88,7 +149,35 @@ def selftest():
             raise AssertionError('Unsafe bundle accepted')
         file.unlink()
         assert inspect(root)['bundle']['phase'] == 'idle'
-    return {'selftest': 'passed', 'scenarios': 3, 'physicalExecutionEnabled': False, 'commandsExecuted': 0}
+    token = 'a' * 24
+    reservation = {'transactionId': token, 'phase': 'reserved',
+                   'executionAuthorized': False, 'physicalExecutionEnabled': False,
+                   'commandsExecuted': 0}
+    evidence = {'transactionId': token, 'assessment': 'evidence-missing-or-unverifiable',
+                'executionAuthorized': False, 'physicalExecutionEnabled': False,
+                'commandsExecuted': 0}
+    scenarios = ['bundle-valid', 'bundle-unsafe-rejected', 'bundle-idle']
+    assert classify_diagnostic()['phase'] == 'empty'
+    scenarios.append('empty')
+    assert classify_diagnostic(reservation)['phase'] == 'reserved'
+    scenarios.append('reserved')
+    assert classify_diagnostic(reservation, evidence)['phase'] == 'unverifiable'
+    scenarios.append('unverifiable')
+    for label, changed in [('cross-identity-rejected', dict(evidence, transactionId='b'*24)),
+                           ('unsafe-flag-rejected', dict(evidence, executionAuthorized=True))]:
+        try:
+            classify_diagnostic(reservation, changed)
+        except ValueError:
+            scenarios.append(label)
+        else:
+            raise AssertionError(label)
+    assert classify_diagnostic(reservation, dict(evidence, assessment='evidence-contradictory'))['phase'] == 'diagnostic-only'
+    scenarios.append('diagnostic-only')
+    assert classify_diagnostic(reservation, dict(evidence, assessment='diagnostic-terminal-observed'))['phase'] == 'terminal-observed'
+    scenarios.append('terminal-observed-not-authorized')
+    return {'version': '0.5.50', 'selftest': 'passed', 'scenarios': scenarios,
+            'physicalExecutionEnabled': False, 'executionAuthorized': False,
+            'commandsExecuted': 0}
 
 
 def main():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v0.5.49: three reviewed offline tests; systemd-dependent tests excluded."""
+"""v0.5.50: four allowlisted offline tests; systemd-dependent tests excluded."""
 import argparse
 import json
 import os
@@ -13,8 +13,9 @@ FILES = (
     'display-global-lock.py',
     'display-coordination-rehearsal.py',
     'display-coordination-finalization.py',
+    'display-coordination-contract.py',
 )
-EXPECTED = (5, 6, 7)
+EXPECTED = (5, 6, 7, 10)
 TIMEOUT = 20
 
 
@@ -81,7 +82,7 @@ def run_suite(source):
                 results.append({'controller': filename, 'passed': False, 'error': str(exc)[:350]})
                 break
     success = len(results) == len(FILES) and all(r['passed'] for r in results)
-    return {'version': '0.5.49', 'mode': 'allowlisted-offline-regression',
+    return {'version': '0.5.50', 'mode': 'allowlisted-offline-regression',
             'selftest': 'passed' if success else 'failed', 'results': results,
             'totalScenarios': sum(EXPECTED) if success else None,
             'physicalExecutionEnabled': False, 'executionAuthorized': False,
@@ -96,7 +97,7 @@ def main():
     try:
         result, success = run_suite(Path(__file__).resolve().parent)
     except (ValueError, OSError) as exc:
-        result, success = {'version': '0.5.49', 'selftest': 'failed', 'error': str(exc),
+        result, success = {'version': '0.5.50', 'selftest': 'failed', 'error': str(exc),
                            'executionAuthorized': False}, False
     print(json.dumps(result, indent=2))
     return 0 if success else 2
