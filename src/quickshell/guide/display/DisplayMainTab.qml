@@ -65,6 +65,41 @@ DisplayMainState {
                 }
             }
 
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: diagnosticRow.implicitHeight + rootObj.s(20)
+                radius: ThemeBackend.borderRadius
+                color: Qt.alpha(ThemeBackend.surface0, 0.5)
+                RowLayout {
+                    id: diagnosticRow
+                    anchors.fill: parent
+                    anchors.margins: rootObj.s(10)
+                    spacing: rootObj.s(10)
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        Text {
+                            text: "Development evidence: " + displayTabRoot.diagnosticAssessment
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(12)
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            text: displayTabRoot.diagnosticMessage
+                            wrapMode: Text.WordWrap
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(11)
+                        }
+                    }
+                    Button {
+                        text: displayTabRoot.diagnosticBusy ? "Checking..." : "Check evidence"
+                        enabled: !displayTabRoot.diagnosticBusy
+                        onClicked: displayTabRoot.requestDisplayDiagnostic()
+                    }
+                }
+            }
+
             DisplayLayoutMap {
                 Layout.fillWidth: true
                 tab: displayTabRoot

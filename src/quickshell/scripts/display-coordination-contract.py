@@ -270,7 +270,7 @@ def observe_stores_twice(bundle_root=None, journal_root=None, reservation_root=N
     Diagnostic only: no atomicity, no locks, no execution authorization. A
     transient change reverted between observations may remain undetected.
     """
-    denied = {'version': '0.5.54', 'mode': 'read-only-double-observation',
+    denied = {'version': '0.5.56.1', 'mode': 'read-only-double-observation',
               'atomicCrossStoreSnapshot': False, 'evidenceAuthenticated': False,
               'executionAuthorized': False, 'finalizationAuthorized': False,
               'reservationReusable': False, 'physicalExecutionEnabled': False,
@@ -298,6 +298,20 @@ def observe_stores_twice(bundle_root=None, journal_root=None, reservation_root=N
         return summary, tuple(fingerprints)
 
     try:
+        if reader is None:
+            # Only an absent required journal is 'unavailable'. A symlink,
+            # malformed JSON, unsafe path or any other error fails closed.
+            for root in (bundle_root, journal_root, reservation_root):
+                directory = Path(root)
+                info = directory.lstat()
+                if (not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid()
+                        or stat.S_IMODE(info.st_mode) & 0o077):
+                    raise ValueError('Unsafe diagnostic root')
+            try:
+                secure_json(paths[1])
+            except FileNotFoundError:
+                return {**denied, 'assessment': 'diagnostic-unavailable',
+                        'observationError': 'required-journal-absent'}
         take = reader if reader is not None else capture
         first = take()
         second = take()
@@ -345,9 +359,18 @@ def selftest_observation():
         root = Path(tmp)
         root.chmod(0o700)
         out = observe_stores_twice(root, root, root)
-        assert out['assessment'] == 'observation-failed'
-        scenarios.append('missing-journal-rejected')
-    return {'version': '0.5.54', 'selftest': 'passed', 'scenarios': scenarios,
+        assert out['assessment'] == 'diagnostic-unavailable'
+        scenarios.append('missing-journal-unavailable')
+        journal = root / JOURNAL
+        journal.write_text('{bad json', encoding='utf-8')
+        journal.chmod(0o600)
+        assert observe_stores_twice(root, root, root)['assessment'] == 'observation-failed'
+        scenarios.append('malformed-journal-rejected')
+        journal.unlink()
+        journal.symlink_to(root / 'missing-target')
+        assert observe_stores_twice(root, root, root)['assessment'] == 'observation-failed'
+        scenarios.append('symlink-journal-rejected')
+    return {'version': '0.5.56.1', 'selftest': 'passed', 'scenarios': scenarios,
             'executionAuthorized': False, 'physicalExecutionEnabled': False,
             'physicalRollbackVerified': False, 'commandsExecuted': 0}
 

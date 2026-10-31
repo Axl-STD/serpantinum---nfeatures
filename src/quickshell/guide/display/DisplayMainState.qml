@@ -8,6 +8,58 @@ GuideTab {
     id: displayTabRoot
     subTabIndex: 0
 
+    // v0.5.56: explicitly requested diagnostic, never applies monitor changes.
+    readonly property string diagnosticRoot: Quickshell.env("SERPANTINUM_DISPLAY_DEV_ROOT") || ""
+    property string diagnosticAssessment: "diagnostic-unavailable"
+    property string diagnosticMessage: "No diagnostic has been requested."
+    property bool diagnosticBusy: false
+
+    function requestDisplayDiagnostic() {
+        if (diagnosticBusy) return;
+        if (!diagnosticRoot || !diagnosticRoot.startsWith("/")) {
+            diagnosticAssessment = "diagnostic-unavailable";
+            diagnosticMessage = "Development evidence directory not configured.";
+            return;
+        }
+        diagnosticBusy = true;
+        diagnosticAssessment = "checking";
+        diagnosticMessage = "Reading isolated evidence...";
+        displayDiagnosticProcess.running = true;
+    }
+
+    Process {
+        id: displayDiagnosticProcess
+        running: false
+        command: ["python3", Caching.qsDir + "/scripts/display-coordination-contract.py",
+                  "observe-stores", "--bundle-root", displayTabRoot.diagnosticRoot + "/bundle",
+                  "--journal-root", displayTabRoot.diagnosticRoot + "/journal",
+                  "--reservation-root", displayTabRoot.diagnosticRoot + "/reservation"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    let data = JSON.parse(this.text);
+                    if (data.executionAuthorized !== false || data.physicalExecutionEnabled !== false) {
+                        throw new Error("Unsafe diagnostic response");
+                    }
+                    displayTabRoot.diagnosticAssessment = String(data.assessment || "diagnostic-unavailable");
+                    displayTabRoot.diagnosticMessage = data.assessment === "diagnostic-unavailable"
+                        ? "Required development journal is absent; no physical execution authorized."
+                        : "Diagnostic only; no physical execution authorized.";
+                } catch (e) {
+                    displayTabRoot.diagnosticAssessment = "diagnostic-unavailable";
+                    displayTabRoot.diagnosticMessage = "Invalid or incomplete diagnostic response.";
+                }
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            displayTabRoot.diagnosticBusy = false;
+            if (exitCode !== 0) {
+                displayTabRoot.diagnosticAssessment = "diagnostic-unavailable";
+                displayTabRoot.diagnosticMessage = "Evidence missing, unsafe or unreadable (code " + exitCode + ").";
+            }
+        }
+    }
+
     property var defaultDisplaySettings: ({
         "monitors": {}
     })
