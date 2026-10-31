@@ -435,6 +435,18 @@ GuideTab {
         return best;
     }
 
+    // v0.5.62.1: serialize refresh requests; never restart a running detector.
+    property bool monitorDetectionInFlight: false
+    property bool monitorDetectionQueued: false
+
+    function startQueuedMonitorDetection() {
+        if (monitorDetectionInFlight || monitorDetector.running || !monitorDetectionQueued)
+            return;
+        monitorDetectionQueued = false;
+        monitorDetectionInFlight = true;
+        monitorDetector.running = true;
+    }
+
     Process {
         id: monitorDetector
         running: false
@@ -451,6 +463,9 @@ GuideTab {
         ]
         stdout: StdioCollector {
             onStreamFinished: {
+                // A newer request supersedes this run, even if it completed successfully.
+                if (!displayTabRoot.monitorDetectionInFlight || displayTabRoot.monitorDetectionQueued)
+                    return;
                 let out = this.text;
                 if (!out) return;
                 let mList = [];
@@ -553,6 +568,11 @@ GuideTab {
                 }
             }
         }
+        onExited: (exitCode, exitStatus) => {
+            displayTabRoot.monitorDetectionInFlight = false;
+            if (displayTabRoot.monitorDetectionQueued)
+                Qt.callLater(displayTabRoot.startQueuedMonitorDetection);
+        }
     }
 
     // Available modes are read-only until transactional apply/rollback is implemented.
@@ -584,8 +604,10 @@ GuideTab {
     }
 
     function reloadMonitors() {
-        monitorDetector.running = false;
-        monitorDetector.running = true;
+        monitorDetectionQueued = true;
+        // Coalesce repeated requests while an existing process is still running.
+        if (!monitorDetectionInFlight && !monitorDetector.running)
+            Qt.callLater(startQueuedMonitorDetection);
     }
 
     function updateMonitorSetting(monName, key, value) {
