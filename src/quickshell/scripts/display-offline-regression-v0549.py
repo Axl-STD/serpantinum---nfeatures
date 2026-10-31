@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v0.5.50: four allowlisted offline tests; systemd-dependent tests excluded."""
+"""v0.5.51: five allowlisted offline tests; systemd actions never invoked."""
 import argparse
 import json
 import os
@@ -14,8 +14,11 @@ FILES = (
     'display-coordination-rehearsal.py',
     'display-coordination-finalization.py',
     'display-coordination-contract.py',
+    'display-worker-attestation.py',
 )
-EXPECTED = (5, 6, 7, 10)
+EXPECTED = (5, 6, 7, 10, 13)
+# Imported for pure unit-property checks only; never executed as a CLI.
+DEPENDENCIES = ('display-systemd-reconciliation.py',)
 TIMEOUT = 20
 
 
@@ -63,7 +66,7 @@ def run_suite(source):
     with tempfile.TemporaryDirectory(prefix='serpantinum-v0549-offline-') as tmp:
         os.chmod(tmp, 0o700)
         work = Path(tmp)
-        for filename in FILES:
+        for filename in FILES + DEPENDENCIES:
             path = source / filename
             if not path.is_file() or path.is_symlink():
                 raise ValueError('Missing or symlinked allowlisted file: ' + filename)
@@ -82,7 +85,7 @@ def run_suite(source):
                 results.append({'controller': filename, 'passed': False, 'error': str(exc)[:350]})
                 break
     success = len(results) == len(FILES) and all(r['passed'] for r in results)
-    return {'version': '0.5.50', 'mode': 'allowlisted-offline-regression',
+    return {'version': '0.5.51', 'mode': 'allowlisted-offline-regression',
             'selftest': 'passed' if success else 'failed', 'results': results,
             'totalScenarios': sum(EXPECTED) if success else None,
             'physicalExecutionEnabled': False, 'executionAuthorized': False,
@@ -97,7 +100,7 @@ def main():
     try:
         result, success = run_suite(Path(__file__).resolve().parent)
     except (ValueError, OSError) as exc:
-        result, success = {'version': '0.5.50', 'selftest': 'failed', 'error': str(exc),
+        result, success = {'version': '0.5.51', 'selftest': 'failed', 'error': str(exc),
                            'executionAuthorized': False}, False
     print(json.dumps(result, indent=2))
     return 0 if success else 2
