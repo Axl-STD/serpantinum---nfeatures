@@ -67,6 +67,24 @@ def inspect(root, token, metadata=None, *, metadata_probe=None):
         result['finalPresent'] = classified['finalPresent']
         if 'reason' in classified:
             result['reason'] = classified['reason']
+        # A second independent observation is required only for live probes.
+        # Offline injected metadata remains a single immutable test fixture.
+        if metadata is None and safe_metadata:
+            second = (metadata_probe(token) if metadata_probe is not None
+                      else historical.probe(token))
+            identity = ('transactionId', 'unit', 'invocationId', 'execMainPid',
+                        'assessment', 'systemdExecutionMetadataConsistent')
+            second_safe = (isinstance(second, dict)
+                           and all(second.get(k) == historical_result.get(k) for k in identity)
+                           and all(second.get(k) is False for k in SAFE_FALSE)
+                           and second.get('commandsExecuted') == 0)
+            if not second_safe:
+                result['assessment'] = 'worker-state-uncertain'
+                result['workerState'] = 'unknown'
+                result['systemdExecutionMetadataConsistent'] = False
+                result['receiptMetadataConsistent'] = False
+                result['reason'] = 'Historical observations inconsistent'
+                return result
         # Classification of bytes is not an authenticated binding to systemd.
         if not safe_metadata and result['assessment'] not in ('unsafe-file-entry', 'rejected'):
             result['assessment'] = 'worker-state-uncertain'
