@@ -21,6 +21,9 @@ GuideTab {
     // v0.5.75.1: fail closed on diagnostic timeout or unconfirmed cancellation.
     property bool diagnosticTimedOut: false
     property bool diagnosticBlocked: false
+    // Set only by the exit callback of an active diagnostic.
+    property bool diagnosticExitConfirmed: false
+    readonly property bool diagnosticRecoveryAvailable: diagnosticBlocked && diagnosticExitConfirmed && !diagnosticBusy && !displayDiagnosticProcess.running
     readonly property int diagnosticTimeoutMs: 4000
 
     Timer {
@@ -55,6 +58,20 @@ GuideTab {
         }
     }
 
+    function recoverDisplayDiagnostic() {
+        if (!diagnosticRecoveryAvailable) return;
+        diagnosticWatchdog.stop();
+        diagnosticCancelGrace.stop();
+        diagnosticResponse = "";
+        diagnosticResponseValid = false;
+        diagnosticUnderlyingAssessment = "";
+        diagnosticTimedOut = false;
+        diagnosticExitConfirmed = false;
+        diagnosticBlocked = false;
+        diagnosticAssessment = "diagnostic-unavailable";
+        diagnosticMessageKey = "not_requested";
+    }
+
     function requestDisplayDiagnostic() {
         if (diagnosticBlocked || diagnosticBusy || displayDiagnosticProcess.running) return;
         if (!diagnosticRoot || !diagnosticRoot.startsWith("/")) {
@@ -63,6 +80,7 @@ GuideTab {
             return;
         }
         diagnosticTimedOut = false;
+        diagnosticExitConfirmed = false;
         diagnosticResponse = "";
         diagnosticResponseValid = false;
         diagnosticUnderlyingAssessment = "";
@@ -92,6 +110,7 @@ GuideTab {
             diagnosticWatchdog.stop();
             diagnosticCancelGrace.stop();
             if (!displayTabRoot.diagnosticBusy) return;
+            displayTabRoot.diagnosticExitConfirmed = true;
             const rejected = displayTabRoot.diagnosticTimedOut || displayTabRoot.diagnosticBlocked;
             displayTabRoot.diagnosticBusy = false;
             if (rejected || exitCode !== 0 || exitStatus !== 0 || !displayTabRoot.diagnosticResponseValid) {

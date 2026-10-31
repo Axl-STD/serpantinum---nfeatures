@@ -371,7 +371,8 @@
           "changed": "Las evidencias cambiaron entre lecturas. No se autoriza ninguna operación física.",
           "failed": "Falló la lectura o validación de evidencias. No se autoriza ninguna operación física.",
           "invalid_response": "Respuesta de diagnóstico inválida, insegura o incompleta."
-        }
+        },
+        "recover": "Restablecer diagnóstico"
       },
       "overview": {
         "title": "Estado de pantallas",

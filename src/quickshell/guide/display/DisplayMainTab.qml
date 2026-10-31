@@ -207,8 +207,14 @@ DisplayMainState {
                     }
                     Button {
                         text: displayTabRoot.diagnosticBusy ? I18n.t("guide.display.diagnostic.checking", "Checking...") : I18n.t("guide.display.diagnostic.check", "Check evidence")
-                        enabled: !displayTabRoot.diagnosticBusy
+                        enabled: !displayTabRoot.diagnosticBusy && !displayTabRoot.diagnosticBlocked
                         onClicked: displayTabRoot.requestDisplayDiagnostic()
+                    }
+                    Button {
+                        visible: displayTabRoot.diagnosticBlocked
+                        text: I18n.t("guide.display.diagnostic.recover", "Reset diagnostic")
+                        enabled: displayTabRoot.diagnosticRecoveryAvailable
+                        onClicked: displayTabRoot.recoverDisplayDiagnostic()
                     }
                 }
             }

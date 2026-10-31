@@ -370,7 +370,8 @@
           "changed": "Evidence changed between reads; no physical execution authorized.",
           "failed": "Evidence read or validation failed; no physical execution authorized.",
           "invalid_response": "Invalid, unsafe or incomplete diagnostic response."
-        }
+        },
+        "recover": "Reset diagnostic"
       },
       "overview": {
         "title": "Display status",

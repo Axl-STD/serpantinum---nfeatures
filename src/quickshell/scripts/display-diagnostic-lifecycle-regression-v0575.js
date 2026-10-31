@@ -38,7 +38,7 @@ function fixture(rootPath='/tmp/display-diagnostic-fixture'){
  let starts=0;
  const proc={_running:false};
  Object.defineProperty(proc,'running',{get(){return this._running},set(v){if(v&&!this._running)starts++;this._running=v;}});
- const root={diagnosticRoot:rootPath,diagnosticBlocked:false,diagnosticTimedOut:false,diagnosticBusy:false,diagnosticResponse:'',diagnosticResponseValid:false,diagnosticAssessment:'diagnostic-unavailable',diagnosticUnderlyingAssessment:'',diagnosticMessageKey:'not_requested'};
+ const root={diagnosticRoot:rootPath,diagnosticBlocked:false,diagnosticExitConfirmed:false,diagnosticTimedOut:false,diagnosticBusy:false,diagnosticResponse:'',diagnosticResponseValid:false,diagnosticAssessment:'diagnostic-unavailable',diagnosticUnderlyingAssessment:'',diagnosticMessageKey:'not_requested'};
  const context=vm.createContext({displayTabRoot:root,displayDiagnosticProcess:proc,diagnosticWatchdog:{start(){},stop(){}},diagnosticCancelGrace:{start(){},stop(){}},JSON,Error});
  return {root,proc,context,starts:()=>starts,request:()=>request.runInContext(context,{timeout:1000})(),stdout:text=>stdout.runInContext(context,{timeout:1000}).call({text}),exit:(code,status)=>{proc._running=false;exited.runInContext(context,{timeout:1000})(code,status);}};
 }
