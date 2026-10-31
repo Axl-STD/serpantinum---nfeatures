@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serpantinum v0.5.54: read-only coordination contract.
+"""Serpantinum v0.5.55: read-only coordination contract.
 
 Diagnostic inspection only. No authorization, locking, recovery or physical actions.
 Snapshots are non-atomic; do not use this result as an execution precheck.
@@ -18,12 +18,75 @@ JOURNAL = 'recovery-protocol-v0531.json'
 
 
 def secure_json(path):
-    if path.is_symlink() or not path.is_file():
-        raise ValueError('Missing or symlinked evidence')
-    info = path.stat()
-    if info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) & 0o077 or info.st_size > 1048576:
-        raise ValueError('Unsafe evidence permissions or size')
-    return json.loads(path.read_text(encoding='utf-8'))
+    """Read JSON through a verified descriptor; no symlink following at leaf/parent.
+
+    This does not make ancestor directories immutable or cross-store reads atomic.
+    """
+    path = Path(path)
+    dir_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC | os.O_NOFOLLOW
+    file_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW | os.O_NONBLOCK
+    parent_fd = os.open(path.parent, dir_flags)
+    try:
+        parent_info = os.fstat(parent_fd)
+        if (not stat.S_ISDIR(parent_info.st_mode) or parent_info.st_uid != os.getuid()
+                or stat.S_IMODE(parent_info.st_mode) & 0o022):
+            raise ValueError('Unsafe evidence parent directory')
+        fd = os.open(path.name, file_flags, dir_fd=parent_fd)
+        try:
+            info = os.fstat(fd)
+            if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                    or stat.S_IMODE(info.st_mode) & 0o077 or info.st_nlink != 1
+                    or info.st_size > 1048576):
+                raise ValueError('Unsafe evidence descriptor')
+            with os.fdopen(fd, 'rb', closefd=False) as stream:
+                raw = stream.read(1048577)
+            if len(raw) > 1048576:
+                raise ValueError('Evidence exceeds size limit')
+            return json.loads(raw.decode('utf-8'))
+        finally:
+            os.close(fd)
+    finally:
+        os.close(parent_fd)
+
+
+def selftest_secure_json():
+    import tempfile
+    scenarios = []
+    with tempfile.TemporaryDirectory(prefix='serpantinum-v0555-') as tmp:
+        base = Path(tmp)
+        base.chmod(0o700)
+        target = base / 'evidence.json'
+        target.write_text('{"safe": true}', encoding='utf-8')
+        target.chmod(0o600)
+        assert secure_json(target) == {'safe': True}
+        scenarios.append('valid-descriptor')
+
+        def rejected(label, path):
+            try:
+                secure_json(path)
+            except (ValueError, OSError):
+                scenarios.append(label)
+            else:
+                raise AssertionError(label + ' accepted')
+
+        link = base / 'link.json'
+        link.symlink_to(target)
+        rejected('symlink-rejected', link)
+        target.chmod(0o644)
+        rejected('unsafe-permissions-rejected', target)
+        target.chmod(0o600)
+        target.write_bytes(b' ' * 1048577)
+        rejected('oversized-rejected', target)
+        target.write_text('{}', encoding='utf-8')
+        rejected('directory-rejected', base)
+        hardlink = base / 'hardlink.json'
+        os.link(target, hardlink)
+        rejected('hardlink-rejected', target)
+        hardlink.unlink()
+        rejected('missing-rejected', base / 'missing.json')
+    return {'version': '0.5.55', 'selftest': 'passed', 'scenarios': scenarios,
+            'executionAuthorized': False, 'physicalExecutionEnabled': False,
+            'physicalRollbackVerified': False, 'commandsExecuted': 0}
 
 
 def inspect(bundle_root=None, journal_root=None):
@@ -371,7 +434,7 @@ def selftest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['inspect', 'selftest', 'inspect-stores', 'selftest-stores', 'observe-stores', 'selftest-observation'])
+    parser.add_argument('command', choices=['inspect', 'selftest', 'inspect-stores', 'selftest-stores', 'observe-stores', 'selftest-observation', 'selftest-secure-json'])
     parser.add_argument('--bundle-root', type=Path)
     parser.add_argument('--journal-root', type=Path)
     parser.add_argument('--reservation-root', type=Path)
@@ -381,6 +444,8 @@ def main():
             data = selftest()
         elif args.command == 'selftest-stores':
             data = selftest_stores()
+        elif args.command == 'selftest-secure-json':
+            data = selftest_secure_json()
         elif args.command == 'selftest-observation':
             data = selftest_observation()
         elif args.command == 'observe-stores':

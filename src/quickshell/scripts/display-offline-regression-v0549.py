@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v0.5.54: allowlisted offline selftests and cross-store classification."""
+"""v0.5.55: allowlisted offline selftests and cross-store classification."""
 import argparse
 import json
 import os
@@ -116,10 +116,23 @@ def run_suite(source):
                 results.append({'controller': name, 'passed': True, 'scenarios': len(scenarios)})
             except (ValueError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
                 results.append({'controller': name, 'passed': False, 'error': str(exc)[:350]})
-    success = len(results) == len(FILES) + 2 and all(r['passed'] for r in results)
-    return {'version': '0.5.54', 'mode': 'allowlisted-offline-regression',
+        if len(results) == len(FILES) + 2 and all(r['passed'] for r in results):
+            name = 'display-coordination-contract.py:secure-json'
+            try:
+                proc = subprocess.run([sys.executable, '-I', str(work / 'display-coordination-contract.py'), 'selftest-secure-json'],
+                                      cwd=work, capture_output=True, text=True, timeout=TIMEOUT,
+                                      env={'PATH': '/usr/bin:/bin', 'HOME': str(work),
+                                           'TMPDIR': str(work), 'PYTHONDONTWRITEBYTECODE': '1'})
+                if proc.returncode != 0:
+                    raise ValueError('Exit ' + str(proc.returncode) + ': ' + proc.stderr[-350:])
+                scenarios = verify(name, objects_from_stdout(proc.stdout), 7)
+                results.append({'controller': name, 'passed': True, 'scenarios': len(scenarios)})
+            except (ValueError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
+                results.append({'controller': name, 'passed': False, 'error': str(exc)[:350]})
+    success = len(results) == len(FILES) + 3 and all(r['passed'] for r in results)
+    return {'version': '0.5.55', 'mode': 'allowlisted-offline-regression',
             'selftest': 'passed' if success else 'failed', 'results': results,
-            'totalScenarios': sum(EXPECTED) + 15 if success else None,
+            'totalScenarios': sum(EXPECTED) + 22 if success else None,
             'physicalExecutionEnabled': False, 'executionAuthorized': False,
             'physicalRollbackVerified': False, 'commandsExecuted': 0,
             'systemdIntegration': False, 'liveBundleTouched': False,
@@ -133,7 +146,7 @@ def main():
     try:
         result, success = run_suite(Path(__file__).resolve().parent)
     except (ValueError, OSError) as exc:
-        result, success = {'version': '0.5.54', 'selftest': 'failed', 'error': str(exc),
+        result, success = {'version': '0.5.55', 'selftest': 'failed', 'error': str(exc),
                            'executionAuthorized': False}, False
     print(json.dumps(result, indent=2))
     return 0 if success else 2
