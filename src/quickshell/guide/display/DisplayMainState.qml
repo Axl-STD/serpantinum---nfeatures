@@ -109,27 +109,74 @@ GuideTab {
     property var displaySettings: JSON.parse(JSON.stringify(Config.getSetting("display", defaultDisplaySettings)))
     property var monitorsList: []
     property string selectedMonitorName: ""
-    // v0.5.40: pending session-only changes. Never applied or persisted.
+    // v0.5.61: session-only proposals with an observed monitor baseline.
+    // Diagnostic evidence never authorizes applying a proposal.
     property var pendingDisplayChanges: ({})
+    property var pendingDisplayBaselines: ({})
     readonly property int pendingDisplayCount: Object.keys(pendingDisplayChanges).length
+    function monitorFingerprint(mon) {
+        if (!mon || !mon.name) return "";
+        return JSON.stringify([
+            String(mon.name), String(mon.description || mon.name),
+            String(mon.dimensions || ""), String(mon.framerate || ""),
+            Number(mon.scale), mon.active !== false,
+            Number(mon.transform || 0)
+        ]);
+    }
     function stageDisplayChange(monName, key, value) {
-        if (!monName || !monitorsList.some(m => m.name === monName)) return false;
+        const mon = monitorsList.find(m => m.name === monName);
+        if (!mon || !monitorFingerprint(mon)) return false;
         if (key !== "powerEnabled" && key !== "scale") return false;
         if (key === "scale" && (!isFinite(Number(value)) || Number(value) <= 0)) return false;
-        let changes = Object.assign({}, pendingDisplayChanges);
-        let entry = Object.assign({}, changes[monName] || {});
+        const changes = Object.assign({}, pendingDisplayChanges);
+        const baselines = Object.assign({}, pendingDisplayBaselines);
+        const fingerprint = monitorFingerprint(mon);
+        if (baselines[monName] && baselines[monName] !== fingerprint) {
+            delete changes[monName];
+            delete baselines[monName];
+            pendingDisplayChanges = changes;
+            pendingDisplayBaselines = baselines;
+            return false;
+        }
+        const entry = Object.assign({}, changes[monName] || {});
         entry[key] = value;
         changes[monName] = entry;
+        baselines[monName] = fingerprint;
+        pendingDisplayBaselines = baselines;
         pendingDisplayChanges = changes;
         return true;
     }
+    function reconcilePendingDisplayChanges(observed) {
+        // Called only after a successfully parsed, nonempty monitor detection.
+        if (!Array.isArray(observed) || !observed.length) return;
+        const changes = Object.assign({}, pendingDisplayChanges);
+        const baselines = Object.assign({}, pendingDisplayBaselines);
+        let dirty = false;
+        for (const name of Object.keys(changes)) {
+            const mon = observed.find(m => m.name === name);
+            if (!mon || !baselines[name] || baselines[name] !== monitorFingerprint(mon)) {
+                delete changes[name];
+                delete baselines[name];
+                dirty = true;
+                if (pendingMonScaleName === name) {
+                    pendingMonScaleName = "";
+                    scaleDebounceTimer.stop();
+                }
+            }
+        }
+        if (dirty) {
+            pendingDisplayBaselines = baselines;
+            pendingDisplayChanges = changes;
+        }
+    }
     function discardDisplayChanges() {
+        pendingDisplayBaselines = ({});
         pendingDisplayChanges = ({});
         pendingMonScaleName = "";
         scaleDebounceTimer.stop();
     }
     function pendingDisplayValue(monName, key, fallback) {
-        let entry = pendingDisplayChanges[monName];
+        const entry = pendingDisplayChanges[monName];
         return entry && entry[key] !== undefined ? entry[key] : fallback;
     }
 
@@ -492,6 +539,12 @@ GuideTab {
                 } catch (e) {
                 }
                 if (mList.length > 0) {
+                    // A delayed scale edit predating this refresh has no trusted baseline.
+                    if (displayTabRoot.pendingMonScaleName !== "") {
+                        displayTabRoot.pendingMonScaleName = "";
+                        displayTabRoot.scaleDebounceTimer.stop();
+                    }
+                    displayTabRoot.reconcilePendingDisplayChanges(mList);
                     displayTabRoot.monitorsList = mList;
                     displayTabRoot.ensureDisplaySelection();
                     if (!mList.some(m => m.name === displayTabRoot.selectedMonitorName))
