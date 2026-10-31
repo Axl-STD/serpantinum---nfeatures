@@ -1,7 +1,7 @@
 binds {
     Mod+Return { spawn "kitty"; }
     Mod+F { spawn "firefox"; }
-    Mod+E { spawn "nautilus"; }
+    Mod+E { spawn "ski"; }
     Mod+Backspace { toggle-overview; }
     Mod+Q { close-window; }
     Mod+Alt+F { maximize-window-to-edges; }

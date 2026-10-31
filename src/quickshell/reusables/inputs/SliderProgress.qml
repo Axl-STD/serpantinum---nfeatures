@@ -83,7 +83,7 @@ Item {
         opacity: root.enabled ? 1.0 : 0.5
         clip: true
 
-        Behavior on opacity { NumberAnimation { duration: 180 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
 
         GlassFill {
             id: glass
@@ -92,8 +92,8 @@ Item {
             tintColor: root.backgroundColor
             tintAmount: 0.22
             press: root.isDragging ? 0.35 : 0
-            Behavior on tintAmount { NumberAnimation { duration: 180 } }
-            Behavior on press { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on tintAmount { NumberAnimation { duration: 150 } }
+            Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
         }
 
         Item {
@@ -105,7 +105,7 @@ Item {
             opacity: root.animPosition > 0.001 ? (glass.active ? 0.6 : 1.0) : 0.0
             clip: true
 
-            Behavior on opacity { NumberAnimation { duration: 180 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
 
             Rectangle {
                 width: root.width
@@ -143,8 +143,8 @@ Item {
         shadow: 1
         press: root.isDragging ? 1 : 0
         scale: root.isDragging ? 1.2 : 1.0
-        Behavior on press { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-        Behavior on scale { NumberAnimation { duration: 220; easing.type: Easing.OutBack } }
+        Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+        Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutBack } }
         transform: Scale {
             origin.x: thumbGlass.width / 2
             origin.y: thumbGlass.height / 2
@@ -157,8 +157,6 @@ Item {
         anchors.fill: parent
         radius: root.cornerRadius
         color: "transparent"
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        border.width: 1
     }
 
     Rectangle {
@@ -166,8 +164,6 @@ Item {
         anchors.margins: -3
         radius: root.cornerRadius + 3
         color: "transparent"
-        border.width: 2
-        border.color: Qt.alpha(ThemeBackend.mauve, 0.8)
         visible: root.activeFocus
     }
 

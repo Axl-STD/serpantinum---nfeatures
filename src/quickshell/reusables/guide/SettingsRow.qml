@@ -436,14 +436,11 @@ Rectangle {
         return base;
     }
     color: rowGlass.active ? (root.highlightFlash > 0.001 ? Qt.alpha(ThemeBackend.mauve, root.highlightFlash * 0.12) : "transparent") : stateColor
-    border.color: root.borderColor
-    border.width: root.borderWidth
     clip: true
 
     implicitHeight: contentCol.implicitHeight + root.verticalPadding * 2
 
-    Behavior on color { ColorAnimation { duration: 180 } }
-    Behavior on border.color { ColorAnimation { duration: 180 } }
+    Behavior on color { ColorAnimation { duration: 150 } }
 
     GlassFill {
         id: rowGlass
@@ -453,8 +450,8 @@ Rectangle {
         tintColor: ThemeBackend.surface0
         tintAmount: (root.clickable && cardMa.containsMouse ? 0.34 : 0.26) * (root.dimmed ? 0.5 : 1.0)
         press: root.clickable && cardMa.containsMouse ? 0.2 : 0
-        Behavior on press { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-        Behavior on tintAmount { NumberAnimation { duration: 180 } }
+        Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+        Behavior on tintAmount { NumberAnimation { duration: 150 } }
     }
 
     MouseArea {
@@ -484,7 +481,7 @@ Rectangle {
         spacing: root.innerSpacing
 
         opacity: root.dimmed ? 0.4 : 1.0
-        Behavior on opacity { NumberAnimation { duration: 180 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
 
         GridLayout {
             id: mainRow

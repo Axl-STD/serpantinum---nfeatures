@@ -22,8 +22,6 @@ Rectangle {
         tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
         tintAmount: 0.25
     }
-    border.color: Qt.alpha(ThemeBackend.surface1, 0.4)
-    border.width: ThemeBackend.liquidGlass ? 0 : 1
 
     property string monName: modelData.name
     property var widgetsList: (monWidgetCard.tab.monitorWidgetsMap && monWidgetCard.tab.monitorWidgetsMap[monName]) ? monWidgetCard.tab.monitorWidgetsMap[monName] : []

@@ -134,8 +134,8 @@
       {
         "name": "Files",
         "comment": "Access and organize files",
-        "desktop_id": "org.gnome.Nautilus",
-        "icon": "org.gnome.Nautilus"
+        "desktop_id": "ski",
+        "icon": "ski"
       }
     ],
     "overrideBoundsCorrection": false,

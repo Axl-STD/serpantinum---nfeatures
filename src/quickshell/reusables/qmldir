@@ -10,6 +10,7 @@ IconButton 1.0 buttons/IconButton.qml
 
 FlipIcon 1.0 display/FlipIcon.qml
 ImageBox 1.0 display/ImageBox.qml
+BoundedImage 1.0 display/BoundedImage.qml
 LoaderIcon 1.0 display/LoaderIcon.qml
 NotificationBox 1.0 display/NotificationBox.qml
 SystemUsageCard 1.0 display/SystemUsageCard.qml

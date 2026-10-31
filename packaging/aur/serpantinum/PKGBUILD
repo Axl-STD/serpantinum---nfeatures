@@ -2,7 +2,7 @@ pkgname=serpantinum
 pkgver=2.2.10
 pkgrel=1
 pkgdesc='A shell for Wayland compositors built on Quickshell'
-arch=('any')
+arch=('x86_64')
 url='https://github.com/ilyamiro/serpantinum'
 license=('AGPL-3.0-only')
 depends=(
@@ -14,7 +14,7 @@ depends=(
     'imagemagick' 'wget' 'file' 'git' 'psmisc'
     'ffmpeg' 'fastfetch' 'quickshell' 'unzip' 'python-websockets' 'python-jeepney' 'qt6-websockets'
     'grim' 'playerctl' 'satty' 'xdg-desktop-portal-gtk' 'slurp' 'wmctrl' 'power-profiles-daemon'
-    'easyeffects' 'calf' 'lsp-plugins-lv2' 'nautilus' 'qt5-wayland' 'qt5-quickcontrols' 'qt5-quickcontrols2'
+    'easyeffects' 'calf' 'lsp-plugins-lv2' 'qt5-wayland' 'qt5-quickcontrols' 'qt5-quickcontrols2'
     'qt5-graphicaleffects' 'qt6-wayland' 'qt5ct' 'qt6ct' 'adwaita-icon-theme' 'gpu-screen-recorder'
     'wf-recorder' 'adw-gtk-theme' 'wl-gammarelay-rs'
     'ttf-iosevka-nerd' 'pambase' 'curl' 'pciutils'
@@ -31,8 +31,11 @@ optdepends=(
 conflicts=('quickshell-git')
 backup=('etc/pam.d/serpantinum')
 install=serpantinum.install
-source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('63dde78567668c0882b6da28f5f310179f2ccb21991dbd136551c6ae473f08d6')
+_skiver=0.2.0
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
+        "ski-$_skiver-x86_64-linux.tar.gz::https://github.com/ilyamiro/Ski/releases/download/v$_skiver/ski-$_skiver-x86_64-linux.tar.gz")
+sha256sums=('63dde78567668c0882b6da28f5f310179f2ccb21991dbd136551c6ae473f08d6'
+            '23445ca575d5fdf468616d5d1791d91c8472c9c433814caee16e2f5ef8217dd2')
 
 package() {
     cd "$pkgname-$pkgver"
@@ -64,6 +67,22 @@ EOF
 
     install -Dm644 packaging/desktop/serpantinum-settings.desktop "$pkgdir/usr/share/applications/serpantinum-settings.desktop"
     install -Dm644 packaging/desktop/serpantinum-settings.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/serpantinum-settings.svg"
+
+    cp -a "$srcdir/usr/." "$pkgdir/usr/"
+
+    install -Dm644 /dev/stdin "$pkgdir/etc/xdg/xdg-desktop-portal/portals.conf" <<'EOF'
+[preferred]
+org.freedesktop.impl.portal.FileChooser=ski
+EOF
+
+    install -Dm644 /dev/stdin "$pkgdir/etc/xdg/mimeapps.list" <<'EOF'
+[Default Applications]
+inode/directory=ski.desktop
+EOF
+
+    install -Dm644 /dev/stdin "$pkgdir/usr/lib/environment.d/50-serpantinum-portal.conf" <<'EOF'
+GTK_USE_PORTAL=1
+EOF
 
     install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
 }

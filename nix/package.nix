@@ -29,7 +29,6 @@
 , libnotify
 , lm_sensors
 , matugen
-, nautilus
 , networkmanager
 , pamixer
 , pavucontrol
@@ -85,7 +84,6 @@ let
     libnotify
     lm_sensors
     matugen
-    nautilus
     networkmanager
     pamixer
     pavucontrol

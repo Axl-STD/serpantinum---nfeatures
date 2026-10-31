@@ -1,6 +1,6 @@
 bindsym $mod+Return exec $terminal
 bindsym $mod+F exec firefox
-bindsym $mod+E exec nautilus
+bindsym $mod+E exec ski
 bindsym $mod+BackSpace scratchpad show
 bindsym $mod+Q kill
 bindsym $mod+Shift+F floating toggle

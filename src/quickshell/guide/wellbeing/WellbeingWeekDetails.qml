@@ -37,11 +37,8 @@ Item {
             height: rootObj.s(52)
             radius: ThemeBackend.borderRadius
             color: gfWeekRow.active ? "transparent" : (weekRowMa.containsMouse ? Qt.alpha(ThemeBackend.surface1, 0.45) : Qt.alpha(ThemeBackend.surface0, 0.4))
-            border.color: weekRowMa.containsMouse ? Qt.alpha(ThemeBackend.surface2, 0.45) : Qt.alpha(ThemeBackend.surface1, 0.3)
-            border.width: ThemeBackend.liquidGlass ? 0 : 1
 
             Behavior on color { ColorAnimation { duration: 150 } }
-            Behavior on border.color { ColorAnimation { duration: 150 } }
 
             transform: Translate { y: (index * rootObj.s(12)) * (1 - details.tab.introBottom) }
 
@@ -52,7 +49,7 @@ Item {
                 tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
                 tintAmount: 0.25
                 press: weekRowMa.pressed ? 0.8 : (weekRowMa.containsMouse ? 0.25 : 0)
-                Behavior on press { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
             }
 
             MouseArea {

@@ -357,7 +357,7 @@ GuideTab {
             verticalPadding: rootObj.s(10)
             spacing: rootObj.s(12)
             innerSpacing: actionCard.isCardOpen ? rootObj.s(12) : 0
-            Behavior on innerSpacing { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+            Behavior on innerSpacing { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
             bottomSpacing: 0
 
             customLeftContent: actionCard.isCustomAct ? customLeftRowComponent : null
@@ -414,8 +414,6 @@ GuideTab {
                     implicitHeight: rootObj.s(18)
                     radius: rootObj.s(4)
                     color: Qt.alpha(ThemeBackend.red, 0.15)
-                    border.color: Qt.alpha(ThemeBackend.red, 0.4)
-                    border.width: 1
 
                     Text {
                         id: invalidBadgeText
@@ -526,8 +524,8 @@ GuideTab {
                 property real openProgress: actionCard.isCardOpen ? 1 : 0
                 implicitHeight: expandedInnerCol.implicitHeight * openProgress
 
-                Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                Behavior on openProgress { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+                Behavior on openProgress { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
                 ColumnLayout {
                     id: expandedInnerCol
@@ -819,7 +817,6 @@ GuideTab {
                     tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
                     tintAmount: 0.25
                 }
-                border.width: 0
                 visible: idleTabRoot.idleEnabled
 
                 ColumnLayout {

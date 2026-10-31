@@ -44,7 +44,7 @@ Item {
             opacity: isCurrent ? 1.0 : 0.0
 
             Behavior on opacity {
-                NumberAnimation { duration: 140; easing.type: Easing.OutCubic }
+                NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
             }
 
             Binding {
@@ -107,6 +107,9 @@ Item {
                     function onRequestLoad(order) {
                         if (order === popup.tabLoadOrder(tabContentWrapper.parentTabIndex, -1)) singleTabLoader.ensureLoaded();
                     }
+                    function onReleaseTabs() {
+                        if (popup.currentTab !== tabContentWrapper.parentTabIndex && singleTabLoader.status !== Loader.Null) singleTabLoader.source = "";
+                    }
                 }
 
                 Connections {
@@ -139,7 +142,7 @@ Item {
                     opacity: isSubCurrent ? 1.0 : 0.0
 
                     Behavior on opacity {
-                        NumberAnimation { duration: 140; easing.type: Easing.OutCubic }
+                        NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
                     }
 
                     function ensureLoaded() {
@@ -187,6 +190,9 @@ Item {
                         }
                         function onRequestLoad(order) {
                             if (order === popup.tabLoadOrder(tabContentWrapper.parentTabIndex, subIndex)) subTabLoader.ensureLoaded();
+                        }
+                        function onReleaseTabs() {
+                            if (!subTabLoader.isSubCurrent && subTabLoader.status !== Loader.Null) subTabLoader.source = "";
                         }
                     }
 

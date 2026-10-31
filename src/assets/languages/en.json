@@ -1824,6 +1824,15 @@
       "quickshell_outdated": "Quickshell {version} is too old, {minimum} or newer is required. Upgrading...",
       "quickshell_still_old": "Quickshell is still older than {minimum}. Update it manually, otherwise settings will not open."
     },
+    "ski": {
+      "installing": "Installing the Ski file manager...",
+      "up_to_date": "-> Ski {version} is already installed.",
+      "installed": "Installed Ski {version}",
+      "install_failed": "Failed to install Ski",
+      "download_failed": "Could not download Ski, skipping. You can install it later from github.com/ilyamiro/Ski.",
+      "checksum_failed": "Ski download failed its checksum check, skipping.",
+      "unsupported_arch": "Prebuilt Ski packages exist only for x86_64, skipping."
+    },
     "deploy": {
       "configuring_sddm": "Configuring SDDM display manager...",
       "disabling_dm": "-> Disabling conflicting display manager: {dm}",

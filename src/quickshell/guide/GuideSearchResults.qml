@@ -187,7 +187,6 @@ Flickable {
                                     ? ThemeBackend.mauve
                                     : (directItemMa.containsMouse ? Qt.alpha(ThemeBackend.surface1, 0.6) : Qt.alpha(ThemeBackend.surface0, 0.35))
                                 color: ThemeBackend.liquidGlass ? "transparent" : legacyColor
-                                border.color: "transparent"
 
                                 Loader {
                                     anchors.fill: parent
@@ -404,7 +403,6 @@ Flickable {
                                                     ? ThemeBackend.mauve
                                                     : (subItemMa.containsMouse ? Qt.alpha(ThemeBackend.surface1, 0.6) : Qt.alpha(ThemeBackend.surface0, 0.35))
                                                 color: ThemeBackend.liquidGlass ? "transparent" : legacyColor
-                                                border.color: "transparent"
 
                                                 Loader {
                                     anchors.fill: parent

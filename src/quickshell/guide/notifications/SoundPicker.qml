@@ -71,8 +71,6 @@ FilePicker {
                             tintColor: ThemeBackend.surface1
                             tintAmount: 0.25
                         }
-                        border.width: 1
-                        border.color: soundPickerRoot.selectedFilePath !== "" ? ThemeBackend.mauve : ThemeBackend.surface1
 
                         Text {
                             anchors.centerIn: parent

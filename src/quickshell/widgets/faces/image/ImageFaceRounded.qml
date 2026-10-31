@@ -25,7 +25,7 @@ Item {
         radius: ThemeBackend.borderRadius !== undefined ? ThemeBackend.borderRadius : 12
         antialiasing: true
 
-        AnimatedImage {
+        BoundedImage {
             id: srcImage
             anchors.fill: parent
             source: root.imagePath !== "" ? (root.imagePath.startsWith("file://") ? root.imagePath : "file://" + root.imagePath) : ""
@@ -33,8 +33,8 @@ Item {
             asynchronous: true
             cache: true
             smooth: true
-            mipmap: true
             antialiasing: true
+            allowAnimation: true
             playing: true
             visible: false
         }

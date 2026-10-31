@@ -221,7 +221,7 @@ Item {
                             color: ThemeBackend.red
                             opacity: root.showError ? 0.15 : 0.0
                             z: 4
-                            Behavior on opacity { NumberAnimation { duration: 200 } }
+                            Behavior on opacity { NumberAnimation { duration: 250 } }
                         }
                     }
                 }
@@ -287,7 +287,7 @@ Item {
                     height: isTargetNote ? (Scaler.s(54) + (Scaler.s(130) - Scaler.s(54)) * root.expandProgress) : Scaler.s(54)
 
                     scale: itemMouseArea.pressed ? 0.98 : 1.0
-                    Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
+                    Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
 
                     Rectangle {
                         id: noteItemCard
@@ -303,10 +303,10 @@ Item {
                             tintColor: ThemeBackend.surface1
                             tintAmount: 0.3
                             press: itemMouseArea.pressed ? 0.8 : (itemMouseArea.containsMouse ? 0.2 : 0)
-                            Behavior on press { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                            Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                         }
 
-                        Behavior on color { ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+                        Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
                         RowLayout {
                             anchors.fill: parent

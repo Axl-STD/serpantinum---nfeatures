@@ -123,7 +123,7 @@ RowLayout {
             opacity: shown ? 1.0 : 0.0
             visible: opacity > 0
             enabled: shown
-            Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+            Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
             height: rootObj.s(30)
             horizontalPadding: rootObj.s(12)
             cornerRadius: ThemeBackend.borderRadius

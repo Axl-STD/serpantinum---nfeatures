@@ -233,8 +233,6 @@ Popup {
     background: Rectangle {
         color: ThemeBackend.base
         radius: pickerRoot.crLarge
-        border.color: ThemeBackend.surface0
-        border.width: 1
         layer.enabled: true
         layer.effect: MultiEffect {
             shadowEnabled: true

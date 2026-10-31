@@ -117,8 +117,8 @@ if [ -f "$CACHE_DIR/rec_pid" ]; then
                 ACTION=$(notify-send -a "$notif_app" -i "$NOTIF_ICON" -h "string:image-path:$NOTIF_ICON" -A "default=$notif_action" "$notif_title" "$notif_body")
                 rm -f "$VIDEO_THUMB"
                 if [ "$ACTION" = "default" ]; then
-                    if command -v nautilus &> /dev/null; then
-                        nautilus "$RECORD_DIR"
+                    if command -v ski &> /dev/null; then
+                        ski "$RECORD_DIR"
                     else
                         xdg-open "$RECORD_DIR"
                     fi
@@ -641,8 +641,8 @@ if [ "$FULL_MODE" = true ] || [ -n "$GEOMETRY" ]; then
             notif_body="$(t "screenshot.notifications.screenshot_saved_body" "file=Screenshot_$time.png" "folder=$SAVE_DIR")"
             ACTION=$(notify-send -a "$notif_app" -i "$FILENAME" -h "string:image-path:$FILENAME" -A "default=$notif_action" "$notif_title" "$notif_body")
             if [ "$ACTION" = "default" ]; then
-                if command -v nautilus &> /dev/null; then
-                    nautilus "$SAVE_DIR"
+                if command -v ski &> /dev/null; then
+                    ski "$SAVE_DIR"
                 else
                     xdg-open "$SAVE_DIR"
                 fi

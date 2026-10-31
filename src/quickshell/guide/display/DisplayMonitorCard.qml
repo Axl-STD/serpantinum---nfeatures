@@ -41,8 +41,9 @@ Rectangle {
 
     readonly property color cardTint: monitorPowered ? Qt.alpha(ThemeBackend.surface0, 0.4) : Qt.darker(Qt.alpha(ThemeBackend.surface0, 0.4), 1.1)
     color: monDelegateGlass.active ? "transparent" : cardTint
-    border.color: monDelegate.tab.selectedMonitorName === monName ? ThemeBackend.mauve : (monitorPowered ? Qt.alpha(ThemeBackend.surface1, 0.4) : Qt.darker(Qt.alpha(ThemeBackend.surface1, 0.4), 1.1))
-    border.width: monDelegate.tab.selectedMonitorName === monName ? rootObj.s(2) : (ThemeBackend.liquidGlass ? 0 : 1)
+    // Upstream 2.3.1: borderless cards; retain selection feedback.
+    border.color: ThemeBackend.mauve
+    border.width: monDelegate.tab.selectedMonitorName === monName ? rootObj.s(2) : 0
 
     GlassFill {
         id: monDelegateGlass
@@ -59,10 +60,9 @@ Rectangle {
     implicitHeight: targetHeight * appearProgress
     opacity: appeared ? 1.0 : 0.0
 
-    Behavior on appearProgress { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-    Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+    Behavior on appearProgress { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+    Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
     Behavior on color { ColorAnimation { duration: 250 } }
-    Behavior on border.color { ColorAnimation { duration: 250 } }
 
     Component.onCompleted: {
         appeared = true;
@@ -226,8 +226,8 @@ Rectangle {
                     property real openProgress: isOpen ? 1 : 0
                     implicitHeight: tempInnerBox.implicitHeight * openProgress
 
-                    Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                    Behavior on openProgress { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                    Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+                    Behavior on openProgress { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
                     SettingsRow {
                         id: tempInnerBox

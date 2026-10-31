@@ -564,8 +564,6 @@ Item {
                                     height: root.s(32)
                                     radius: ThemeBackend.borderRadius
                                     color: lapGlass.active ? "transparent" : Qt.alpha(ThemeBackend.surface0, ThemeBackend.elementOpacity)
-                                    border.width: 1
-                                    border.color: ThemeBackend.surface1
 
                                     GlassFill {
                                         id: lapGlass
@@ -716,8 +714,6 @@ Item {
                         height: root.s(160)
                         radius: ThemeBackend.borderRadius
                         color: pomoGlass.active ? "transparent" : Qt.alpha(ThemeBackend.surface0, ThemeBackend.elementOpacity)
-                        border.width: 1
-                        border.color: ThemeBackend.surface1
                         visible: pomodoroView.showSettings
 
                         GlassFill {

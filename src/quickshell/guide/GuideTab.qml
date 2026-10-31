@@ -14,5 +14,5 @@ Item {
     visible: isCurrent
     opacity: revealed ? 1.0 : 0.0
 
-    Behavior on opacity { NumberAnimation { duration: 140 } }
+    Behavior on opacity { NumberAnimation { duration: 150 } }
 }

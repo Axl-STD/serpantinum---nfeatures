@@ -144,7 +144,7 @@ PanelWindow {
                 property: "animProgress"
                 from: menuContainer.animProgress > 0.8 ? 0.2 : 0.0
                 to: 1.0
-                duration: 180
+                duration: 150
                 easing.type: Easing.OutBack
                 easing.overshoot: 1.05
             }
@@ -363,7 +363,7 @@ PanelWindow {
                                     Layout.fillHeight: true
                                     clip: true
                                     Behavior on Layout.preferredWidth {
-                                        NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                        NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
                                     }
 
                                     CloseButton {
@@ -378,7 +378,7 @@ PanelWindow {
                                         iconFontSize: dockAppMenuWindow.s(13)
                                         opacity: rowHover.hovered ? 1.0 : 0.0
                                         Behavior on opacity {
-                                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                                            NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
                                         }
                                         onClicked: {
                                             if (typeof WindowTracker !== "undefined") {

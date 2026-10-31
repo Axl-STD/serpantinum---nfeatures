@@ -46,13 +46,14 @@ FilePicker {
                 radius: imagePickerRoot.showCircleMask ? (side / 2) : imagePickerRoot.crMedium
                 clip: true
 
-                AnimatedImage {
+                BoundedImage {
                     anchors.fill: parent
                     visible: !imagePickerRoot.selectedIsVideo
                     source: imagePickerRoot.selectedFilePath !== "" && !imagePickerRoot.selectedIsVideo ? "file://" + imagePickerRoot.selectedFilePath : ""
                     fillMode: imagePickerRoot.showCircleMask ? Image.PreserveAspectCrop : Image.PreserveAspectFit
                     asynchronous: true
                     cache: false
+                    allowAnimation: true
                     playing: true
                 }
 

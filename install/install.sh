@@ -9,6 +9,7 @@ RAW_SLUG="${REPO_SLUG:-ilyamiro/serpantinum}"
 REPO_SLUG="$(printf '%s' "$RAW_SLUG" | tr -d '\r\n\t ' | sed 's/[^a-zA-Z0-9_\/-]//g')"
 CACHE_BASE="${XDG_CACHE_HOME:-$HOME/.cache}/serpantinum-installer"
 export REPO_SLUG
+export SERPANTINUM_INSTALLER=1
 
 if [ -n "${BASH_SOURCE[0]}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
     INSTALL_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
@@ -47,6 +48,7 @@ MODULES_DIR="$INSTALL_DIR/modules"
 source "$PROJECT_ROOT/src/scripts/i18n.sh"
 source "$MODULES_DIR/pm.sh"
 source "$MODULES_DIR/deps.sh"
+source "$MODULES_DIR/ski.sh"
 source "$MODULES_DIR/state.sh"
 source "$MODULES_DIR/migrate.sh"
 source "$MODULES_DIR/deploy.sh"
@@ -84,6 +86,7 @@ elif [[ "$INSTALL_STATE" == "fresh" || "$IS_REINSTALL" == true ]]; then
 fi
 
 install_dependencies "$INSTALL_STATE" "$IS_REINSTALL" "${SELECTED_COMPOSITORS[@]}"
+install_ski
 
 deploy_package "$PROJECT_ROOT" "$OLD_COMMIT" "$TARGET_COMMIT" "$IS_REINSTALL" "$INSTALL_STATE" "${SELECTED_COMPOSITORS[@]}"
 setup_sddm "$PROJECT_ROOT" "$INSTALL_STATE" "$IS_REINSTALL"
@@ -91,6 +94,7 @@ install_wallpapers "$INSTALL_FULL_WALLPAPERS"
 
 WALLPAPER_DIR=$(get_wallpaper_dir)
 init_serpantinum_config "$PROJECT_ROOT" "$WALLPAPER_DIR" "$INSTALL_STATE" "$IS_REINSTALL"
+configure_ski_defaults
 
 setup_services
 write_version_state "$TARGET_VERSION" "$TARGET_COMMIT" "$TELEMETRY_ID" "$ENABLE_TELEMETRY" "${SELECTED_COMPOSITORS[*]}"

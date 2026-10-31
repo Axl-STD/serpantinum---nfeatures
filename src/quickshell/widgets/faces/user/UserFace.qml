@@ -131,7 +131,7 @@ Item {
 
                         color: Qt.alpha(actionMa.containsMouse ? (ThemeBackend.surface2 !== undefined ? ThemeBackend.surface2 : Qt.lighter(ThemeBackend.surface1, 1.12)) : ThemeBackend.surface1, ThemeBackend.elementOpacity)
                         Behavior on color {
-                            ColorAnimation { duration: 200 }
+                            ColorAnimation { duration: 250 }
                         }
 
                         scale: actionMa.pressed ? (0.98 - (0.01 * weight)) : (actionMa.containsMouse ? 1.02 : 1.0)

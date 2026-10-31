@@ -64,7 +64,7 @@ Item {
                 autoPaddingEnabled: false
             }
 
-            AnimatedImage {
+            BoundedImage {
                 id: srcImage
                 anchors.fill: parent
                 source: root.imagePath !== "" ? (root.imagePath.startsWith("file://") ? root.imagePath : "file://" + root.imagePath) : ""
@@ -72,8 +72,8 @@ Item {
                 asynchronous: true
                 cache: true
                 smooth: true
-                mipmap: true
                 antialiasing: true
+                allowAnimation: true
                 playing: true
             }
         }

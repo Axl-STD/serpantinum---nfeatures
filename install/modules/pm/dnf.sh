@@ -64,7 +64,6 @@ declare -A PM_PKG_MAP=(
     [easyeffects]="easyeffects"
     [calf]="calf"
     [lsp-plugins-lv2]="lsp-plugins-lv2"
-    [nautilus]="nautilus"
     [qt5-wayland]="qt5-qtwayland"
     [qt5-quickcontrols]="qt5-qtquickcontrols"
     [qt5-quickcontrols2]="qt5-qtquickcontrols2"

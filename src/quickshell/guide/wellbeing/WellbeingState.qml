@@ -120,15 +120,15 @@ GuideTab {
             NumberAnimation { target: tabRoot; property: "introStats"; from: 0; to: 1.0; duration: 900; easing.type: Easing.OutBack; easing.overshoot: 1.2 }
         }
         SequentialAnimation {
-            PauseAnimation { duration: 350 }
+            PauseAnimation { duration: 400 }
             NumberAnimation { target: tabRoot; property: "introMidLeft"; from: 0; to: 1.0; duration: 850; easing.type: Easing.OutQuart }
         }
         SequentialAnimation {
-            PauseAnimation { duration: 300 }
+            PauseAnimation { duration: 250 }
             NumberAnimation { target: tabRoot; property: "introAppBars"; from: 0; to: 1.0; duration: 1300; easing.type: Easing.OutQuart }
         }
         SequentialAnimation {
-            PauseAnimation { duration: 450 }
+            PauseAnimation { duration: 400 }
             NumberAnimation { target: tabRoot; property: "introMidRight"; from: 0; to: 1.0; duration: 850; easing.type: Easing.OutQuart }
         }
         SequentialAnimation {

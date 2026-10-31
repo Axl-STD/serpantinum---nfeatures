@@ -392,7 +392,7 @@ PanelWindow {
                 property: "animProgress"
                 from: menuContainer.animProgress > 0.8 ? 0.2 : 0.0
                 to: 1.0
-                duration: 140
+                duration: 150
                 easing.type: Easing.OutBack
                 easing.overshoot: 1.05
             }

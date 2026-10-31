@@ -13,7 +13,7 @@ GuideTab {
     property real updateTransitionProgress: Updater.updateAvailable ? 1.0 : 0.0
     Behavior on updateTransitionProgress {
         NumberAnimation {
-            duration: 450
+            duration: 400
             easing.type: Easing.OutQuint
         }
     }
@@ -230,7 +230,6 @@ GuideTab {
                                 tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
                                 tintAmount: 0.25
                             }
-                            border.width: 0
 
                             RowLayout {
                                 id: rowHwLayout
@@ -310,7 +309,6 @@ GuideTab {
                                 tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
                                 tintAmount: 0.25
                             }
-                            border.width: 0
 
                             RowLayout {
                                 id: rowSysLayout

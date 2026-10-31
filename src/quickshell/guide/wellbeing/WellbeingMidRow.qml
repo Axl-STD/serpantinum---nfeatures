@@ -27,8 +27,6 @@ RowLayout {
             tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
             tintAmount: 0.25
         }
-        border.color: Qt.alpha(ThemeBackend.surface1, 0.3)
-        border.width: ThemeBackend.liquidGlass ? 0 : 1
 
         opacity: middleSection.tab.introMidLeft
         transform: Translate { x: rootObj.s(-30) * (1 - middleSection.tab.introMidLeft) }
@@ -155,8 +153,6 @@ RowLayout {
             tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
             tintAmount: 0.25
         }
-        border.color: Qt.alpha(ThemeBackend.surface1, 0.3)
-        border.width: ThemeBackend.liquidGlass ? 0 : 1
 
         opacity: middleSection.tab.introMidRight
         transform: Translate { x: rootObj.s(30) * (1 - middleSection.tab.introMidRight) }
@@ -195,9 +191,6 @@ RowLayout {
                         color: monthGlass.active || model.total === -1 ? "transparent" : (model.total === 0 ? ThemeBackend.surface2 : Qt.rgba(ThemeBackend.mauve.r, ThemeBackend.mauve.g, ThemeBackend.mauve.b, intensity))
                         Behavior on color { ColorAnimation { duration: 700; easing.type: Easing.OutQuint } }
 
-                        border.color: model.isTarget ? ThemeBackend.text : "transparent"
-                        border.width: model.isTarget && !monthGlass.active ? 1 : 0
-                        Behavior on border.color { ColorAnimation { duration: 300 } }
 
                         GlassFill {
                             id: monthGlass
@@ -213,8 +206,6 @@ RowLayout {
                             anchors.fill: parent
                             radius: parent.radius
                             color: "transparent"
-                            border.color: middleSection.tab.textMain
-                            border.width: model.isTarget && monthGlass.active ? 1 : 0
                         }
 
                         visible: model.total !== -1

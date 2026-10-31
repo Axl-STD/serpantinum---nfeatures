@@ -43,8 +43,6 @@ Rectangle {
         tintColor: Qt.alpha(ThemeBackend.surface0, 0.4)
         tintAmount: 0.25
     }
-    border.color: Qt.alpha(ThemeBackend.surface1, 0.3)
-    border.width: ThemeBackend.liquidGlass ? 0 : 1
 
     opacity: chart.tab.introMidLeft
     transform: Translate { y: rootObj.s(20) * (1 - chart.tab.introMidLeft) }
@@ -108,8 +106,6 @@ Rectangle {
                             height: gridArea.cellH
                             radius: Math.min(width, height) * 0.32
                             color: chart.cellColor(val)
-                            border.width: hovered ? 1 : 0
-                            border.color: chart.tab.textMain
 
                             scale: chart.tab.isWeekView ? 1.0 : 0.5
                             Behavior on scale {
@@ -146,8 +142,6 @@ Rectangle {
                         height: tipText.implicitHeight + rootObj.s(12)
                         radius: rootObj.s(8)
                         color: ThemeBackend.base
-                        border.color: Qt.alpha(ThemeBackend.surface2, 0.7)
-                        border.width: 1
                         x: Math.max(0, Math.min(gridArea.width - width, (chart.hoverHour + 0.5) * (gridArea.cellW + chart.gap) - width / 2))
                         y: Math.max(0, chart.hoverDay * (gridArea.cellH + chart.gap) - height - chart.gap)
 
@@ -242,8 +236,6 @@ Rectangle {
                     Layout.fillHeight: true
                     radius: ThemeBackend.borderRadius
                     color: tileGlass.active ? "transparent" : Qt.alpha(ThemeBackend.surface1, 0.35)
-                    border.color: Qt.alpha(ThemeBackend.surface2, 0.35)
-                    border.width: ThemeBackend.liquidGlass ? 0 : 1
 
                     GlassFill {
                         id: tileGlass

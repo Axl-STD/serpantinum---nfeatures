@@ -48,8 +48,6 @@ SettingsRow {
             tintColor: ThemeBackend.surface0
             tintAmount: 0.25
         }
-        border.width: 1
-        border.color: Qt.alpha(ThemeBackend.surface2, 0.6)
         clip: true
         opacity: row.tab.isCustomPos ? 1.0 : 0.0
         visible: opacity > 0.001
@@ -134,8 +132,8 @@ SettingsRow {
             property real openProgress: isOpen ? 1 : 0
             implicitHeight: selectorBox.implicitHeight * openProgress
 
-            Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-            Behavior on openProgress { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+            Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+            Behavior on openProgress { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
             Rectangle {
                 id: selectorBox
@@ -154,7 +152,6 @@ SettingsRow {
                     tintColor: Qt.alpha(ThemeBackend.surface1, 0.35)
                     tintAmount: 0.25
                 }
-                border.width: 0
 
                 ColumnLayout {
                     id: selectorInnerCol
@@ -271,8 +268,6 @@ SettingsRow {
                             anchors.fill: parent
                             radius: rootObj.s(8)
                             color: notifPreviewGlass.active ? "transparent" : ThemeBackend.base
-                            border.width: ThemeBackend.liquidGlass ? 0 : 1
-                            border.color: ThemeBackend.surface0
                             clip: true
 
                             GlassFill {

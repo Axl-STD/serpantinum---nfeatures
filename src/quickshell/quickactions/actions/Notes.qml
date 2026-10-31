@@ -132,8 +132,9 @@ Item {
     property real currentTimeTicker: 0
     Timer {
         interval: 10000
-        running: true
+        running: root.visible
         repeat: true
+        triggeredOnStart: true
         onTriggered: root.currentTimeTicker = Date.now()
     }
 
@@ -485,7 +486,7 @@ Item {
                         height: isTargetNote ? (root.s(54) + (root.s(130) - root.s(54)) * root.expandProgress) : root.s(54)
 
                         scale: itemMouseArea.pressed ? 0.98 : 1.0
-                        Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
+                        Behavior on scale { NumberAnimation { duration: 150; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
 
                         Rectangle {
                             id: noteItemCard
@@ -507,10 +508,10 @@ Item {
                                 tintColor: noteDelegateWrapper.isSelected ? ThemeBackend.mauve : ThemeBackend.surface1
                                 tintAmount: noteDelegateWrapper.isSelected ? 0.5 : 0.3
                                 press: itemMouseArea.pressed ? 0.8 : (itemMouseArea.containsMouse ? 0.2 : 0)
-                                Behavior on press { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                                Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                             }
 
-                            Behavior on color { ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+                            Behavior on color { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
                             RowLayout {
                                 anchors.fill: parent

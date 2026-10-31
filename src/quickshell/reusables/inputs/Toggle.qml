@@ -50,7 +50,7 @@ Item {
     SequentialAnimation {
         id: stretchAnim
         NumberAnimation { target: root; property: "stretch"; to: 1.0; duration: 120; easing.type: Easing.OutCubic }
-        NumberAnimation { target: root; property: "stretch"; to: 0.0; duration: 420; easing.type: Easing.OutBack; easing.overshoot: 1.4 }
+        NumberAnimation { target: root; property: "stretch"; to: 0.0; duration: 400; easing.type: Easing.OutBack; easing.overshoot: 1.4 }
     }
 
     property bool isHoveredOrHighlighted: (btnMa.containsMouse || root.action_highlight) && root.enabled
@@ -91,8 +91,8 @@ Item {
             opacity: root.enabled ? 1.0 : 0.5
             Layout.alignment: Qt.AlignVCenter
 
-            Behavior on color { ColorAnimation { duration: 200 } }
-            Behavior on opacity { NumberAnimation { duration: 180 } }
+            Behavior on color { ColorAnimation { duration: 250 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
 
             GlassFill {
                 id: trackGlass
@@ -100,7 +100,7 @@ Item {
                 radius: parent.radius
                 tintColor: root.checked ? root.accentColor : root.baseColor
                 tintAmount: root.checked ? 0.7 : (root.isHoveredOrHighlighted ? 0.4 : 0.3)
-                Behavior on tintAmount { NumberAnimation { duration: 200 } }
+                Behavior on tintAmount { NumberAnimation { duration: 250 } }
             }
 
             scale: (!root.enabled ? 1.0 : (btnMa.pressed ? 0.95 : (root.isHoveredOrHighlighted ? 1.04 : 1.0))) * root.popScale
@@ -124,12 +124,12 @@ Item {
                     shadow: 1
                     press: btnMa.pressed ? 1 : 0
                     pulse: Math.min(1, root.flashOpacity * 2.5)
-                    Behavior on press { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+                    Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                 }
 
-                Behavior on width { NumberAnimation { duration: 220; easing.type: Easing.OutBack; easing.overshoot: 1.3 } }
-                Behavior on x { NumberAnimation { duration: 200; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
-                Behavior on color { ColorAnimation { duration: 180 } }
+                Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.3 } }
+                Behavior on x { NumberAnimation { duration: 250; easing.type: Easing.OutBack; easing.overshoot: 1.2 } }
+                Behavior on color { ColorAnimation { duration: 150 } }
             }
 
             Rectangle {
@@ -137,8 +137,6 @@ Item {
                 anchors.margins: -3
                 radius: parent.radius + 3
                 color: "transparent"
-                border.width: 2
-                border.color: Qt.alpha(ThemeBackend.mauve, 0.8)
                 visible: root.activeFocus
             }
 
@@ -148,7 +146,7 @@ Item {
                 color: "#ffffff"
                 opacity: root.flashOpacity
                 visible: !trackGlass.active
-                PropertyAnimation on opacity { id: btnFlashAnim; to: 0; duration: 350; easing.type: Easing.OutExpo }
+                PropertyAnimation on opacity { id: btnFlashAnim; to: 0; duration: 400; easing.type: Easing.OutExpo }
             }
         }
     }
@@ -156,7 +154,7 @@ Item {
     SequentialAnimation {
         id: btnPopAnim
         NumberAnimation { target: root; property: "popScale"; to: 1.05; duration: 100; easing.type: Easing.OutQuad }
-        NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 350; easing.type: Easing.OutQuint }
+        NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 400; easing.type: Easing.OutQuint }
     }
 
     MouseArea {

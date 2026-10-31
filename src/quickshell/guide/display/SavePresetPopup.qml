@@ -187,8 +187,6 @@ Popup {
             tintColor: ThemeBackend.base
             tintAmount: 0.25
         }
-        border.color: ThemeBackend.surface0
-        border.width: 1
     }
 
     contentItem: ColumnLayout {
@@ -241,8 +239,9 @@ Popup {
                     scale: (currentPreviewBox.width > 0 ? currentPreviewBox.width : 1) / currentPreviewBox.sWidth
                     enabled: false
 
-                    Image {
+                    BoundedImage {
                         anchors.fill: parent
+                        devicePixelRatio: ((Screen.devicePixelRatio && Screen.devicePixelRatio > 0) ? Screen.devicePixelRatio : 1) * parent.scale
                         source: (savePresetPopup.visible && savePresetPopup.targetMonitor) ? savePresetPopup.getWallpaperSource(savePresetPopup.targetMonitor) : ""
                         fillMode: Image.PreserveAspectCrop
                         smooth: true
@@ -318,8 +317,6 @@ Popup {
             Rectangle {
                 anchors.fill: parent
                 color: "transparent"
-                border.width: 1
-                border.color: Qt.alpha(ThemeBackend.surface2, 0.4)
                 radius: ThemeBackend.borderRadius
             }
         }

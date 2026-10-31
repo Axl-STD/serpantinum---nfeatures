@@ -78,15 +78,15 @@ Item {
             shadow: 1
             press: (btnMa.pressed && root.enabled) ? 1 : (root.isHoveredOrHighlighted ? 0.25 : 0)
             pulse: Math.min(1, root.flashOpacity * 2.5)
-            Behavior on press { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
             radius: root.cornerRadius
             tintColor: root.accentColor
             tintAmount: ((btnMa.pressed && root.enabled) ? 0.55 : (root.isHoveredOrHighlighted ? 0.42 : 0.3)) * root.bgOpacity * root.glassTintScale
-            Behavior on tintAmount { NumberAnimation { duration: 180 } }
+            Behavior on tintAmount { NumberAnimation { duration: 150 } }
         }
 
-        Behavior on color { ColorAnimation { duration: 180 } }
-        Behavior on opacity { NumberAnimation { duration: 180 } }
+        Behavior on color { ColorAnimation { duration: 150 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
 
         scale: ((btnMa.pressed && root.enabled) ? 0.985 : (root.isHoveredOrHighlighted ? 1.015 : 1.0)) * root.popScale
         Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
@@ -94,7 +94,7 @@ Item {
         SequentialAnimation {
             id: btnPopAnim
             NumberAnimation { target: root; property: "popScale"; to: 1.015; duration: 100; easing.type: Easing.OutQuad }
-            NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 350; easing.type: Easing.OutQuint }
+            NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 400; easing.type: Easing.OutQuint }
         }
 
         RowLayout {
@@ -160,7 +160,7 @@ Item {
             color: "#ffffff"
             opacity: root.flashOpacity
             visible: !glass.active
-            PropertyAnimation on opacity { id: btnFlashAnim; to: 0; duration: 350; easing.type: Easing.OutExpo }
+            PropertyAnimation on opacity { id: btnFlashAnim; to: 0; duration: 400; easing.type: Easing.OutExpo }
         }
     }
 
@@ -169,8 +169,6 @@ Item {
         anchors.margins: -2
         radius: root.cornerRadius + 2
         color: "transparent"
-        border.width: 2
-        border.color: Qt.alpha(ThemeBackend.mauve, 0.8)
         visible: root.activeFocus
     }
 

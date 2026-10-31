@@ -187,14 +187,13 @@ Item {
             }
         }
 
-        Image {
+        BoundedImage {
             id: wpCardImage
             anchors.fill: parent
             source: wpPreviewContainer.tab.isWallpaperVideo ? ("file://" + Caching.getCacheDir("wallpaper") + "/current_wallpaper.png?rev=" + wpPreviewContainer.tab.wallpaperRevision) : (wpPreviewContainer.tab.currentWallpaperPath ? "file://" + wpPreviewContainer.tab.currentWallpaperPath : "")
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
             smooth: true
-            mipmap: true
             cache: false
             visible: source !== ""
         }
@@ -226,9 +225,7 @@ Item {
         color: ThemeBackend.mauve
         opacity: wpPreviewContainer.highlightFlash * 0.2
         visible: opacity > 0.001
-        border.color: ThemeBackend.mauve
-        border.width: wpPreviewContainer.highlightFlash > 0.01 ? 2 : 0
-        Behavior on opacity { NumberAnimation { duration: 180 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
     }
 
     IconButton {

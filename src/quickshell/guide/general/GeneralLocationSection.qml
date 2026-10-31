@@ -22,7 +22,7 @@ SettingsBlob {
         showDivider: section.tab.isLocEditOpen
         dividerColor: Qt.alpha(ThemeBackend.surface1, 0.2)
         innerSpacing: section.tab.isLocEditOpen ? rootObj.s(12) : 0
-        Behavior on innerSpacing { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+        Behavior on innerSpacing { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
         LoaderIcon {
             id: detectLoader
@@ -84,7 +84,7 @@ SettingsBlob {
                 property real openProgress: section.tab.isLocEditOpen ? 1 : 0
                 Layout.preferredHeight: implicitHeight * openProgress
                 Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-                Behavior on openProgress { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                Behavior on openProgress { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
                 Input {
                     id: latInput

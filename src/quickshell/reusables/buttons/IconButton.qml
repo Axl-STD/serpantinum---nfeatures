@@ -55,7 +55,7 @@ Item {
         SequentialAnimation {
             id: btnPopAnim
             NumberAnimation { target: root; property: "popScale"; to: 1.1; duration: 110; easing.type: Easing.OutQuad }
-            NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 420; easing.type: Easing.OutQuint }
+            NumberAnimation { target: root; property: "popScale"; to: 1.0; duration: 400; easing.type: Easing.OutQuint }
         }
 
         Rectangle {
@@ -66,8 +66,8 @@ Item {
             color: ThemeBackend.liquidGlass ? "transparent" : (!root.enabled ? root.accentColor : (btnMa.pressed ? Qt.darker(root.accentColor, 1.12) : (root.isHoveredOrHighlighted ? Qt.lighter(root.accentColor, 1.12) : root.accentColor)))
             opacity: (root.enabled ? 1.0 : 0.5) * root.bgOpacity
 
-            Behavior on color { ColorAnimation { duration: 180 } }
-            Behavior on opacity { NumberAnimation { duration: 180 } }
+            Behavior on color { ColorAnimation { duration: 150 } }
+            Behavior on opacity { NumberAnimation { duration: 150 } }
 
             GlassFill {
                 id: glass
@@ -75,11 +75,11 @@ Item {
                 shadow: root.glassShadow
                 press: btnMa.pressed ? 1 : (root.isHoveredOrHighlighted ? 0.25 : 0)
                 pulse: Math.min(1, root.flashOpacity * 2.5)
-                Behavior on press { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                Behavior on press { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                 radius: root.cornerRadius
                 tintColor: root.accentColor
                 tintAmount: btnMa.pressed ? 0.55 : (root.isHoveredOrHighlighted ? 0.42 : 0.3)
-                Behavior on tintAmount { NumberAnimation { duration: 180 } }
+                Behavior on tintAmount { NumberAnimation { duration: 150 } }
             }
         }
 
@@ -134,8 +134,6 @@ Item {
         anchors.margins: -2
         radius: root.cornerRadius + 2
         color: "transparent"
-        border.width: 2
-        border.color: Qt.alpha(ThemeBackend.mauve, 0.8)
         visible: root.activeFocus
         z: 100
     }

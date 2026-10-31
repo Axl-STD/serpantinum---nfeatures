@@ -62,7 +62,7 @@ Notification {
                 visible: false
             }
 
-            Image {
+            BoundedImage {
                 id: rawBgImg
                 anchors.fill: parent
                 source: {
