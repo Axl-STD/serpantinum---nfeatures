@@ -438,13 +438,54 @@ GuideTab {
     // v0.5.62.1: serialize refresh requests; never restart a running detector.
     property bool monitorDetectionInFlight: false
     property bool monitorDetectionQueued: false
+    // v0.5.63.1: fail closed after repeated timeouts or unconfirmed cancellation.
+    property bool monitorDetectionTimedOut: false
+    property bool monitorDetectionBlocked: false
+    property int monitorDetectionTimeouts: 0
+    readonly property int monitorDetectionTimeoutMs: 4000
+
+    Timer {
+        id: monitorDetectionWatchdog
+        interval: displayTabRoot.monitorDetectionTimeoutMs
+        repeat: false
+        onTriggered: {
+            if (!displayTabRoot.monitorDetectionInFlight || displayTabRoot.monitorDetectionBlocked)
+                return;
+            displayTabRoot.monitorDetectionTimedOut = true;
+            displayTabRoot.monitorDetectionTimeouts++;
+            // Retry at most once, and only after the previous process exits.
+            if (displayTabRoot.monitorDetectionTimeouts <= 1)
+                displayTabRoot.monitorDetectionQueued = true;
+            else {
+                displayTabRoot.monitorDetectionQueued = false;
+                displayTabRoot.monitorDetectionBlocked = true;
+            }
+            monitorDetectionCancelGrace.start();
+            monitorDetector.running = false;
+        }
+    }
+
+    Timer {
+        id: monitorDetectionCancelGrace
+        interval: 2500
+        repeat: false
+        onTriggered: {
+            // No verified exit: never start another process automatically.
+            if (displayTabRoot.monitorDetectionInFlight) {
+                displayTabRoot.monitorDetectionBlocked = true;
+                displayTabRoot.monitorDetectionQueued = false;
+            }
+        }
+    }
 
     function startQueuedMonitorDetection() {
-        if (monitorDetectionInFlight || monitorDetector.running || !monitorDetectionQueued)
+        if (monitorDetectionBlocked || monitorDetectionInFlight || monitorDetector.running || !monitorDetectionQueued)
             return;
         monitorDetectionQueued = false;
         monitorDetectionInFlight = true;
+        monitorDetectionTimedOut = false;
         monitorDetector.running = true;
+        monitorDetectionWatchdog.start();
     }
 
     Process {
@@ -464,7 +505,7 @@ GuideTab {
         stdout: StdioCollector {
             onStreamFinished: {
                 // A newer request supersedes this run, even if it completed successfully.
-                if (!displayTabRoot.monitorDetectionInFlight || displayTabRoot.monitorDetectionQueued)
+                if (!displayTabRoot.monitorDetectionInFlight || displayTabRoot.monitorDetectionQueued || displayTabRoot.monitorDetectionTimedOut || displayTabRoot.monitorDetectionBlocked)
                     return;
                 let out = this.text;
                 if (!out) return;
@@ -569,8 +610,13 @@ GuideTab {
             }
         }
         onExited: (exitCode, exitStatus) => {
+            monitorDetectionWatchdog.stop();
+            monitorDetectionCancelGrace.stop();
+            const timedOut = displayTabRoot.monitorDetectionTimedOut;
             displayTabRoot.monitorDetectionInFlight = false;
-            if (displayTabRoot.monitorDetectionQueued)
+            if (!timedOut && exitCode === 0 && exitStatus === 0)
+                displayTabRoot.monitorDetectionTimeouts = 0;
+            if (!displayTabRoot.monitorDetectionBlocked && displayTabRoot.monitorDetectionQueued)
                 Qt.callLater(displayTabRoot.startQueuedMonitorDetection);
         }
     }
@@ -604,6 +650,7 @@ GuideTab {
     }
 
     function reloadMonitors() {
+        if (monitorDetectionBlocked) return;
         monitorDetectionQueued = true;
         // Coalesce repeated requests while an existing process is still running.
         if (!monitorDetectionInFlight && !monitorDetector.running)
