@@ -371,6 +371,13 @@
           "failed": "Evidence read or validation failed; no physical execution authorized.",
           "invalid_response": "Invalid, unsafe or incomplete diagnostic response."
         }
+      },
+      "overview": {
+        "title": "Display status",
+        "pending": "Pending display changes",
+        "preview": "Preview only · Not applied or saved",
+        "discard": "Discard",
+        "evidence": "Evidence status"
       }
     },
     "bar": {

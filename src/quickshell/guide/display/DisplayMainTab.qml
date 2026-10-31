@@ -34,32 +34,76 @@ DisplayMainState {
             width: parent.width - (parent.contentHeight > parent.height ? rootObj.s(6) : 0)
             spacing: rootObj.s(12)
 
+            // v0.5.60: planning and evidence are independent read-only summaries.
             Rectangle {
                 Layout.fillWidth: true
-                visible: displayTabRoot.pendingDisplayCount > 0
-                implicitHeight: pendingRow.implicitHeight + rootObj.s(20)
+                implicitHeight: overviewColumn.implicitHeight + rootObj.s(24)
                 radius: ThemeBackend.borderRadius
                 color: Qt.alpha(ThemeBackend.surface0, 0.5)
                 border.width: 1
-                border.color: ThemeBackend.mauve
-                RowLayout {
-                    id: pendingRow
+                border.color: ThemeBackend.surface2
+                ColumnLayout {
+                    id: overviewColumn
                     anchors.fill: parent
-                    anchors.margins: rootObj.s(10)
-                    spacing: rootObj.s(10)
+                    anchors.margins: rootObj.s(12)
+                    spacing: rootObj.s(7)
                     Text {
-                        Layout.fillWidth: true
-                        wrapMode: Text.WordWrap
-                        text: "Pending display changes (preview only) — not applied or saved"
+                        text: I18n.t("guide.display.overview.title", "Display status")
                         color: ThemeBackend.text
                         font.family: ThemeBackend.fontFamily
-                        font.pixelSize: rootObj.s(12)
+                        font.bold: true
+                        font.pixelSize: rootObj.s(13)
                     }
-                    Button {
-                        text: "Discard"
-                        onClicked: {
-                            displayTabRoot.discardDisplayChanges();
-                            displayTabRoot.reloadMonitors();
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: rootObj.s(10)
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: rootObj.s(2)
+                            Text {
+                                text: I18n.t("guide.display.overview.pending", "Pending display changes")
+                                color: ThemeBackend.text
+                                font.family: ThemeBackend.fontFamily
+                                font.pixelSize: rootObj.s(12)
+                            }
+                            Text {
+                                text: I18n.t("guide.display.overview.preview", "Preview only · Not applied or saved")
+                                color: ThemeBackend.text
+                                opacity: 0.7
+                                font.family: ThemeBackend.fontFamily
+                                font.pixelSize: rootObj.s(10)
+                            }
+                        }
+                        Text {
+                            text: String(displayTabRoot.pendingDisplayCount)
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.bold: true
+                            font.pixelSize: rootObj.s(13)
+                        }
+                        Button {
+                            visible: displayTabRoot.pendingDisplayCount > 0
+                            text: I18n.t("guide.display.overview.discard", "Discard")
+                            onClicked: {
+                                displayTabRoot.discardDisplayChanges();
+                                displayTabRoot.reloadMonitors();
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Text {
+                            Layout.fillWidth: true
+                            text: I18n.t("guide.display.overview.evidence", "Evidence status")
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(12)
+                        }
+                        Text {
+                            text: I18n.t("guide.display.diagnostic.status." + displayTabRoot.diagnosticStatusKey, "Diagnostic status")
+                            color: displayTabRoot.diagnosticStatusKey === "conflict" || displayTabRoot.diagnosticStatusKey === "failed" ? ThemeBackend.mauve : ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(11)
                         }
                     }
                 }

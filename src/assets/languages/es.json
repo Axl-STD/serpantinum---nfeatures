@@ -372,6 +372,13 @@
           "failed": "Falló la lectura o validación de evidencias. No se autoriza ninguna operación física.",
           "invalid_response": "Respuesta de diagnóstico inválida, insegura o incompleta."
         }
+      },
+      "overview": {
+        "title": "Estado de pantallas",
+        "pending": "Cambios de pantalla pendientes",
+        "preview": "Solo vista previa · Sin aplicar ni guardar",
+        "discard": "Descartar",
+        "evidence": "Estado de evidencias"
       }
     },
     "bar": {
