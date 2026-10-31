@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v0.5.51: five allowlisted offline tests; systemd actions never invoked."""
+"""v0.5.52: seven allowlisted offline selftests; no live systemd actions."""
 import argparse
 import json
 import os
@@ -15,8 +15,10 @@ FILES = (
     'display-coordination-finalization.py',
     'display-coordination-contract.py',
     'display-worker-attestation.py',
+    'display-evidence-link-v0546.py',
+    'display-evidence-consistency-v0547.py',
 )
-EXPECTED = (5, 6, 7, 10, 13)
+EXPECTED = (5, 6, 7, 10, 13, 5, 7)
 # Imported for pure unit-property checks only; never executed as a CLI.
 DEPENDENCIES = ('display-systemd-reconciliation.py',)
 TIMEOUT = 20
@@ -55,9 +57,13 @@ def verify(name, objs, expected):
     scenarios = final.get('scenarios')
     if not isinstance(scenarios, list) or len(scenarios) != expected or len(set(scenarios)) != expected:
         raise ValueError(name + ': scenario count/uniqueness mismatch')
-    for key in ('physicalExecutionEnabled', 'commandsExecuted'):
-        if key not in final:
-            raise ValueError(name + ': missing safety field ' + key)
+    if 'commandsExecuted' not in final:
+        raise ValueError(name + ': missing commandsExecuted')
+    if name in ('display-evidence-link-v0546.py', 'display-evidence-consistency-v0547.py'):
+        if final.get('executionAuthorized') is not False:
+            raise ValueError(name + ': missing explicit denial of authorization')
+    elif final.get('physicalExecutionEnabled') is not False:
+        raise ValueError(name + ': missing explicit physical execution denial')
     return scenarios
 
 
@@ -85,12 +91,13 @@ def run_suite(source):
                 results.append({'controller': filename, 'passed': False, 'error': str(exc)[:350]})
                 break
     success = len(results) == len(FILES) and all(r['passed'] for r in results)
-    return {'version': '0.5.51', 'mode': 'allowlisted-offline-regression',
+    return {'version': '0.5.52', 'mode': 'allowlisted-offline-regression',
             'selftest': 'passed' if success else 'failed', 'results': results,
             'totalScenarios': sum(EXPECTED) if success else None,
             'physicalExecutionEnabled': False, 'executionAuthorized': False,
             'physicalRollbackVerified': False, 'commandsExecuted': 0,
-            'systemdIntegration': False, 'liveBundleTouched': False}, success
+            'systemdIntegration': False, 'liveBundleTouched': False,
+            'note': 'Offline selftests only; no physical safety or rollback proof'}, success
 
 
 def main():
@@ -100,7 +107,7 @@ def main():
     try:
         result, success = run_suite(Path(__file__).resolve().parent)
     except (ValueError, OSError) as exc:
-        result, success = {'version': '0.5.51', 'selftest': 'failed', 'error': str(exc),
+        result, success = {'version': '0.5.52', 'selftest': 'failed', 'error': str(exc),
                            'executionAuthorized': False}, False
     print(json.dumps(result, indent=2))
     return 0 if success else 2
