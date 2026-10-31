@@ -377,7 +377,16 @@
         "pending": "Pending display changes",
         "preview": "Preview only · Not applied or saved",
         "discard": "Discard",
-        "evidence": "Evidence status"
+        "evidence": "Evidence status",
+        "detector": "Monitor detection",
+        "detector_status": {
+          "unavailable": "Not yet verified",
+          "checking": "Checking monitors...",
+          "updated": "Updated",
+          "retrying": "Detection timed out · Retrying",
+          "blocked": "Detection unavailable · Blocked",
+          "failed": "Unable to refresh monitors"
+        }
       }
     },
     "bar": {

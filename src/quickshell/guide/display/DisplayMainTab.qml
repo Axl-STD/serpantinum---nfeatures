@@ -92,6 +92,26 @@ DisplayMainState {
                     }
                     RowLayout {
                         Layout.fillWidth: true
+                        spacing: rootObj.s(8)
+                        Text {
+                            Layout.fillWidth: true
+                            text: I18n.t("guide.display.overview.detector", "Monitor detection")
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(12)
+                        }
+                        Text {
+                            text: I18n.t("guide.display.overview.detector_status." + displayTabRoot.monitorDetectionStatus, "Detection unavailable")
+                            color: displayTabRoot.monitorDetectionStatus === "blocked" || displayTabRoot.monitorDetectionStatus === "failed" ? ThemeBackend.mauve : ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(11)
+                            wrapMode: Text.WordWrap
+                            horizontalAlignment: Text.AlignRight
+                            Layout.maximumWidth: rootObj.s(210)
+                        }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
                         Text {
                             Layout.fillWidth: true
                             text: I18n.t("guide.display.overview.evidence", "Evidence status")

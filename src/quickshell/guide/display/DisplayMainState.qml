@@ -443,6 +443,9 @@ GuideTab {
     property bool monitorDetectionBlocked: false
     property int monitorDetectionTimeouts: 0
     readonly property int monitorDetectionTimeoutMs: 4000
+    // v0.5.64: presentation-only observation; never an execution gate.
+    property string monitorDetectionStatus: "unavailable"
+    property bool monitorDetectionReceivedValidOutput: false
 
     Timer {
         id: monitorDetectionWatchdog
@@ -453,6 +456,7 @@ GuideTab {
                 return;
             displayTabRoot.monitorDetectionTimedOut = true;
             displayTabRoot.monitorDetectionTimeouts++;
+            displayTabRoot.monitorDetectionStatus = displayTabRoot.monitorDetectionTimeouts <= 1 ? "retrying" : "blocked";
             // Retry at most once, and only after the previous process exits.
             if (displayTabRoot.monitorDetectionTimeouts <= 1)
                 displayTabRoot.monitorDetectionQueued = true;
@@ -474,6 +478,7 @@ GuideTab {
             if (displayTabRoot.monitorDetectionInFlight) {
                 displayTabRoot.monitorDetectionBlocked = true;
                 displayTabRoot.monitorDetectionQueued = false;
+                displayTabRoot.monitorDetectionStatus = "blocked";
             }
         }
     }
@@ -484,6 +489,8 @@ GuideTab {
         monitorDetectionQueued = false;
         monitorDetectionInFlight = true;
         monitorDetectionTimedOut = false;
+        monitorDetectionReceivedValidOutput = false;
+        monitorDetectionStatus = monitorDetectionTimeouts > 0 ? "retrying" : "checking";
         monitorDetector.running = true;
         monitorDetectionWatchdog.start();
     }
@@ -595,6 +602,7 @@ GuideTab {
                 } catch (e) {
                 }
                 if (mList.length > 0) {
+                    displayTabRoot.monitorDetectionReceivedValidOutput = true;
                     // A delayed scale edit predating this refresh has no trusted baseline.
                     if (displayTabRoot.pendingMonScaleName !== "") {
                         displayTabRoot.pendingMonScaleName = "";
@@ -614,8 +622,18 @@ GuideTab {
             monitorDetectionCancelGrace.stop();
             const timedOut = displayTabRoot.monitorDetectionTimedOut;
             displayTabRoot.monitorDetectionInFlight = false;
-            if (!timedOut && exitCode === 0 && exitStatus === 0)
+            if (displayTabRoot.monitorDetectionBlocked) {
+                displayTabRoot.monitorDetectionStatus = "blocked";
+            } else if (timedOut) {
+                displayTabRoot.monitorDetectionStatus = "retrying";
+            } else if (exitCode === 0 && exitStatus === 0 && displayTabRoot.monitorDetectionReceivedValidOutput && !displayTabRoot.monitorDetectionQueued) {
                 displayTabRoot.monitorDetectionTimeouts = 0;
+                displayTabRoot.monitorDetectionStatus = "updated";
+            } else if (displayTabRoot.monitorDetectionQueued) {
+                displayTabRoot.monitorDetectionStatus = "checking";
+            } else {
+                displayTabRoot.monitorDetectionStatus = "failed";
+            }
             if (!displayTabRoot.monitorDetectionBlocked && displayTabRoot.monitorDetectionQueued)
                 Qt.callLater(displayTabRoot.startQueuedMonitorDetection);
         }

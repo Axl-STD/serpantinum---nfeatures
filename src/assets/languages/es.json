@@ -378,7 +378,16 @@
         "pending": "Cambios de pantalla pendientes",
         "preview": "Solo vista previa · Sin aplicar ni guardar",
         "discard": "Descartar",
-        "evidence": "Estado de evidencias"
+        "evidence": "Estado de evidencias",
+        "detector": "Detección de monitores",
+        "detector_status": {
+          "unavailable": "Aún sin verificar",
+          "checking": "Comprobando monitores...",
+          "updated": "Actualizada",
+          "retrying": "Tiempo agotado · Reintentando",
+          "blocked": "Detección no disponible · Bloqueada",
+          "failed": "No se pudieron actualizar los monitores"
+        }
       }
     },
     "bar": {
