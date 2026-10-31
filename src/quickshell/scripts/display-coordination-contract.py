@@ -128,6 +128,106 @@ def classify_diagnostic(reservation=None, evidence=None):
             'commandsExecuted': 0}
 
 
+
+def classify_stores(bundle=None, journal=None, reservation=None):
+    """Pure comparison of caller-supplied summaries, never an atomic snapshot."""
+    sources = {'bundle': bundle, 'journal': journal, 'reservation': reservation}
+    ids = []
+    present = []
+    for name, item in sources.items():
+        if item is None:
+            continue
+        if not isinstance(item, dict):
+            raise ValueError('Invalid ' + name + ' summary')
+        if name == 'bundle' and item.get('phase') == 'idle' and 'transactionId' not in item:
+            continue
+        if name == 'reservation' and item.get('phase') == 'empty' and 'transactionId' not in item:
+            continue
+        token = item.get('transactionId')
+        if not isinstance(token, str) or not TOKEN.fullmatch(token):
+            raise ValueError('Invalid ' + name + ' transaction identity')
+        if not isinstance(item.get('phase'), str) or not item['phase']:
+            raise ValueError('Invalid ' + name + ' phase')
+        if name == 'bundle' and item.get('integrityVerified') is not True:
+            raise ValueError('Unverified bundle integrity')
+        if name == 'journal' and (type(item.get('historyLength')) is not int or item['historyLength'] < 1):
+            raise ValueError('Unverified journal history')
+        if name == 'reservation' and item.get('phase') != 'reserved':
+            raise ValueError('Unknown reservation phase')
+        for key in ('executionAuthorized', 'physicalExecutionEnabled', 'physicalRollbackVerified',
+                    'finalizationAuthorized', 'reservationReusable'):
+            if key in item and item[key] is not False:
+                raise ValueError('Unsafe ' + name + ' flag: ' + key)
+        if 'commandsExecuted' in item and (type(item['commandsExecuted']) is not int or item['commandsExecuted'] != 0):
+            raise ValueError('Unsafe ' + name + ' command count')
+        ids.append(token)
+        present.append(name)
+    if not present:
+        assessment = 'empty'
+    elif len(set(ids)) > 1:
+        assessment = 'identity-conflict'
+    elif len(present) < 3:
+        assessment = 'incomplete'
+    else:
+        assessment = 'consistent-observable'
+    return {'version': '0.5.53', 'mode': 'non-atomic-cross-store-diagnostic',
+            'assessment': assessment, 'observedStores': present,
+            'transactionId': ids[0] if ids and len(set(ids)) == 1 else None,
+            'atomicCrossStoreSnapshot': False, 'evidenceAuthenticated': False,
+            'executionAuthorized': False, 'finalizationAuthorized': False,
+            'reservationReusable': False, 'physicalExecutionEnabled': False,
+            'physicalRollbackVerified': False, 'commandsExecuted': 0}
+
+
+def inspect_stores(bundle_root=None, journal_root=None, reservation_root=None):
+    """Sequential read-only inspection; all roots must be explicit and isolated."""
+    if any(x is None for x in (bundle_root, journal_root, reservation_root)):
+        raise ValueError('All three explicit roots required')
+    base = Path(reservation_root)
+    if base.is_symlink() or not base.is_dir() or base.stat().st_uid != os.getuid() or base.stat().st_mode & 0o077:
+        raise ValueError('Unsafe reservation root')
+    b = inspect(bundle_root=bundle_root)['bundle']
+    j = inspect(journal_root=journal_root)['journal']
+    rpath = base / 'coordination-rehearsal-v0543.json'
+    if not rpath.exists() and not rpath.is_symlink():
+        r = None
+    else:
+        r = secure_json(rpath)
+        if (r.get('version') != '0.5.43' or r.get('mode') != 'isolated-rehearsal-only'
+                or r.get('phase') != 'reserved' or r.get('executionAuthorized') is not False
+                or r.get('physicalExecutionEnabled') is not False or r.get('commandsExecuted') != 0):
+            raise ValueError('Invalid reservation format')
+    return classify_stores(b, j, r)
+
+
+def selftest_stores():
+    token = 'a' * 24
+    b = {'phase': 'sealed-read-only', 'transactionId': token, 'integrityVerified': True}
+    j = {'phase': 'prepared', 'transactionId': token, 'historyLength': 1}
+    r = {'phase': 'reserved', 'transactionId': token, 'executionAuthorized': False,
+         'physicalExecutionEnabled': False, 'commandsExecuted': 0}
+    scenarios = []
+    assert classify_stores()['assessment'] == 'empty'; scenarios.append('empty')
+    assert classify_stores(b)['assessment'] == 'incomplete'; scenarios.append('incomplete')
+    assert classify_stores(b, j, r)['assessment'] == 'consistent-observable'; scenarios.append('consistent-observable')
+    assert classify_stores(b, j, dict(r, transactionId='b'*24))['assessment'] == 'identity-conflict'; scenarios.append('identity-conflict')
+    for label, args in (
+        ('bundle-integrity-rejected', (dict(b, integrityVerified=False), j, r)),
+        ('journal-history-rejected', (b, dict(j, historyLength=0), r)),
+        ('reservation-flags-rejected', (b, j, dict(r, executionAuthorized=True))),
+        ('invalid-identity-rejected', (dict(b, transactionId='invalid'), j, r)),
+    ):
+        try:
+            classify_stores(*args)
+        except ValueError:
+            scenarios.append(label)
+        else:
+            raise AssertionError(label)
+    return {'version': '0.5.53', 'selftest': 'passed', 'scenarios': scenarios,
+            'executionAuthorized': False, 'physicalExecutionEnabled': False,
+            'physicalRollbackVerified': False, 'commandsExecuted': 0}
+
+
 def selftest():
     import tempfile
     with tempfile.TemporaryDirectory() as tmp:
@@ -182,12 +282,20 @@ def selftest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['inspect', 'selftest'])
+    parser.add_argument('command', choices=['inspect', 'selftest', 'inspect-stores', 'selftest-stores'])
     parser.add_argument('--bundle-root', type=Path)
     parser.add_argument('--journal-root', type=Path)
+    parser.add_argument('--reservation-root', type=Path)
     args = parser.parse_args()
     try:
-        data = selftest() if args.command == 'selftest' else inspect(args.bundle_root, args.journal_root)
+        if args.command == 'selftest':
+            data = selftest()
+        elif args.command == 'selftest-stores':
+            data = selftest_stores()
+        elif args.command == 'inspect-stores':
+            data = inspect_stores(args.bundle_root, args.journal_root, args.reservation_root)
+        else:
+            data = inspect(args.bundle_root, args.journal_root)
         print(json.dumps(data, indent=2, ensure_ascii=False))
         return 0
     except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
