@@ -8,19 +8,23 @@ GuideTab {
     id: displayTabRoot
     subTabIndex: 0
 
-    // v0.5.56: explicitly requested diagnostic, never applies monitor changes.
+    // v0.5.57: on-demand, read-only diagnostics. Never an execution gate.
     readonly property string diagnosticRoot: Quickshell.env("SERPANTINUM_DISPLAY_DEV_ROOT") || ""
     property string diagnosticAssessment: "diagnostic-unavailable"
     property string diagnosticMessage: "No diagnostic has been requested."
     property bool diagnosticBusy: false
+    property string diagnosticResponse: ""
+    property bool diagnosticResponseValid: false
 
     function requestDisplayDiagnostic() {
-        if (diagnosticBusy) return;
+        if (diagnosticBusy || displayDiagnosticProcess.running) return;
         if (!diagnosticRoot || !diagnosticRoot.startsWith("/")) {
             diagnosticAssessment = "diagnostic-unavailable";
             diagnosticMessage = "Development evidence directory not configured.";
             return;
         }
+        diagnosticResponse = "";
+        diagnosticResponseValid = false;
         diagnosticBusy = true;
         diagnosticAssessment = "checking";
         diagnosticMessage = "Reading isolated evidence...";
@@ -36,26 +40,43 @@ GuideTab {
                   "--reservation-root", displayTabRoot.diagnosticRoot + "/reservation"]
         stdout: StdioCollector {
             onStreamFinished: {
-                try {
-                    let data = JSON.parse(this.text);
-                    if (data.executionAuthorized !== false || data.physicalExecutionEnabled !== false) {
-                        throw new Error("Unsafe diagnostic response");
-                    }
-                    displayTabRoot.diagnosticAssessment = String(data.assessment || "diagnostic-unavailable");
-                    displayTabRoot.diagnosticMessage = data.assessment === "diagnostic-unavailable"
-                        ? "Required development journal is absent; no physical execution authorized."
-                        : "Diagnostic only; no physical execution authorized.";
-                } catch (e) {
-                    displayTabRoot.diagnosticAssessment = "diagnostic-unavailable";
-                    displayTabRoot.diagnosticMessage = "Invalid or incomplete diagnostic response.";
-                }
+                displayTabRoot.diagnosticResponse = this.text;
+                displayTabRoot.diagnosticResponseValid = true;
             }
         }
         onExited: (exitCode, exitStatus) => {
             displayTabRoot.diagnosticBusy = false;
-            if (exitCode !== 0) {
-                displayTabRoot.diagnosticAssessment = "diagnostic-unavailable";
-                displayTabRoot.diagnosticMessage = "Evidence missing, unsafe or unreadable (code " + exitCode + ").";
+            if (exitCode !== 0 || !displayTabRoot.diagnosticResponseValid) {
+                displayTabRoot.diagnosticAssessment = "observation-failed";
+                displayTabRoot.diagnosticMessage = "Diagnostic process failed or returned no response (code " + exitCode + ").";
+                return;
+            }
+            try {
+                const data = JSON.parse(displayTabRoot.diagnosticResponse);
+                const allowed = ["diagnostic-unavailable", "observation-failed",
+                                 "stable-observation", "concurrent-change-detected"];
+                if (!data || !allowed.includes(data.assessment) ||
+                    data.executionAuthorized !== false ||
+                    data.finalizationAuthorized !== false ||
+                    data.reservationReusable !== false ||
+                    data.physicalExecutionEnabled !== false ||
+                    data.physicalRollbackVerified !== false ||
+                    data.atomicCrossStoreSnapshot !== false ||
+                    data.commandsExecuted !== 0) {
+                    throw new Error("Unsafe or unrecognized diagnostic response");
+                }
+                displayTabRoot.diagnosticAssessment = data.assessment;
+                if (data.assessment === "diagnostic-unavailable")
+                    displayTabRoot.diagnosticMessage = "Required development journal is absent; no physical execution authorized.";
+                else if (data.assessment === "stable-observation")
+                    displayTabRoot.diagnosticMessage = "Two reads matched; not an atomic snapshot or execution authorization.";
+                else if (data.assessment === "concurrent-change-detected")
+                    displayTabRoot.diagnosticMessage = "Evidence changed between reads; no physical execution authorized.";
+                else
+                    displayTabRoot.diagnosticMessage = "Evidence read or validation failed; no physical execution authorized.";
+            } catch (e) {
+                displayTabRoot.diagnosticAssessment = "observation-failed";
+                displayTabRoot.diagnosticMessage = "Invalid, unsafe or incomplete diagnostic response.";
             }
         }
     }
