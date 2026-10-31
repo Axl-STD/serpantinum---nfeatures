@@ -73,10 +73,11 @@ def run_isolated(args, timeout=SUITE_TIMEOUT):
     """Run only allowlisted suite argv in a new process group."""
     proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             text=True, start_new_session=True, close_fds=True)
-    previous = signal.getsignal(signal.SIGTERM)
+    previous = {sig: signal.getsignal(sig) for sig in (signal.SIGTERM, signal.SIGINT)}
     def interrupted(signum, frame):
-        raise GateInterrupted('gate interrupted by SIGTERM')
-    signal.signal(signal.SIGTERM, interrupted)
+        raise GateInterrupted('gate interrupted by ' + signal.Signals(signum).name)
+    for sig in previous:
+        signal.signal(sig, interrupted)
     try:
         out, err = proc.communicate(timeout=timeout)
     except subprocess.TimeoutExpired as exc:
@@ -88,7 +89,8 @@ def run_isolated(args, timeout=SUITE_TIMEOUT):
         proc.communicate()
         raise
     finally:
-        signal.signal(signal.SIGTERM, previous)
+        for sig, handler in previous.items():
+            signal.signal(sig, handler)
     return subprocess.CompletedProcess(args, proc.returncode, out, err)
 
 OFFLINE = (
