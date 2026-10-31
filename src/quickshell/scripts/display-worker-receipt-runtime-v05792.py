@@ -34,12 +34,26 @@ def worker(token, root):
     folder = Path(root)
     if folder.is_symlink() or not folder.is_dir() or folder.stat().st_mode & 0o077:
         raise ValueError('Unsafe receipt directory')
+    # Stage privately, then publish exclusively. Never expose partial receipt.json.
     path = folder / 'receipt.json'
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(fd, 'wb') as stream:
-        stream.write(binding.canonical(receipt))
-        stream.flush()
-        os.fsync(stream.fileno())
+    fd, staged = tempfile.mkstemp(prefix='.receipt-staged-', dir=folder)
+    try:
+        os.fchmod(fd, 0o600)
+        with os.fdopen(fd, 'wb') as stream:
+            stream.write(binding.canonical(receipt))
+            stream.flush()
+            os.fsync(stream.fileno())
+        # Atomic no-replace publication on the same filesystem.
+        # Unlike os.replace, os.link fails if the final name already exists.
+        os.link(staged, path, follow_symlinks=False)
+        dirfd = os.open(folder, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            os.fsync(dirfd)
+        finally:
+            os.close(dirfd)
+    finally:
+        if os.path.lexists(staged):
+            os.unlink(staged)
     return 0
 
 
