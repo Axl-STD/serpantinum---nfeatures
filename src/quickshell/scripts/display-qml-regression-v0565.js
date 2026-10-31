@@ -53,7 +53,7 @@ const results = [];
 for (const [name, output, code, status, timedOut, queued, blocked, publish, expectedStatus] of cases) {
   const original = [{name:'OLD', dimensions:'1280x720', scale:1}];
   const pending = {OLD:{scale:1.25}};
-  const counters = {reconcile:0, refresh:0, select:0, stop:0, later:0};
+  const counters = {reconcile:0, refresh:0, select:0, stop:0, later:0, recorded:0};
   const root = {
     compositor:'hyprland', monitorDetectionInFlight:true, monitorDetectionQueued:queued,
     monitorDetectionTimedOut:timedOut, monitorDetectionBlocked:blocked,
@@ -63,6 +63,7 @@ for (const [name, output, code, status, timedOut, queued, blocked, publish, expe
     pendingDisplayChanges:pending, pendingMonScaleName:'', selectedMonitorName:'OLD',
     scaleDebounceTimer:{stop() { counters.stop++; }},
     reconcilePendingDisplayChanges(list) { counters.reconcile++; assert.equal(list[0].name,'NEW'); },
+    recordSuccessfulMonitorDetection() { counters.recorded++; },
     ensureDisplaySelection() { counters.select++; },
     refreshDisplaySettings() { counters.refresh++; },
     startQueuedMonitorDetection() { counters.later++; }
@@ -77,6 +78,7 @@ for (const [name, output, code, status, timedOut, queued, blocked, publish, expe
   exited.runInContext(context, {timeout:1000})(code,status);
   assert.equal(root.monitorsList[0].name, publish ? 'NEW' : 'OLD',name);
   assert.equal(counters.reconcile,publish ? 1 : 0,name);
+  assert.equal(counters.recorded,publish ? 1 : 0,name + ": timestamp recording");
   assert.equal(counters.refresh,publish ? 1 : 0,name);
   assert.equal(root.monitorDetectionStatus,expectedStatus,name);
   assert.equal(root.monitorDetectionCandidate,null,name);

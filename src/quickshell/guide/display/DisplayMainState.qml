@@ -456,6 +456,26 @@ GuideTab {
         return monitorTopologyVerifiedOnce ? "last_known" : "no_verified";
     }
 
+    // v0.5.67: session-only, presentation-only age of last successful publication.
+    property double monitorLastSuccessfulDetectionMs: 0
+    property double monitorAgeClockMs: 0
+    readonly property int monitorLastSuccessfulAgeMinutes: {
+        if (monitorLastSuccessfulDetectionMs <= 0) return -1;
+        return Math.floor(Math.max(0, monitorAgeClockMs - monitorLastSuccessfulDetectionMs) / 60000);
+    }
+    function recordSuccessfulMonitorDetection() {
+        const now = Date.now();
+        monitorLastSuccessfulDetectionMs = now;
+        monitorAgeClockMs = now;
+    }
+    Timer {
+        id: monitorAgeRefreshTimer
+        interval: 5000
+        repeat: true
+        running: displayTabRoot.monitorLastSuccessfulDetectionMs > 0
+        onTriggered: displayTabRoot.monitorAgeClockMs = Date.now()
+    }
+
     Timer {
         id: monitorDetectionWatchdog
         interval: displayTabRoot.monitorDetectionTimeoutMs
@@ -641,6 +661,7 @@ GuideTab {
                 displayTabRoot.reconcilePendingDisplayChanges(candidate);
                 displayTabRoot.monitorsList = candidate;
                 displayTabRoot.monitorTopologyVerifiedOnce = true;
+                displayTabRoot.recordSuccessfulMonitorDetection();
                 displayTabRoot.ensureDisplaySelection();
                 if (!candidate.some(m => m.name === displayTabRoot.selectedMonitorName))
                     displayTabRoot.selectedMonitorName = candidate[0].name;

@@ -390,7 +390,10 @@
         "topology_notice": {
           "last_known": "Last known topology",
           "no_verified": "No verified topology available"
-        }
+        },
+        "last_successful_detection": "Last successful detection",
+        "age_just_now": "Just now",
+        "age_minutes_ago": "%1 min ago"
       }
     },
     "bar": {

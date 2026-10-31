@@ -115,6 +115,28 @@ DisplayMainState {
                     }
                     RowLayout {
                         Layout.fillWidth: true
+                        visible: displayTabRoot.monitorLastSuccessfulAgeMinutes >= 0
+                        spacing: rootObj.s(8)
+                        Text {
+                            Layout.fillWidth: true
+                            text: I18n.t("guide.display.overview.last_successful_detection", "Last successful detection")
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(12)
+                        }
+                        Text {
+                            text: displayTabRoot.monitorLastSuccessfulAgeMinutes === 0
+                                  ? I18n.t("guide.display.overview.age_just_now", "Just now")
+                                  : I18n.t("guide.display.overview.age_minutes_ago", "%1 min ago")
+                                        .replace("%1", String(displayTabRoot.monitorLastSuccessfulAgeMinutes))
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(11)
+                            horizontalAlignment: Text.AlignRight
+                        }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
                         Text {
                             Layout.fillWidth: true
                             text: I18n.t("guide.display.overview.evidence", "Evidence status")
