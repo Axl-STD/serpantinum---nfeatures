@@ -801,24 +801,33 @@ GuideTab {
         }
     }
 
+    // v0.5.68: coalesce navigation-driven refreshes before entering the serialized detector.
+    // Explicit monitor topology events and Discard retain their immediate refresh path.
+    function scheduleNavigationMonitorReload() {
+        if (!rootObj || !rootObj.visible || !displayTabRoot.visible)
+            return;
+        reloadMonitorsDebounceTimer.restart();
+    }
+
     Timer {
         id: reloadMonitorsDebounceTimer
         interval: 220
         repeat: false
-        onTriggered: displayTabRoot.reloadMonitors()
+        onTriggered: {
+            if (rootObj && rootObj.visible && displayTabRoot.visible)
+                displayTabRoot.reloadMonitors();
+        }
     }
 
     Component.onCompleted: {
         displayTabRoot.refreshDisplaySettings();
-        if (visible) {
-            reloadMonitorsDebounceTimer.restart();
-        }
+        displayTabRoot.scheduleNavigationMonitorReload();
     }
 
     onVisibleChanged: {
         if (visible) {
             displayTabRoot.refreshDisplaySettings();
-            reloadMonitorsDebounceTimer.restart();
+            displayTabRoot.scheduleNavigationMonitorReload();
         } else {
             reloadMonitorsDebounceTimer.stop();
         }
@@ -829,13 +838,13 @@ GuideTab {
         function onVisibleChanged() {
             if (rootObj && rootObj.visible && displayTabRoot.visible) {
                 displayTabRoot.refreshDisplaySettings();
-                displayTabRoot.reloadMonitors();
+                displayTabRoot.scheduleNavigationMonitorReload();
             }
         }
         function onCurrentTabChanged() {
-            if (rootObj && rootObj.currentTab === displayTabRoot.tabIndex) {
+            if (rootObj && rootObj.currentTab === displayTabRoot.tabIndex && displayTabRoot.visible) {
                 displayTabRoot.refreshDisplaySettings();
-                displayTabRoot.reloadMonitors();
+                displayTabRoot.scheduleNavigationMonitorReload();
             }
         }
     }
