@@ -65,11 +65,25 @@ GuideTab {
                     data.commandsExecuted !== 0) {
                     throw new Error("Unsafe or unrecognized diagnostic response");
                 }
+                // A stable double read may still contain conflicting identities.
+                // Reject unknown underlying classifications instead of displaying success.
+                if (data.assessment === "stable-observation" &&
+                    !["consistent-observable", "identity-conflict", "incomplete", "empty"].includes(data.underlyingAssessment)) {
+                    throw new Error("Unknown underlying assessment");
+                }
                 displayTabRoot.diagnosticAssessment = data.assessment;
                 if (data.assessment === "diagnostic-unavailable")
                     displayTabRoot.diagnosticMessage = "Required development journal is absent; no physical execution authorized.";
-                else if (data.assessment === "stable-observation")
-                    displayTabRoot.diagnosticMessage = "Two reads matched; not an atomic snapshot or execution authorization.";
+                else if (data.assessment === "stable-observation") {
+                    if (data.underlyingAssessment === "consistent-observable")
+                        displayTabRoot.diagnosticMessage = "Identities consistent across observed stores; two reads matched. Not an atomic snapshot or execution authorization.";
+                    else if (data.underlyingAssessment === "identity-conflict")
+                        displayTabRoot.diagnosticMessage = "IDENTITY CONFLICT: stores disagree despite matching reads. No physical execution authorized.";
+                    else if (data.underlyingAssessment === "incomplete")
+                        displayTabRoot.diagnosticMessage = "Incomplete evidence: one or more stores are missing. No physical execution authorized.";
+                    else
+                        displayTabRoot.diagnosticMessage = "No active transaction observed; not an atomic snapshot or execution authorization.";
+                }
                 else if (data.assessment === "concurrent-change-detected")
                     displayTabRoot.diagnosticMessage = "Evidence changed between reads; no physical execution authorized.";
                 else
