@@ -387,6 +387,10 @@
           "retrying": "Tiempo agotado · Reintentando",
           "blocked": "Detección no disponible · Bloqueada",
           "failed": "No se pudieron actualizar los monitores"
+        },
+        "topology_notice": {
+          "last_known": "Última topología conocida",
+          "no_verified": "No hay topología verificada disponible"
         }
       }
     },

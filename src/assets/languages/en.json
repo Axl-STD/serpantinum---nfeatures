@@ -386,6 +386,10 @@
           "retrying": "Detection timed out · Retrying",
           "blocked": "Detection unavailable · Blocked",
           "failed": "Unable to refresh monitors"
+        },
+        "topology_notice": {
+          "last_known": "Last known topology",
+          "no_verified": "No verified topology available"
         }
       }
     },

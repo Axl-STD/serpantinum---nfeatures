@@ -448,6 +448,13 @@ GuideTab {
     property bool monitorDetectionReceivedValidOutput: false
     // v0.5.64.1: candidate is never published until the process exits successfully.
     property var monitorDetectionCandidate: null
+    // v0.5.66: presentation only; tracks whether a successful topology was ever published.
+    property bool monitorTopologyVerifiedOnce: false
+    readonly property string monitorTopologyNoticeKey: {
+        if (monitorDetectionStatus !== "failed" && monitorDetectionStatus !== "retrying" && monitorDetectionStatus !== "blocked")
+            return "";
+        return monitorTopologyVerifiedOnce ? "last_known" : "no_verified";
+    }
 
     Timer {
         id: monitorDetectionWatchdog
@@ -633,6 +640,7 @@ GuideTab {
                 }
                 displayTabRoot.reconcilePendingDisplayChanges(candidate);
                 displayTabRoot.monitorsList = candidate;
+                displayTabRoot.monitorTopologyVerifiedOnce = true;
                 displayTabRoot.ensureDisplaySelection();
                 if (!candidate.some(m => m.name === displayTabRoot.selectedMonitorName))
                     displayTabRoot.selectedMonitorName = candidate[0].name;

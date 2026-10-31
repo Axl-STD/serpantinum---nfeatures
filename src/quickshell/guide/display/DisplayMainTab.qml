@@ -102,6 +102,9 @@ DisplayMainState {
                         }
                         Text {
                             text: I18n.t("guide.display.overview.detector_status." + displayTabRoot.monitorDetectionStatus, "Detection unavailable")
+                                  + (displayTabRoot.monitorTopologyNoticeKey !== ""
+                                     ? " · " + I18n.t("guide.display.overview.topology_notice." + displayTabRoot.monitorTopologyNoticeKey, "Last known topology")
+                                     : "")
                             color: displayTabRoot.monitorDetectionStatus === "blocked" || displayTabRoot.monitorDetectionStatus === "failed" ? ThemeBackend.mauve : ThemeBackend.text
                             font.family: ThemeBackend.fontFamily
                             font.pixelSize: rootObj.s(11)
