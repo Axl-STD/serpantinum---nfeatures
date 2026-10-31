@@ -52,7 +52,7 @@ const cases=[
 const results=[];
 for(const [name,payload,code,status,assessment,message,valid=true] of cases){
   const root={diagnosticBusy:true,diagnosticResponseValid:valid,diagnosticResponse:typeof payload==='string'?payload:JSON.stringify(payload),diagnosticAssessment:'checking',diagnosticUnderlyingAssessment:'',diagnosticMessageKey:'reading'};
-  const ctx=vm.createContext({displayTabRoot:root,JSON,Error});
+  const ctx=vm.createContext({displayTabRoot:root,diagnosticWatchdog:{stop(){}},diagnosticCancelGrace:{stop(){}},JSON,Error});
   handler.runInContext(ctx,{timeout:1000})(code,status);
   assert.equal(root.diagnosticBusy,false,name+': busy');
   assert.equal(root.diagnosticAssessment,assessment,name+': assessment');
@@ -61,7 +61,7 @@ for(const [name,payload,code,status,assessment,message,valid=true] of cases){
 }
 // v0.5.74.1: abnormal process termination must fail closed.
 const root={diagnosticBusy:true,diagnosticResponseValid:true,diagnosticResponse:JSON.stringify(base),diagnosticAssessment:'checking',diagnosticUnderlyingAssessment:'',diagnosticMessageKey:'reading'};
-handler.runInContext(vm.createContext({displayTabRoot:root,JSON,Error}),{timeout:1000})(0,1);
+handler.runInContext(vm.createContext({displayTabRoot:root,diagnosticWatchdog:{stop(){}},diagnosticCancelGrace:{stop(){}},JSON,Error}),{timeout:1000})(0,1);
 const abnormalExitAccepted=root.diagnosticAssessment==='stable-observation';
 assert.equal(abnormalExitAccepted,false,'abnormal exit must be rejected');
 assert.equal(root.diagnosticAssessment,'observation-failed');

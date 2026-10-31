@@ -18,14 +18,51 @@ GuideTab {
     property bool diagnosticBusy: false
     property string diagnosticResponse: ""
     property bool diagnosticResponseValid: false
+    // v0.5.75.1: fail closed on diagnostic timeout or unconfirmed cancellation.
+    property bool diagnosticTimedOut: false
+    property bool diagnosticBlocked: false
+    readonly property int diagnosticTimeoutMs: 4000
+
+    Timer {
+        id: diagnosticWatchdog
+        interval: displayTabRoot.diagnosticTimeoutMs
+        repeat: false
+        onTriggered: {
+            if (!displayTabRoot.diagnosticBusy || displayTabRoot.diagnosticBlocked) return;
+            displayTabRoot.diagnosticTimedOut = true;
+            displayTabRoot.diagnosticResponse = "";
+            displayTabRoot.diagnosticResponseValid = false;
+            displayTabRoot.diagnosticAssessment = "observation-failed";
+            displayTabRoot.diagnosticUnderlyingAssessment = "";
+            displayTabRoot.diagnosticMessageKey = "process_failed";
+            diagnosticCancelGrace.start();
+            displayDiagnosticProcess.running = false;
+        }
+    }
+
+    Timer {
+        id: diagnosticCancelGrace
+        interval: 2500
+        repeat: false
+        onTriggered: {
+            if (displayTabRoot.diagnosticBusy) {
+                displayTabRoot.diagnosticBlocked = true;
+                displayTabRoot.diagnosticResponse = "";
+                displayTabRoot.diagnosticResponseValid = false;
+                displayTabRoot.diagnosticAssessment = "observation-failed";
+                displayTabRoot.diagnosticMessageKey = "process_failed";
+            }
+        }
+    }
 
     function requestDisplayDiagnostic() {
-        if (diagnosticBusy || displayDiagnosticProcess.running) return;
+        if (diagnosticBlocked || diagnosticBusy || displayDiagnosticProcess.running) return;
         if (!diagnosticRoot || !diagnosticRoot.startsWith("/")) {
             diagnosticAssessment = "diagnostic-unavailable";
             diagnosticMessageKey = "not_configured";
             return;
         }
+        diagnosticTimedOut = false;
         diagnosticResponse = "";
         diagnosticResponseValid = false;
         diagnosticUnderlyingAssessment = "";
@@ -33,6 +70,7 @@ GuideTab {
         diagnosticAssessment = "checking";
         diagnosticMessageKey = "reading";
         displayDiagnosticProcess.running = true;
+        diagnosticWatchdog.start();
     }
 
     Process {
@@ -44,13 +82,19 @@ GuideTab {
                   "--reservation-root", displayTabRoot.diagnosticRoot + "/reservation"]
         stdout: StdioCollector {
             onStreamFinished: {
+                if (!displayTabRoot.diagnosticBusy || displayTabRoot.diagnosticTimedOut || displayTabRoot.diagnosticBlocked)
+                    return;
                 displayTabRoot.diagnosticResponse = this.text;
                 displayTabRoot.diagnosticResponseValid = true;
             }
         }
         onExited: (exitCode, exitStatus) => {
+            diagnosticWatchdog.stop();
+            diagnosticCancelGrace.stop();
+            if (!displayTabRoot.diagnosticBusy) return;
+            const rejected = displayTabRoot.diagnosticTimedOut || displayTabRoot.diagnosticBlocked;
             displayTabRoot.diagnosticBusy = false;
-            if (exitCode !== 0 || exitStatus !== 0 || !displayTabRoot.diagnosticResponseValid) {
+            if (rejected || exitCode !== 0 || exitStatus !== 0 || !displayTabRoot.diagnosticResponseValid) {
                 displayTabRoot.diagnosticAssessment = "observation-failed";
                 displayTabRoot.diagnosticUnderlyingAssessment = "";
                 displayTabRoot.diagnosticMessageKey = "process_failed";
