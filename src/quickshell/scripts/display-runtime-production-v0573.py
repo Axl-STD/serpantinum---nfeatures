@@ -12,7 +12,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'guide/display/DisplayMainState.qml'
-EXPECTED = 'b0cad99eecd555bcc7bef11445e6dec69bc4e65c352ccd9b19f195d1d0a35214'
+EXPECTED = 'd7fe5b4e886f40135bd93a9ad9f0e81d985ce9eefd56c9bc0bff657635c55aa1'
 
 def block(source, marker, start=0):
     p = source.index(marker, start)

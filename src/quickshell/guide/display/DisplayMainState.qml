@@ -50,7 +50,7 @@ GuideTab {
         }
         onExited: (exitCode, exitStatus) => {
             displayTabRoot.diagnosticBusy = false;
-            if (exitCode !== 0 || !displayTabRoot.diagnosticResponseValid) {
+            if (exitCode !== 0 || exitStatus !== 0 || !displayTabRoot.diagnosticResponseValid) {
                 displayTabRoot.diagnosticAssessment = "observation-failed";
                 displayTabRoot.diagnosticUnderlyingAssessment = "";
                 displayTabRoot.diagnosticMessageKey = "process_failed";
