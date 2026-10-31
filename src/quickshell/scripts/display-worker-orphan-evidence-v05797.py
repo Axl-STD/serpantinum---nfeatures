@@ -58,7 +58,7 @@ def read_entry(dirfd, name):
         os.close(fd)
 
 
-def classify(root, token, worker_state='unknown'):
+def classify(root, token, worker_state='unknown', *, expected_metadata=None):
     result = dict(version='0.5.79.8.1', mode='read-only-orphaned-receipt-classification',
                   assessment='rejected', stagedCount=0, finalPresent=False,
                   receiptMetadataConsistent=False, workerState=worker_state,
@@ -112,6 +112,25 @@ def classify(root, token, worker_state='unknown'):
                 return value == expected
             except (ValueError, TypeError, KeyError, UnicodeError):
                 return False
+        # Bind the SAME descriptor-anchored byte snapshot to historical metadata.
+        # A staged receipt remains unpublished even when its identity matches.
+        if expected_metadata is not None and worker_state == 'confirmed-exited':
+            if (not isinstance(expected_metadata, dict)
+                    or expected_metadata.get('transactionId') != token
+                    or expected_metadata.get('systemdExecutionMetadataConsistent') is not True
+                    or any(expected_metadata.get(key) is not False for key in SAFE_FALSE)
+                    or expected_metadata.get('commandsExecuted') != 0):
+                raise ValueError('Unverified historical metadata')
+            for name, data in raw.items():
+                if not valid(data):
+                    continue  # Existing incomplete/invalid evidence classification wins.
+                receipt = json.loads(data.decode('utf-8'))
+                linked = binding.assess(token, expected_metadata, receipt)
+                if linked.get('receiptMetadataConsistent') is not True:
+                    result['assessment'] = 'conflicting-evidence'
+                    return result
+            result['receiptMetadataConsistent'] = (bool(raw) and all(valid(data) for data in raw.values())
+                                                   and len(set(raw.values())) == 1)
         if worker_state != 'confirmed-exited':
             result['assessment'] = 'worker-state-uncertain'
         elif not staged:
