@@ -446,6 +446,8 @@ GuideTab {
     // v0.5.64: presentation-only observation; never an execution gate.
     property string monitorDetectionStatus: "unavailable"
     property bool monitorDetectionReceivedValidOutput: false
+    // v0.5.64.1: candidate is never published until the process exits successfully.
+    property var monitorDetectionCandidate: null
 
     Timer {
         id: monitorDetectionWatchdog
@@ -490,6 +492,7 @@ GuideTab {
         monitorDetectionInFlight = true;
         monitorDetectionTimedOut = false;
         monitorDetectionReceivedValidOutput = false;
+        monitorDetectionCandidate = null;
         monitorDetectionStatus = monitorDetectionTimeouts > 0 ? "retrying" : "checking";
         monitorDetector.running = true;
         monitorDetectionWatchdog.start();
@@ -602,18 +605,9 @@ GuideTab {
                 } catch (e) {
                 }
                 if (mList.length > 0) {
+                    // Stage only. A successful process exit is required before publication.
+                    displayTabRoot.monitorDetectionCandidate = mList;
                     displayTabRoot.monitorDetectionReceivedValidOutput = true;
-                    // A delayed scale edit predating this refresh has no trusted baseline.
-                    if (displayTabRoot.pendingMonScaleName !== "") {
-                        displayTabRoot.pendingMonScaleName = "";
-                        displayTabRoot.scaleDebounceTimer.stop();
-                    }
-                    displayTabRoot.reconcilePendingDisplayChanges(mList);
-                    displayTabRoot.monitorsList = mList;
-                    displayTabRoot.ensureDisplaySelection();
-                    if (!mList.some(m => m.name === displayTabRoot.selectedMonitorName))
-                        displayTabRoot.selectedMonitorName = mList[0].name;
-                    displayTabRoot.refreshDisplaySettings();
                 }
             }
         }
@@ -621,12 +615,34 @@ GuideTab {
             monitorDetectionWatchdog.stop();
             monitorDetectionCancelGrace.stop();
             const timedOut = displayTabRoot.monitorDetectionTimedOut;
+            const validCompletion = !displayTabRoot.monitorDetectionBlocked &&
+                                    !timedOut && !displayTabRoot.monitorDetectionQueued &&
+                                    exitCode === 0 && exitStatus === 0 &&
+                                    displayTabRoot.monitorDetectionReceivedValidOutput &&
+                                    Array.isArray(displayTabRoot.monitorDetectionCandidate) &&
+                                    displayTabRoot.monitorDetectionCandidate.length > 0;
+            const candidate = validCompletion ? displayTabRoot.monitorDetectionCandidate : null;
+            // Clear before publishing or scheduling another run.
+            displayTabRoot.monitorDetectionCandidate = null;
+            displayTabRoot.monitorDetectionReceivedValidOutput = false;
             displayTabRoot.monitorDetectionInFlight = false;
+            if (validCompletion) {
+                if (displayTabRoot.pendingMonScaleName !== "") {
+                    displayTabRoot.pendingMonScaleName = "";
+                    displayTabRoot.scaleDebounceTimer.stop();
+                }
+                displayTabRoot.reconcilePendingDisplayChanges(candidate);
+                displayTabRoot.monitorsList = candidate;
+                displayTabRoot.ensureDisplaySelection();
+                if (!candidate.some(m => m.name === displayTabRoot.selectedMonitorName))
+                    displayTabRoot.selectedMonitorName = candidate[0].name;
+                displayTabRoot.refreshDisplaySettings();
+            }
             if (displayTabRoot.monitorDetectionBlocked) {
                 displayTabRoot.monitorDetectionStatus = "blocked";
             } else if (timedOut) {
                 displayTabRoot.monitorDetectionStatus = "retrying";
-            } else if (exitCode === 0 && exitStatus === 0 && displayTabRoot.monitorDetectionReceivedValidOutput && !displayTabRoot.monitorDetectionQueued) {
+            } else if (validCompletion) {
                 displayTabRoot.monitorDetectionTimeouts = 0;
                 displayTabRoot.monitorDetectionStatus = "updated";
             } else if (displayTabRoot.monitorDetectionQueued) {
