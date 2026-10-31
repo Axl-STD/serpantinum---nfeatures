@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """v0.5.90: combined evidence security gate; read-only checks and opt-in runtime."""
 import argparse
+import contextlib
 import json
 import os
 from pathlib import Path
@@ -81,8 +82,10 @@ def stop_group(proc):
 
 
 def runner(argv):
+    from display_runtime_admission_v0592 import child_fds
     proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            text=True, start_new_session=True, close_fds=True)
+                            text=True, start_new_session=True, close_fds=True,
+                            pass_fds=child_fds())
     try:
         out, err = proc.communicate(timeout=TIMEOUT)
     except BaseException:
@@ -109,11 +112,12 @@ def invoke(entry, runtime, run=runner):
 def execute(mode, run=runner):
     if mode not in ('offline','runtime'):
         raise ValueError('invalid mode')
-    # Both existing gates already acquire the SAME runtime flock. Do not nest locks.
-    # Their runtime sections are sequential; no global lock spans both gates.
-    results = [invoke(entry, False, run) for entry in OFFLINE]
-    if mode == 'runtime':
-        results.extend(invoke(entry, True, run) for entry in RUNTIME)
+    from display_runtime_admission_v0592 import admission
+    guard = admission() if mode == 'runtime' and run is runner else contextlib.nullcontext()
+    with guard:
+        results = [invoke(entry, False, run) for entry in OFFLINE]
+        if mode == 'runtime':
+            results.extend(invoke(entry, True, run) for entry in RUNTIME)
     return results
 
 
@@ -122,7 +126,7 @@ def report(mode, results):
             'totalScenarios': len(results), 'results': results,
             'systemdIntegration': mode == 'runtime',
             **{k: False for k in FALSE_FLAGS}, 'commandsExecuted': 0,
-            'limitations': ['Existing gates lock runtime individually; no global cross-gate lock',
+            'limitations': ['Shared runtime admission applies to cooperating v0.5.92 entrypoints',
                 'Sequential observations are not an atomic cross-store snapshot or authenticated ownership',
                 'Runtime is opt-in; no physical display commands or automatic cleanup']}
 

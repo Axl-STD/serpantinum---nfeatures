@@ -72,7 +72,7 @@ def selftest():
     record('offline-no-global-lock', gate.execute('offline', fake_run, fake_lock)['mode'] == 'offline' and events == ['run-offline'])
     events.clear()
     record('runtime-global-lock-held', gate.execute('runtime', fake_run, fake_lock)['mode'] == 'runtime' and events == ['lock-enter','run-runtime','lock-exit'])
-    record('report-scope-explicit', gate.report('runtime', fixture('runtime'))['globalAdmissionScope'] == 'v0591-entrypoint-only')
+    record('report-scope-explicit', gate.report('runtime', fixture('runtime'))['globalAdmissionScope'] == 'v0592-cooperating-entrypoints')
     record('report-no-authorization', gate.report('runtime', fixture('runtime'))['executionAuthorized'] is False)
     with tempfile.TemporaryDirectory(prefix='serpantinum-v0591-') as tmp:
         root = Path(tmp)
@@ -83,14 +83,15 @@ def selftest():
             record('lock-file-retained', (root / gate.LOCK_NAME).exists())
             child = subprocess.run([sys.executable, '-c',
                 'import importlib.util,sys; p=sys.argv[1]; d=sys.argv[2]; s=importlib.util.spec_from_file_location("g",p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m);\ntry:\n with m.global_lock(d): pass\nexcept m.GateError: sys.exit(17)\nsys.exit(0)',
-                str(HERE / 'display-global-runtime-gate-v0591.py'), str(root)], timeout=8)
+                str(HERE / 'display-global-runtime-gate-v0591.py'), str(root)], timeout=8, env={**os.environ, 'PYTHONPATH': str(HERE)})
             record('cross-process-contention', child.returncode == 17)
         with gate.global_lock(root):
             record('lock-recovered-after-release', True)
         proc = subprocess.Popen([sys.executable, '-c',
             'import importlib.util,sys,time; s=importlib.util.spec_from_file_location("g",sys.argv[1]); m=importlib.util.module_from_spec(s); s.loader.exec_module(m);\nwith m.global_lock(sys.argv[2]):\n print("READY",flush=True); time.sleep(30)',
             str(HERE / 'display-global-runtime-gate-v0591.py'), str(root)],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True,
+            env={**os.environ, 'PYTHONPATH': str(HERE)})
         try:
             ready = proc.stdout.readline().strip()
             record('sigkill-holder-ready', ready == 'READY')

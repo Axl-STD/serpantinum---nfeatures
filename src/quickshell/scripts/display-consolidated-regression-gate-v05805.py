@@ -32,7 +32,12 @@ class GateInterrupted(GateError):
 
 @contextlib.contextmanager
 def runtime_exclusive():
-    """Advisory lock held for the complete runtime gate; no unlink race."""
+    """Admit direct callers via legacy flock, delegated callers via verified fd."""
+    from display_runtime_admission_v0592 import ENV, admission
+    if ENV in os.environ:
+        with admission():
+            yield
+        return
     folder = RUNTIME_LOCK.parent
     if folder.is_symlink() or not folder.is_dir():
         raise GateError('unsafe runtime lock directory')

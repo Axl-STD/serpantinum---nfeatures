@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """v0.5.91: opt-in top-level global runtime admission for combined evidence gate.
 
-Global exclusivity applies to invocations through THIS entrypoint. Legacy direct
-entrypoints still use their own existing runtime lock; this is not a universal
-lock across unrelated entrypoints. No display operations are performed here.
+Shared admission applies to cooperating updated runtime entrypoints.
+No independent ownership authentication is implied. No display operations are performed here.
 """
 import argparse
 import contextlib
@@ -18,7 +17,7 @@ import sys
 
 HERE = Path(__file__).resolve().parent
 TARGET = HERE / 'display-evidence-security-gate-v0590.py'
-LOCK_NAME = 'serpantinum-display-global-evidence-' + str(os.getuid()) + '.lock'
+LOCK_NAME = 'serpantinum-display-gate-' + str(os.getuid()) + '.lock'
 TIMEOUT = 600
 FALSE_FLAGS = ('resourceOwnershipVerified', 'productionModified', 'automaticCleanup',
                'atomicCrossStoreSnapshot', 'crashDurabilityVerified',
@@ -31,24 +30,13 @@ class GateError(RuntimeError):
 
 @contextlib.contextmanager
 def global_lock(runtime_dir=None):
-    root = Path(runtime_dir if runtime_dir is not None else os.environ.get('XDG_RUNTIME_DIR', ''))
-    if not str(root) or str(root) == '.' or root == Path('/tmp') or root.is_symlink():
-        raise GateError('private XDG_RUNTIME_DIR required')
-    st = root.stat()
-    if not stat.S_ISDIR(st.st_mode) or st.st_uid != os.getuid() or st.st_mode & 0o077:
-        raise GateError('unsafe runtime directory')
-    fd = os.open(root / LOCK_NAME, os.O_CREAT | os.O_RDWR | os.O_CLOEXEC | os.O_NOFOLLOW, 0o600)
+    from display_runtime_admission_v0592 import admission
     try:
-        st = os.fstat(fd)
-        if not stat.S_ISREG(st.st_mode) or st.st_uid != os.getuid() or st.st_mode & 0o077 or st.st_nlink != 1:
-            raise GateError('unsafe lock file')
-        try:
-            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise GateError('global evidence gate busy') from exc
-        yield
-    finally:
-        os.close(fd)
+        with admission(runtime_dir):
+            yield
+    except RuntimeError as exc:
+        raise GateError(str(exc)) from exc
+
 
 def stop_group(proc):
     try:
@@ -65,8 +53,10 @@ def stop_group(proc):
         proc.communicate()
 
 def isolated_run(argv, timeout=TIMEOUT):
+    from display_runtime_admission_v0592 import child_fds
     proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            text=True, start_new_session=True, close_fds=True)
+                            text=True, start_new_session=True, close_fds=True,
+                            pass_fds=child_fds())
     try:
         out, err = proc.communicate(timeout=timeout)
     except BaseException:
@@ -96,8 +86,8 @@ def execute(mode, run=isolated_run, lock_factory=global_lock):
         raise GateError('invalid mode')
     if TARGET.is_symlink() or not TARGET.is_file():
         raise GateError('missing or unsafe consolidated gate')
-    # The global admission lock is DISTINCT from the inner legacy runtime lock.
-    # Child closes inherited descriptors; therefore no nested self-deadlock.
+    # A verified inherited descriptor delegates the same lock to child gates.
+    # Only the known coordinator child inherits it via pass_fds.
     guard = lock_factory() if mode == 'runtime' else contextlib.nullcontext()
     with guard:
         result = run([sys.executable, str(TARGET), mode])
@@ -114,9 +104,9 @@ def report(mode, payload):
             'totalScenarios': payload['totalScenarios'], 'results': payload['results'],
             'systemdIntegration': mode == 'runtime',
             **{k: False for k in FALSE_FLAGS}, 'commandsExecuted': 0,
-            'globalAdmissionScope': 'v0591-entrypoint-only',
-            'limitations': ['Global admission covers only callers using this v0.5.91 entrypoint',
-                            'Legacy direct gates retain their own runtime locks',
+            'globalAdmissionScope': 'v0592-cooperating-entrypoints',
+            'limitations': ['Admission covers cooperating updated entrypoints, not arbitrary external callers',
+                            'Legacy direct gates use the same admission descriptor under v0.5.92',
                             'No authenticated ownership, atomic cross-store snapshot or physical rollback']}
 
 def main():

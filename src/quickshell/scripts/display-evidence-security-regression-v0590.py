@@ -79,7 +79,7 @@ def selftest():
         raise AssertionError('failed to stop')
     record('stop-first-failure', calls == ['offline'])
     record('runtime-opt-in', len(gate.OFFLINE) == 2 and len(gate.RUNTIME) == 2)
-    record('no-global-lock-claim', 'no global cross-gate lock' in gate.report('runtime', [])['limitations'][0])
+    record('shared-admission-claim', 'Shared runtime admission' in gate.report('runtime', [])['limitations'][0])
     record('report-no-authorization', gate.report('runtime', [])['executionAuthorized'] is False)
     record('report-no-ownership', gate.report('runtime', [])['resourceOwnershipVerified'] is False)
     record('report-no-physical', gate.report('runtime', [])['physicalExecutionEnabled'] is False)
