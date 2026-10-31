@@ -342,6 +342,36 @@
         "primary": "Pantalla principal",
         "make_primary": "Establecer como principal",
         "preview": "Solo vista previa: no se ha modificado la configuración de pantallas."
+      },
+      "diagnostic": {
+        "title": "Diagnóstico de pantallas",
+        "read_only": "Evidencias de desarrollo · Solo lectura",
+        "check": "Comprobar evidencias",
+        "checking": "Comprobando...",
+        "status": {
+          "checking": "Comprobando evidencias",
+          "unavailable": "Evidencias no disponibles",
+          "consistent": "Identidades consistentes",
+          "conflict": "Conflicto de identidad",
+          "incomplete": "Evidencias incompletas",
+          "empty": "Sin transacción activa",
+          "changed": "Cambio concurrente detectado",
+          "failed": "Error de validación"
+        },
+        "messages": {
+          "not_requested": "Todavía no se ha solicitado un diagnóstico.",
+          "not_configured": "No se configuró el directorio de evidencias de desarrollo.",
+          "reading": "Leyendo evidencias aisladas...",
+          "process_failed": "El proceso de diagnóstico falló o no devolvió una respuesta.",
+          "unavailable": "Falta el diario de desarrollo requerido. No se autoriza ninguna operación física.",
+          "consistent": "Las identidades coinciden en los almacenes observados y ambas lecturas fueron iguales. No es una instantánea atómica ni autoriza ejecución.",
+          "conflict": "CONFLICTO DE IDENTIDAD: los almacenes discrepan aunque ambas lecturas coincidan. No se autoriza ninguna operación física.",
+          "incomplete": "Evidencias incompletas: falta uno o más almacenes. No se autoriza ninguna operación física.",
+          "empty": "No se observó una transacción activa. No es una instantánea atómica ni autoriza ejecución.",
+          "changed": "Las evidencias cambiaron entre lecturas. No se autoriza ninguna operación física.",
+          "failed": "Falló la lectura o validación de evidencias. No se autoriza ninguna operación física.",
+          "invalid_response": "Respuesta de diagnóstico inválida, insegura o incompleta."
+        }
       }
     },
     "bar": {

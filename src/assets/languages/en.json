@@ -341,6 +341,36 @@
         "primary": "Primary display",
         "make_primary": "Set as primary",
         "preview": "Preview only — no display settings have been changed."
+      },
+      "diagnostic": {
+        "title": "Display diagnostics",
+        "read_only": "Development evidence · Read only",
+        "check": "Check evidence",
+        "checking": "Checking...",
+        "status": {
+          "checking": "Checking evidence",
+          "unavailable": "Evidence unavailable",
+          "consistent": "Identities consistent",
+          "conflict": "Identity conflict",
+          "incomplete": "Incomplete evidence",
+          "empty": "No active transaction",
+          "changed": "Concurrent change detected",
+          "failed": "Validation failed"
+        },
+        "messages": {
+          "not_requested": "No diagnostic has been requested.",
+          "not_configured": "Development evidence directory not configured.",
+          "reading": "Reading isolated evidence...",
+          "process_failed": "Diagnostic process failed or returned no response.",
+          "unavailable": "Required development journal is absent; no physical execution authorized.",
+          "consistent": "Identities consistent across observed stores; two reads matched. Not an atomic snapshot or execution authorization.",
+          "conflict": "IDENTITY CONFLICT: stores disagree despite matching reads. No physical execution authorized.",
+          "incomplete": "Incomplete evidence: one or more stores are missing. No physical execution authorized.",
+          "empty": "No active transaction observed; not an atomic snapshot or execution authorization.",
+          "changed": "Evidence changed between reads; no physical execution authorized.",
+          "failed": "Evidence read or validation failed; no physical execution authorized.",
+          "invalid_response": "Invalid, unsafe or incomplete diagnostic response."
+        }
       }
     },
     "bar": {

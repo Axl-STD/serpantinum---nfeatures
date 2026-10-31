@@ -67,18 +67,34 @@ DisplayMainState {
 
             Rectangle {
                 Layout.fillWidth: true
-                implicitHeight: diagnosticRow.implicitHeight + rootObj.s(20)
+                implicitHeight: diagnosticRow.implicitHeight + rootObj.s(24)
                 radius: ThemeBackend.borderRadius
                 color: Qt.alpha(ThemeBackend.surface0, 0.5)
+                border.width: 1
+                border.color: displayTabRoot.diagnosticStatusKey === "conflict" || displayTabRoot.diagnosticStatusKey === "failed" ? ThemeBackend.mauve : ThemeBackend.surface2
                 RowLayout {
                     id: diagnosticRow
                     anchors.fill: parent
-                    anchors.margins: rootObj.s(10)
-                    spacing: rootObj.s(10)
+                    anchors.margins: rootObj.s(12)
+                    spacing: rootObj.s(12)
+                    Rectangle {
+                        Layout.preferredWidth: rootObj.s(5)
+                        Layout.fillHeight: true
+                        radius: rootObj.s(3)
+                        color: displayTabRoot.diagnosticStatusKey === "conflict" || displayTabRoot.diagnosticStatusKey === "failed" ? ThemeBackend.mauve : ThemeBackend.surface2
+                    }
                     ColumnLayout {
                         Layout.fillWidth: true
+                        spacing: rootObj.s(4)
                         Text {
-                            text: "Development evidence: " + displayTabRoot.diagnosticAssessment
+                            text: I18n.t("guide.display.diagnostic.title", "Display diagnostics")
+                            color: ThemeBackend.text
+                            font.family: ThemeBackend.fontFamily
+                            font.bold: true
+                            font.pixelSize: rootObj.s(13)
+                        }
+                        Text {
+                            text: I18n.t("guide.display.diagnostic.status." + displayTabRoot.diagnosticStatusKey, "Diagnostic status")
                             color: ThemeBackend.text
                             font.family: ThemeBackend.fontFamily
                             font.pixelSize: rootObj.s(12)
@@ -88,12 +104,20 @@ DisplayMainState {
                             text: displayTabRoot.diagnosticMessage
                             wrapMode: Text.WordWrap
                             color: ThemeBackend.text
+                            opacity: 0.8
                             font.family: ThemeBackend.fontFamily
                             font.pixelSize: rootObj.s(11)
                         }
+                        Text {
+                            text: I18n.t("guide.display.diagnostic.read_only", "Development evidence · Read only")
+                            color: ThemeBackend.text
+                            opacity: 0.65
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: rootObj.s(10)
+                        }
                     }
                     Button {
-                        text: displayTabRoot.diagnosticBusy ? "Checking..." : "Check evidence"
+                        text: displayTabRoot.diagnosticBusy ? I18n.t("guide.display.diagnostic.checking", "Checking...") : I18n.t("guide.display.diagnostic.check", "Check evidence")
                         enabled: !displayTabRoot.diagnosticBusy
                         onClicked: displayTabRoot.requestDisplayDiagnostic()
                     }

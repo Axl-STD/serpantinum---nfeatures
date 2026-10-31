@@ -11,7 +11,10 @@ GuideTab {
     // v0.5.57: on-demand, read-only diagnostics. Never an execution gate.
     readonly property string diagnosticRoot: Quickshell.env("SERPANTINUM_DISPLAY_DEV_ROOT") || ""
     property string diagnosticAssessment: "diagnostic-unavailable"
-    property string diagnosticMessage: "No diagnostic has been requested."
+    property string diagnosticMessageKey: "not_requested"
+    readonly property string diagnosticMessage: I18n.t("guide.display.diagnostic.messages." + diagnosticMessageKey, "Diagnostic unavailable")
+    readonly property string diagnosticStatusKey: diagnosticAssessment === "stable-observation" ? (diagnosticUnderlyingAssessment === "identity-conflict" ? "conflict" : diagnosticUnderlyingAssessment === "consistent-observable" ? "consistent" : diagnosticUnderlyingAssessment === "incomplete" ? "incomplete" : "empty") : diagnosticAssessment === "checking" ? "checking" : diagnosticAssessment === "diagnostic-unavailable" ? "unavailable" : diagnosticAssessment === "concurrent-change-detected" ? "changed" : "failed"
+    property string diagnosticUnderlyingAssessment: ""
     property bool diagnosticBusy: false
     property string diagnosticResponse: ""
     property bool diagnosticResponseValid: false
@@ -20,14 +23,15 @@ GuideTab {
         if (diagnosticBusy || displayDiagnosticProcess.running) return;
         if (!diagnosticRoot || !diagnosticRoot.startsWith("/")) {
             diagnosticAssessment = "diagnostic-unavailable";
-            diagnosticMessage = "Development evidence directory not configured.";
+            diagnosticMessageKey = "not_configured";
             return;
         }
         diagnosticResponse = "";
         diagnosticResponseValid = false;
+        diagnosticUnderlyingAssessment = "";
         diagnosticBusy = true;
         diagnosticAssessment = "checking";
-        diagnosticMessage = "Reading isolated evidence...";
+        diagnosticMessageKey = "reading";
         displayDiagnosticProcess.running = true;
     }
 
@@ -48,7 +52,8 @@ GuideTab {
             displayTabRoot.diagnosticBusy = false;
             if (exitCode !== 0 || !displayTabRoot.diagnosticResponseValid) {
                 displayTabRoot.diagnosticAssessment = "observation-failed";
-                displayTabRoot.diagnosticMessage = "Diagnostic process failed or returned no response (code " + exitCode + ").";
+                displayTabRoot.diagnosticUnderlyingAssessment = "";
+                displayTabRoot.diagnosticMessageKey = "process_failed";
                 return;
             }
             try {
@@ -72,25 +77,27 @@ GuideTab {
                     throw new Error("Unknown underlying assessment");
                 }
                 displayTabRoot.diagnosticAssessment = data.assessment;
+                displayTabRoot.diagnosticUnderlyingAssessment = data.assessment === "stable-observation" ? data.underlyingAssessment : "";
                 if (data.assessment === "diagnostic-unavailable")
-                    displayTabRoot.diagnosticMessage = "Required development journal is absent; no physical execution authorized.";
+                    displayTabRoot.diagnosticMessageKey = "unavailable";
                 else if (data.assessment === "stable-observation") {
                     if (data.underlyingAssessment === "consistent-observable")
-                        displayTabRoot.diagnosticMessage = "Identities consistent across observed stores; two reads matched. Not an atomic snapshot or execution authorization.";
+                        displayTabRoot.diagnosticMessageKey = "consistent";
                     else if (data.underlyingAssessment === "identity-conflict")
-                        displayTabRoot.diagnosticMessage = "IDENTITY CONFLICT: stores disagree despite matching reads. No physical execution authorized.";
+                        displayTabRoot.diagnosticMessageKey = "conflict";
                     else if (data.underlyingAssessment === "incomplete")
-                        displayTabRoot.diagnosticMessage = "Incomplete evidence: one or more stores are missing. No physical execution authorized.";
+                        displayTabRoot.diagnosticMessageKey = "incomplete";
                     else
-                        displayTabRoot.diagnosticMessage = "No active transaction observed; not an atomic snapshot or execution authorization.";
+                        displayTabRoot.diagnosticMessageKey = "empty";
                 }
                 else if (data.assessment === "concurrent-change-detected")
-                    displayTabRoot.diagnosticMessage = "Evidence changed between reads; no physical execution authorized.";
+                    displayTabRoot.diagnosticMessageKey = "changed";
                 else
-                    displayTabRoot.diagnosticMessage = "Evidence read or validation failed; no physical execution authorized.";
+                    displayTabRoot.diagnosticMessageKey = "failed";
             } catch (e) {
                 displayTabRoot.diagnosticAssessment = "observation-failed";
-                displayTabRoot.diagnosticMessage = "Invalid, unsafe or incomplete diagnostic response.";
+                displayTabRoot.diagnosticUnderlyingAssessment = "";
+                displayTabRoot.diagnosticMessageKey = "invalid_response";
             }
         }
     }
