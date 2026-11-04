@@ -131,10 +131,50 @@ def report(mode, results):
                 'Runtime is opt-in; no physical display commands or automatic cleanup']}
 
 
+
+def execute_owned_offline(runtime_root, timeout=60):
+    """Opt-in offline evidence with owner-only admission; no inherited lock FD."""
+    import importlib.util
+    source = HERE / 'display-coordinator-owned-evidence-v0600.py'
+    if source.is_symlink() or not source.is_file():
+        raise ValueError('unsafe owned coordinator dependency')
+    spec = importlib.util.spec_from_file_location('display_owned_combined_v0600', source)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    try:
+        result = module.run(runtime_root, 'combined', timeout=timeout)
+    except module.CoordinatorDenied as exc:
+        raise ValueError('owned combined evidence rejected') from exc
+    if (type(result) is not dict or result.get('selftest') != 'passed' or
+            result.get('mode') != 'offline-coordinator-owned-evidence' or
+            result.get('target') != 'combined' or
+            result.get('evidenceScenarios') != 2 or
+            result.get('workerLockFdInherited') is not False or
+            result.get('systemdIntegration') is not False or
+            result.get('authenticatedDelegationImplemented') is not False or
+            result.get('executionAuthorized') is not False or
+            result.get('physicalExecutionEnabled') is not False or
+            type(result.get('commandsExecuted')) is not int or
+            result['commandsExecuted'] != 0):
+        raise ValueError('unsafe owned combined evidence report')
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=('offline','runtime'))
+    parser.add_argument('command', choices=('offline','runtime','offline-owned'))
     mode = parser.parse_args().command
+    if mode == 'offline-owned':
+        try:
+            result = execute_owned_offline(os.environ.get('XDG_RUNTIME_DIR', ''))
+        except BaseException as exc:
+            print(json.dumps({'version':'0.6.0','mode':'offline-owned',
+                'selftest':'failed','error':type(exc).__name__,
+                'executionAuthorized':False,'physicalExecutionEnabled':False,
+                'commandsExecuted':0}))
+            return 2
+        print(json.dumps(result, indent=2))
+        return 0
     try:
         result = report(mode, execute(mode))
     except BaseException as exc:

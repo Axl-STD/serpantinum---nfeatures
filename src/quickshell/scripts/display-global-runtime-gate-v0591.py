@@ -109,10 +109,47 @@ def report(mode, payload):
                             'Legacy direct gates use the same admission descriptor under v0.5.92',
                             'No authenticated ownership, atomic cross-store snapshot or physical rollback']}
 
+def execute_owned_offline(runtime_root, timeout=60):
+    """Explicit v0.6.0 offline route; never runs the legacy runtime mode.
+
+    The owner-only coordinator holds the evidence lock and launches the
+    existing global OFFLINE suite without passing an admission descriptor.
+    """
+    import importlib.util
+    source = HERE / 'display-coordinator-owned-evidence-v0600.py'
+    if source.is_symlink() or not source.is_file():
+        raise GateError('unsafe owned coordinator dependency')
+    spec = importlib.util.spec_from_file_location('display_owned_global_v0600', source)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    try:
+        result = module.run(runtime_root, 'global', timeout=timeout)
+    except module.CoordinatorDenied as exc:
+        raise GateError('owned offline evidence rejected') from exc
+    if (result.get('selftest') != 'passed' or
+            result.get('workerLockFdInherited') is not False or
+            result.get('executionAuthorized') is not False or
+            result.get('physicalExecutionEnabled') is not False or
+            result.get('commandsExecuted') != 0):
+        raise GateError('unsafe owned evidence report')
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=('offline', 'runtime'))
+    parser.add_argument('command', choices=('offline', 'runtime', 'offline-owned'))
     mode = parser.parse_args().command
+    if mode == 'offline-owned':
+        try:
+            result = execute_owned_offline(os.environ.get('XDG_RUNTIME_DIR', ''))
+        except BaseException as exc:
+            print(json.dumps({'version':'0.6.0','mode':'offline-owned',
+                'selftest':'failed','error':type(exc).__name__,
+                'executionAuthorized':False,'physicalExecutionEnabled':False,
+                'commandsExecuted':0}))
+            return 2
+        print(json.dumps(result, indent=2))
+        return 0
     try:
         payload = report(mode, execute(mode))
     except BaseException as exc:

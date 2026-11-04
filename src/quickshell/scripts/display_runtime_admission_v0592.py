@@ -46,8 +46,22 @@ def admission(runtime_dir=None):
             if fd < 3:
                 raise ValueError('low fd')
             _validate(fd, root)
-            # LOCK_NB succeeds for an inherited locked open-file-description.
-            # If it was not locked, this operation acquires the lock rather than bypassing it.
+            # A delegated descriptor must ALREADY hold a flock. A fresh open
+            # file description must therefore observe contention. Merely calling
+            # flock(fd) here would acquire an unlocked forged descriptor.
+            probe = os.open(root / NAME, os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC)
+            try:
+                _validate(probe, root)
+                try:
+                    fcntl.flock(probe, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    pass
+                else:
+                    fcntl.flock(probe, fcntl.LOCK_UN)
+                    raise AdmissionError('delegated descriptor is not already locked')
+            finally:
+                os.close(probe)
+            # This establishes lock presence, NOT worker identity or authorization.
             fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except (ValueError, OSError, BlockingIOError) as exc:
             raise AdmissionError('invalid or contended delegated descriptor') from exc

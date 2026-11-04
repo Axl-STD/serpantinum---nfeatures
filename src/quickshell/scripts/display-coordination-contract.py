@@ -299,6 +299,12 @@ def observe_stores_twice(bundle_root=None, journal_root=None, reservation_root=N
 
     try:
         if reader is None:
+            # A wholly absent set of stores is an unavailable diagnostic, not
+            # corrupt evidence. Never treat a partial set or symlink as absent.
+            roots = tuple(Path(x) for x in (bundle_root, journal_root, reservation_root))
+            if all(not os.path.lexists(str(directory)) for directory in roots):
+                return {**denied, 'assessment': 'diagnostic-unavailable',
+                        'observationError': 'all-stores-absent'}
             # Only an absent required journal is 'unavailable'. A symlink,
             # malformed JSON, unsafe path or any other error fails closed.
             for root in (bundle_root, journal_root, reservation_root):
