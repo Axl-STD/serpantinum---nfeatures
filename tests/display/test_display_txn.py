@@ -14,7 +14,7 @@ import time
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "display", "display_txn.py")
+SCRIPT = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "displaymgr", "display_txn.py")
 spec = importlib.util.spec_from_file_location("display_txn", SCRIPT)
 dt = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(dt)
@@ -699,7 +699,7 @@ class BackendInterfaceTests(Base):
         self.assertEqual(self.backend.state()["backend"], "hyprland")
 
     def test_qml_backend_list_matches_python(self):
-        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "display", "DisplayMainState.qml")
+        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "displaymgr", "DisplayMainState.qml")
         text = open(qml, encoding="utf-8").read()
         import re
         m = re.search(r"txnBackends:\s*\[([^\]]*)\]", text)
@@ -708,7 +708,7 @@ class BackendInterfaceTests(Base):
         self.assertEqual(listed, sorted(dt.BACKENDS))
 
     def test_qml_persistence_texts_follow_the_engines_backend(self):
-        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "display", "DisplayMainState.qml")
+        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "displaymgr", "DisplayMainState.qml")
         text = open(qml, encoding="utf-8").read()
         block = text[text.index("property string txnPersistLine"):text.index("property bool txnPersistManaged")]
         self.assertIn("txnBackendName", block)
@@ -719,7 +719,7 @@ class BackendInterfaceTests(Base):
                 self.assertIn("persist_%s" % name, block)
 
     def test_qml_hides_the_persistence_hint_once_the_line_is_detected(self):
-        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "display", "DisplayMainState.qml")
+        qml = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "displaymgr", "DisplayMainState.qml")
         text = open(qml, encoding="utf-8").read()
         block = text[text.index("property bool txnPersistDone"):text.index("property string txnBackendName")] \
             if text.index("property bool txnPersistDone") < text.index("property string txnBackendName") \

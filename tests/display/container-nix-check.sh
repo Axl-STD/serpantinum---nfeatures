@@ -12,7 +12,7 @@ echo "store: $store_path"
 ln -s "$store_path" /tmp/h/.config/hypr/hyprland.lua
 XDG_CONFIG_HOME=/tmp/h/.config python3 - <<'PY'
 import importlib.util, json
-spec = importlib.util.spec_from_file_location("dt", "/repo/src/quickshell/guide/display/display_txn.py")
+spec = importlib.util.spec_from_file_location("dt", "/repo/src/quickshell/guide/displaymgr/display_txn.py")
 dt = importlib.util.module_from_spec(spec); spec.loader.exec_module(dt)
 info = dt.persist_info()
 print(json.dumps({k: info[k] for k in ("managed", "writable", "included")}))
@@ -20,5 +20,5 @@ assert info["managed"] is True and info["writable"] is True
 PY
 echo "== dry run of the installPhase layout (read-only repo)"
 out=/tmp/out/share/serpantinum; mkdir -p $out; cp -r src/. $out/; find $out -type f \( -name '*.sh' -o -name '*.py' \) -exec chmod +x {} +
-ls -l $out/quickshell/guide/display/display_txn.py | cut -c1-10
-python3 $out/quickshell/guide/display/display_txn.py status
+ls -l $out/quickshell/guide/displaymgr/display_txn.py | cut -c1-10
+python3 $out/quickshell/guide/displaymgr/display_txn.py status

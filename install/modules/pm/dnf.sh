@@ -64,7 +64,6 @@ declare -A PM_PKG_MAP=(
     [adwaita-icon-theme]="adwaita-icon-theme"
     [gpu-screen-recorder]="gpu-screen-recorder"
     [wf-recorder]="wf-recorder"
-    [wlr-randr]="wlr-randr"
     [adw-gtk-theme]="adw-gtk3-theme"
     [hyprland]="hyprland"
     [niri]="niri"

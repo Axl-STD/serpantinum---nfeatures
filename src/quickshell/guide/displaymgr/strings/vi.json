@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Màn hình"
+        },
+        "display": {
+            "gamma": {
+                "title": "Bộ lọc ánh sáng xanh",
+                "desc": "Bật/tắt ánh sáng màn hình ấm"
+            },
+            "enable": {
+                "title": "Bật màn hình này",
+                "desc": "Tắt tính năng này sẽ vô hiệu hóa màn hình này"
+            },
+            "schedule": {
+                "title": "Lịch trình tự động",
+                "desc": "Tự động điều chỉnh nhiệt độ màu dựa trên hoàng hôn và bình minh"
+            },
+            "temperature": {
+                "title": "Nhiệt độ màu",
+                "desc": "Điều chỉnh độ mạnh của nhiệt độ màu"
+            },
+            "uiscale": {
+                "title": "Tỷ lệ giao diện",
+                "desc": "Đặt hệ số tỷ lệ hiển thị cho màn hình này"
+            },
+            "widgets": {
+                "title": "Tiện ích màn hình",
+                "desc": "Cấu hình và đặt tiện ích cho màn hình này",
+                "open": "Mở trình chỉnh sửa",
+                "hide_bar": {
+                    "title": "Ẩn thanh trong trình chỉnh sửa",
+                    "desc": "Tự động ẩn thanh khi chỉnh sửa tiện ích con ở chế độ biên tập"
+                },
+                "show_distances": {
+                    "title": "Hiển thị khoảng cách",
+                    "desc": "Hiển thị khoảng cách giữa các widget khi di chuyển hoặc thay đổi kích thước trong trình chỉnh sửa"
+                },
+                "hide_presets": "Ẩn mẫu có sẵn",
+                "choose_preset": "Chọn mẫu có sẵn",
+                "presets": {
+                    "title": "Mẫu tiện ích"
+                },
+                "save_preset": {
+                    "title": "Lưu preset"
+                },
+                "preset_name_placeholder": "Nhập tên preset...",
+                "screen_desc": "Cấu hình và chỉnh sửa tiện ích màn hình nền"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Màn hình khóa",
+                    "desc": "Tùy chỉnh bố cục màn hình khóa của bạn",
+                    "button": "Chỉnh sửa màn hình khóa"
+                },
+                "limits": {
+                    "title": "Giới hạn số lần thử",
+                    "desc": "Tạm thời chặn nhập mật khẩu và tắt trình đọc vân tay sau quá nhiều lần thử thất bại"
+                },
+                "password_attempts": {
+                    "title": "Số lần thử mật khẩu",
+                    "desc": "Số lần thất bại trước khi việc nhập mật khẩu bị chặn trong 30 giây"
+                },
+                "fingerprint_attempts": {
+                    "title": "Số lần thử vân tay",
+                    "desc": "Số lần quét thất bại trước khi trình đọc vân tay bị tắt cho đến lần mở khóa tiếp theo"
+                },
+                "fingerprint": {
+                    "title": "Bật đăng nhập bằng vân tay",
+                    "desc": "Cho phép mở khóa màn hình khóa bằng vân tay"
+                },
+                "background": {
+                    "select": "Chọn nền",
+                    "follow": "Theo hình nền",
+                    "custom": "Tùy chỉnh",
+                    "follows_hint": "Đang theo hình nền",
+                    "none": "Chưa chọn nền"
+                }
+            },
+            "txn": {
+                "keep_title": "Giữ các cài đặt màn hình này?",
+                "keep_message": "Cài đặt trước đó sẽ quay lại sau {n} giây nếu bạn không xác nhận.",
+                "keep": "Giữ lại",
+                "revert": "Hoàn tác",
+                "reverted": "Đã khôi phục cài đặt màn hình trước đó.",
+                "reverted_safe": "Không thể khôi phục cài đặt trước đó, nên đã áp dụng bố cục an toàn.",
+                "not_saved": "Đã áp dụng cho phiên này, nhưng không thể lưu cho lần khởi động sau.",
+                "persist_title": "Giữ bố cục màn hình sau khi khởi động lại",
+                "persist_message": "Thêm dòng này vào hyprland.lua sau các quy tắc màn hình của riêng bạn. Serpantinum chỉ ghi vào tệp của chính nó và không bao giờ sửa tệp của bạn.",
+                "persist_managed_message": "Cấu hình Hyprland của bạn do Nix quản lý nên không thể sửa thủ công. Hãy thêm dòng này từ cấu hình Nix của bạn, sau các quy tắc màn hình. Serpantinum chỉ ghi vào tệp của chính nó.",
+                "persist_sway_message": "Thêm dòng này vào cấu hình sway của bạn, sau các quy tắc đầu ra của riêng bạn. Serpantinum chỉ ghi vào tệp của chính nó và không bao giờ sửa tệp của bạn.",
+                "persist_sway_managed_message": "Cấu hình sway của bạn do Nix quản lý nên không thể sửa thủ công. Hãy thêm dòng này từ cấu hình Nix của bạn, sau các quy tắc đầu ra. Serpantinum chỉ ghi vào tệp của chính nó.",
+                "persist_niri_message": "Thêm dòng này vào cấu hình niri của bạn, sau các quy tắc đầu ra của riêng bạn. Serpantinum chỉ ghi vào tệp của chính nó và không bao giờ sửa tệp của bạn.",
+                "persist_niri_managed_message": "Cấu hình niri của bạn do Nix quản lý nên không thể sửa thủ công. Hãy thêm dòng này từ cấu hình Nix của bạn, sau các quy tắc đầu ra. Serpantinum chỉ ghi vào tệp của chính nó.",
+                "persist_mango_message": "Thêm dòng này hai lần vào cấu hình mango (config.conf): làm dòng đầu tiên và dòng cuối cùng, để nó hoạt động khi khởi động và sau khi tải lại. Serpantinum chỉ ghi vào tệp riêng của nó và không bao giờ sửa tệp của bạn.",
+                "persist_mango_managed_message": "Cấu hình mango của bạn do Nix quản lý nên không thể sửa thủ công. Hãy thêm dòng này từ cấu hình Nix hai lần: đầu tiên và cuối cùng. Serpantinum chỉ ghi vào tệp riêng của nó.",
+                "err_unavailable": "Backend màn hình không khả dụng, không có gì bị thay đổi.",
+                "err_generic": "Không thể áp dụng thay đổi.",
+                "err_confirm": "Không thể xác nhận thay đổi.",
+                "err_plan_malformed": "Cấu hình màn hình không hợp lệ.",
+                "err_unknown_monitor": "Màn hình {a} chưa được kết nối.",
+                "err_duplicate_monitor": "Màn hình {a} xuất hiện hai lần.",
+                "err_monitor_identity_changed": "{a} giờ là một màn hình khác. Hãy làm mới và thử lại.",
+                "err_monitor_fields_invalid": "Một số cài đặt cho {a} không hợp lệ.",
+                "err_mode_unsupported": "{a} không hỗ trợ {b}.",
+                "err_scale_invalid": "Tỷ lệ {b} không hợp lệ cho {a}.",
+                "err_transform_invalid": "Hướng của {a} không hợp lệ.",
+                "err_position_out_of_range": "{a} được đặt quá xa.",
+                "err_position_negative": "{a} không thể đặt ở vị trí âm trong mango. Hãy di chuyển các màn hình khác.",
+                "err_wlr_randr_missing": "Cài wlr-randr để quản lý màn hình trong mango.",
+                "err_monitor_missing_from_plan": "Màn hình {a} bị thiếu trong cấu hình.",
+                "err_no_enabled_monitor": "Phải có ít nhất một màn hình được bật.",
+                "err_monitors_overlap": "{a} và {b} chồng lên nhau.",
+                "err_transaction_pending": "Hãy giữ hoặc hoàn tác thay đổi đang chờ trước.",
+                "err_apply_not_verified": "Màn hình không chấp nhận thay đổi, nên đã khôi phục cài đặt trước đó.",
+                "err_layout_overlap": "Các màn hình không được chồng lên nhau.",
+                "err_layout_disconnected": "Các màn hình phải chạm nhau.",
+                "err_layout_draft": "Hãy áp dụng hoặc hủy các thay đổi bố cục trước.",
+                "profile_saved": "Đã lưu hồ sơ {name}.",
+                "profile_deleted": "Đã xóa hồ sơ {name}.",
+                "err_profile_name": "Hãy đặt tên cho hồ sơ.",
+                "err_profile_save": "Hãy đợi thay đổi hiện tại hoàn tất trước khi lưu hồ sơ.",
+                "err_profile_missing": "Hồ sơ đó không còn tồn tại."
+            },
+            "resolution": {
+                "title": "Độ phân giải",
+                "desc": "Đặt chiều rộng và chiều cao của màn hình"
+            },
+            "refresh": {
+                "title": "Tần số quét",
+                "desc": "Đặt tần số quét của màn hình"
+            },
+            "orientation": {
+                "title": "Căn dọc",
+                "desc": "Đặt hướng của màn hình này"
+            },
+            "map": {
+                "hint": "Kéo một màn hình để di chuyển. Các màn hình tự bám vào cạnh của nhau.",
+                "refresh": "Làm mới",
+                "apply": "Áp dụng thay đổi",
+                "discard": "Hủy bỏ",
+                "dirty": "Bạn đã di chuyển một số màn hình. Hãy áp dụng thay đổi để thử; bạn sẽ được hỏi giữ lại hay hoàn tác."
+            },
+            "profiles": {
+                "save": "Lưu hồ sơ",
+                "load": "Tải",
+                "delete": "Xóa",
+                "name_placeholder": "Tên hồ sơ"
+            }
+        }
+    }
+}

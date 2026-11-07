@@ -342,76 +342,6 @@
           "follows_hint": "跟隨桌布",
           "none": "未選擇背景"
         }
-      },
-      "txn": {
-        "keep_title": "要保留這些顯示設定嗎？",
-        "keep_message": "如果不確認，將在 {n} 秒後還原先前的設定。",
-        "keep": "保留",
-        "revert": "還原",
-        "reverted": "已還原先前的顯示設定。",
-        "reverted_safe": "無法還原先前的設定，因此套用了安全的版面配置。",
-        "not_saved": "已套用於本次工作階段，但無法儲存供下次開機使用。",
-        "persist_title": "重新啟動後保留螢幕配置",
-        "persist_message": "請將此行加入 hyprland.lua 中你自己的螢幕規則之後。Serpantinum 只會寫入自己的檔案，絕不會修改你的檔案。",
-        "persist_managed_message": "你的 Hyprland 設定由 Nix 管理，無法手動編輯。請在螢幕規則之後，透過你的 Nix 設定加入這一行。Serpantinum 只會寫入自己的檔案。",
-        "persist_sway_message": "請將這一行加入 sway 設定中你自己的輸出規則之後。Serpantinum 只會寫入它自己的檔案，絕不會修改你的檔案。",
-        "persist_sway_managed_message": "你的 sway 設定由 Nix 管理，無法手動編輯。請在 Nix 設定中、輸出規則之後加入這一行。Serpantinum 只會寫入它自己的檔案。",
-        "persist_niri_message": "請將這一行加入 niri 設定中你自己的輸出規則之後。Serpantinum 只會寫入它自己的檔案，絕不會修改你的檔案。",
-        "persist_niri_managed_message": "你的 niri 設定由 Nix 管理，無法手動編輯。請在 Nix 設定中、輸出規則之後加入這一行。Serpantinum 只會寫入它自己的檔案。",
-        "persist_mango_message": "請將這一行在 mango 設定 (config.conf) 中加入兩次:一次作為第一行,一次作為最後一行,這樣啟動時和重新載入後都會生效。Serpantinum 只寫入自己的檔案,從不修改你的檔案。",
-        "persist_mango_managed_message": "你的 mango 設定由 Nix 管理,無法手動編輯。請在 Nix 設定中加入這一行兩次:一次在最前,一次在最後。Serpantinum 只寫入自己的檔案。",
-        "err_unavailable": "顯示後端無法使用，未做任何變更。",
-        "err_generic": "無法套用變更。",
-        "err_confirm": "無法確認變更。",
-        "err_plan_malformed": "顯示設定無效。",
-        "err_unknown_monitor": "螢幕 {a} 未連接。",
-        "err_duplicate_monitor": "螢幕 {a} 出現兩次。",
-        "err_monitor_identity_changed": "{a} 現在是另一個螢幕。請重新整理後再試。",
-        "err_monitor_fields_invalid": "{a} 的某些設定無效。",
-        "err_mode_unsupported": "{a} 不支援 {b}。",
-        "err_scale_invalid": "縮放 {b} 對 {a} 無效。",
-        "err_transform_invalid": "{a} 的方向無效。",
-        "err_position_out_of_range": "{a} 放置得太遠。",
-        "err_position_negative": "在 mango 中,{a} 不能放在負座標位置。請改為移動其他螢幕。",
-        "err_wlr_randr_missing": "請安裝 wlr-randr 以在 mango 中管理螢幕。",
-        "err_monitor_missing_from_plan": "設定中缺少螢幕 {a}。",
-        "err_no_enabled_monitor": "至少要保持一個螢幕為啟用狀態。",
-        "err_monitors_overlap": "{a} 與 {b} 重疊。",
-        "err_transaction_pending": "請先保留或還原待處理的變更。",
-        "err_apply_not_verified": "螢幕未接受該變更，因此已還原先前的設定。",
-        "err_layout_overlap": "螢幕不能重疊。",
-        "err_layout_disconnected": "螢幕必須互相接觸。",
-        "err_layout_draft": "請先套用或捨棄版面配置變更。",
-        "profile_saved": "已儲存設定檔 {name}。",
-        "profile_deleted": "已刪除設定檔 {name}。",
-        "err_profile_name": "請為設定檔命名。",
-        "err_profile_save": "請等待目前的變更完成後再儲存設定檔。",
-        "err_profile_missing": "該設定檔已不存在。"
-      },
-      "resolution": {
-        "title": "解析度",
-        "desc": "設定螢幕的寬度與高度"
-      },
-      "refresh": {
-        "title": "更新率",
-        "desc": "設定螢幕的更新率"
-      },
-      "orientation": {
-        "title": "垂直對齊",
-        "desc": "設定此螢幕的方向"
-      },
-      "map": {
-        "hint": "拖曳螢幕即可移動。螢幕會吸附到其他螢幕的邊緣。",
-        "refresh": "重新整理",
-        "apply": "套用變更",
-        "discard": "捨棄",
-        "dirty": "你移動了一些螢幕。套用變更以試用；系統會詢問你要保留還是還原。"
-      },
-      "profiles": {
-        "save": "儲存設定檔",
-        "load": "載入",
-        "delete": "刪除",
-        "name_placeholder": "設定檔名稱"
       }
     },
     "bar": {
@@ -1848,8 +1778,7 @@
       "reboot": "重新啟動系統",
       "poweroff": "關閉系統",
       "redactor": "開啟或切換桌面小工具版面編輯器",
-      "lock_redactor": "切換、開啟或關閉鎖定畫面版面編輯器",
-      "display": "顯示設定:救援、查看狀態、復原或確認待定的變更"
+      "lock_redactor": "切換、開啟或關閉鎖定畫面版面編輯器"
     },
     "usage_label": "用法:",
     "config_desc": "讀取和變更設定 (get, set, dump, path, edit)",
@@ -1865,9 +1794,7 @@
     "set_desc": "變更設定 (notifications, idle, dock, sfx, theme, lang, wallpaper)",
     "trigger_desc": "執行一次性操作 (idle, notifications, theme, firstlaunch)",
     "settings_desc": "開啟設定視窗（可指定分頁）",
-    "error_unknown_app": "錯誤：未知的應用程式 '{ID}'。",
-    "display_usage": "用法:serpantinum display <rescue|status|revert|confirm>\n  rescue   還原上一次正常運作的螢幕配置(也可在 TTY 中使用)\n  status   顯示待定的顯示變更(如有)\n  revert   復原待定的顯示變更\n  confirm  保留待定的顯示變更",
-    "display_missing": "未安裝顯示設定模組。"
+    "error_unknown_app": "錯誤：未知的應用程式 '{ID}'。"
   },
   "daemon": {
     "already_running": "常駐程式已在執行中。正在結束...",

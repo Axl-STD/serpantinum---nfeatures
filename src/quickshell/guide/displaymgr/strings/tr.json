@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Monitörler"
+        },
+        "display": {
+            "gamma": {
+                "title": "Mavi ışık filtresi",
+                "desc": "Sıcak ekran aydınlatmasını açıp kapatın"
+            },
+            "enable": {
+                "title": "Bu monitörü etkinleştir",
+                "desc": "Bunu kapatmak bu monitörü devre dışı bırakır"
+            },
+            "schedule": {
+                "title": "Otomatik zamanlama",
+                "desc": "Renk sıcaklığını gün batımı ve gün doğumuna göre otomatik olarak ayarlayın:"
+            },
+            "temperature": {
+                "title": "Renk sıcaklığı",
+                "desc": "Renk sıcaklığı yoğunluğunu ayarlayın"
+            },
+            "uiscale": {
+                "title": "Arayüz ölçeği",
+                "desc": "Bu monitör için ekran ölçekleme katsayısını ayarlayın"
+            },
+            "widgets": {
+                "title": "Masaüstü widget'ları",
+                "desc": "Bu monitör için widget'ları yapılandırın ve yerleştirin",
+                "open": "Düzenleyiciyi aç",
+                "hide_bar": {
+                    "title": "Düzenleyicide çubuğu gizle",
+                    "desc": "Düzenleyici modunda widget'ları düzenlerken çubuğu otomatik olarak gizleyin"
+                },
+                "show_distances": {
+                    "title": "Mesafeleri göster",
+                    "desc": "Düzenleyicide widget'ları taşırken veya yeniden boyutlandırırken aralarındaki mesafeleri göster"
+                },
+                "hide_presets": "Ön ayarları gizle",
+                "choose_preset": "Bir ön ayar seçin",
+                "presets": {
+                    "title": "Widget Ön Ayarları"
+                },
+                "save_preset": {
+                    "title": "Ön Ayarı Kaydet"
+                },
+                "preset_name_placeholder": "Ön ayar adını girin...",
+                "screen_desc": "Masaüstü widget'larını yapılandırın ve düzenleyin"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Kilit ekranı",
+                    "desc": "Kilit ekranınızın düzenini özelleştirin",
+                    "button": "Kilit ekranını düzenle"
+                },
+                "limits": {
+                    "title": "Deneme sınırları",
+                    "desc": "Çok fazla başarısız denemeden sonra parola girişini geçici olarak engelle ve parmak izi okuyucuyu devre dışı bırak"
+                },
+                "password_attempts": {
+                    "title": "Parola denemeleri",
+                    "desc": "Parola girişi 30 saniye engellenmeden önceki başarısız denemeler"
+                },
+                "fingerprint_attempts": {
+                    "title": "Parmak izi denemeleri",
+                    "desc": "Parmak izi okuyucu bir sonraki kilit açmaya kadar devre dışı bırakılmadan önceki başarısız taramalar"
+                },
+                "fingerprint": {
+                    "title": "Parmak izi ile girişi etkinleştir",
+                    "desc": "Kilit ekranını parmak iziyle açmaya izin ver"
+                },
+                "background": {
+                    "select": "Arka plan seç",
+                    "follow": "Duvar kâğıdını izle",
+                    "custom": "Özel",
+                    "follows_hint": "Duvar kâğıdını izler",
+                    "none": "Arka plan seçilmedi"
+                }
+            },
+            "txn": {
+                "keep_title": "Bu ekran ayarları korunsun mu?",
+                "keep_message": "Onaylamazsanız önceki ayarlar {n} sn içinde geri gelir.",
+                "keep": "Koru",
+                "revert": "Geri al",
+                "reverted": "Önceki ekran ayarları geri yüklendi.",
+                "reverted_safe": "Önceki ayarlar geri yüklenemedi, bu yüzden güvenli bir düzen uygulandı.",
+                "not_saved": "Bu oturum için uygulandı, ancak sonraki açılış için kaydedilemedi.",
+                "persist_title": "Yeniden başlattıktan sonra ekran düzenini koru",
+                "persist_message": "Bu satırı kendi monitör kurallarınızdan sonra hyprland.lua dosyasına ekleyin. Serpantinum yalnızca kendi dosyasına yazar, sizinkini asla değiştirmez.",
+                "persist_managed_message": "Hyprland yapılandırmanız Nix tarafından yönetiliyor ve elle düzenlenemez. Bu satırı Nix yapılandırmanızdan, monitör kurallarınızdan sonra ekleyin. Serpantinum yalnızca kendi dosyasına yazar.",
+                "persist_sway_message": "Bu satırı sway yapılandırmanıza kendi çıkış kurallarınızdan sonra ekleyin. Serpantinum yalnızca kendi dosyasına yazar ve seninkini asla düzenlemez.",
+                "persist_sway_managed_message": "Sway yapılandırmanız Nix tarafından yönetiliyor ve elle düzenlenemez. Bu satırı Nix yapılandırmanızdan, çıkış kurallarınızdan sonra ekleyin. Serpantinum yalnızca kendi dosyasına yazar.",
+                "persist_niri_message": "Bu satırı niri yapılandırmanıza kendi çıkış kurallarınızdan sonra ekleyin. Serpantinum yalnızca kendi dosyasına yazar ve seninkini asla düzenlemez.",
+                "persist_niri_managed_message": "Niri yapılandırmanız Nix tarafından yönetiliyor ve elle düzenlenemez. Bu satırı Nix yapılandırmanızdan, çıkış kurallarınızdan sonra ekleyin. Serpantinum yalnızca kendi dosyasına yazar.",
+                "persist_mango_message": "Bu satırı mango yapılandırmanıza (config.conf) iki kez ekleyin: ilk satır ve son satır olarak; böylece başlangıçta ve yeniden yüklemeden sonra çalışır. Serpantinum yalnızca kendi dosyasına yazar, seninkini asla düzenlemez.",
+                "persist_mango_managed_message": "mango yapılandırmanızı Nix yönetiyor, bu yüzden elle düzenlenemez. Bu satırı Nix yapılandırmanızdan iki kez ekleyin: ilk ve son olarak. Serpantinum yalnızca kendi dosyasına yazar.",
+                "err_unavailable": "Ekran arka ucu kullanılamıyor, hiçbir şey değiştirilmedi.",
+                "err_generic": "Değişiklik uygulanamadı.",
+                "err_confirm": "Değişiklik onaylanamadı.",
+                "err_plan_malformed": "Ekran yapılandırması geçerli değil.",
+                "err_unknown_monitor": "{a} monitörü bağlı değil.",
+                "err_duplicate_monitor": "{a} monitörü iki kez görünüyor.",
+                "err_monitor_identity_changed": "{a} artık farklı bir ekran. Yenileyip tekrar deneyin.",
+                "err_monitor_fields_invalid": "{a} için bazı ayarlar geçerli değil.",
+                "err_mode_unsupported": "{a}, {b} desteklemiyor.",
+                "err_scale_invalid": "{b} ölçeği {a} için geçerli değil.",
+                "err_transform_invalid": "{a} için yönlendirme geçerli değil.",
+                "err_position_out_of_range": "{a} çok uzağa yerleştirilmiş.",
+                "err_position_negative": "{a}, mango'da negatif bir konuma yerleştirilemez. Bunun yerine diğer monitörleri taşıyın.",
+                "err_wlr_randr_missing": "mango'daki monitörleri yönetmek için wlr-randr'ı yükleyin.",
+                "err_monitor_missing_from_plan": "{a} monitörü yapılandırmada eksik.",
+                "err_no_enabled_monitor": "En az bir monitör etkin kalmalı.",
+                "err_monitors_overlap": "{a} ve {b} çakışıyor.",
+                "err_transaction_pending": "Önce bekleyen değişikliği koruyun veya geri alın.",
+                "err_apply_not_verified": "Ekran değişikliği kabul etmedi, bu yüzden önceki ayarlar geri yüklendi.",
+                "err_layout_overlap": "Ekranlar çakışamaz.",
+                "err_layout_disconnected": "Ekranlar birbirine değmeli.",
+                "err_layout_draft": "Önce düzen değişikliklerini uygulayın veya vazgeçin.",
+                "profile_saved": "{name} profili kaydedildi.",
+                "profile_deleted": "{name} profili silindi.",
+                "err_profile_name": "Profile bir ad verin.",
+                "err_profile_save": "Profil kaydetmeden önce mevcut değişikliğin bitmesini bekleyin.",
+                "err_profile_missing": "Bu profil artık yok."
+            },
+            "resolution": {
+                "title": "Çözünürlük",
+                "desc": "Ekran genişliğini ve yüksekliğini ayarla"
+            },
+            "refresh": {
+                "title": "Yenileme hızı",
+                "desc": "Ekran yenileme hızını ayarla"
+            },
+            "orientation": {
+                "title": "Dikey hizalama",
+                "desc": "Bu monitörün yönlendirmesini ayarla"
+            },
+            "map": {
+                "hint": "Bir ekranı taşımak için sürükleyin. Ekranlar diğerlerinin kenarlarına yapışır.",
+                "refresh": "Yenile",
+                "apply": "Değişiklikleri uygula",
+                "discard": "Vazgeç",
+                "dirty": "Bazı ekranları taşıdınız. Denemek için değişiklikleri uygulayın; korumak veya geri almak isteyip istemediğiniz sorulacak."
+            },
+            "profiles": {
+                "save": "Profili kaydet",
+                "load": "Yükle",
+                "delete": "Sil",
+                "name_placeholder": "Profil adı"
+            }
+        }
+    }
+}

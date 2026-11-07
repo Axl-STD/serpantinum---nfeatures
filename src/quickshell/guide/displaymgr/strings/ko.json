@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "모니터"
+        },
+        "display": {
+            "gamma": {
+                "title": "블루라이트 필터",
+                "desc": "따뜻한 화면 조명을 켜거나 끕니다"
+            },
+            "enable": {
+                "title": "이 모니터 사용",
+                "desc": "이 설정을 끄면 해당 모니터가 비활성화됩니다"
+            },
+            "schedule": {
+                "title": "자동 일정",
+                "desc": "다음 위치의 일출·일몰을 기준으로 색온도를 자동 조절합니다"
+            },
+            "temperature": {
+                "title": "색온도",
+                "desc": "색온도 강도를 조절합니다"
+            },
+            "uiscale": {
+                "title": "UI 배율",
+                "desc": "이 모니터의 화면 배율을 설정합니다"
+            },
+            "widgets": {
+                "title": "데스크톱 위젯",
+                "desc": "이 모니터에 표시할 위젯을 설정하고 배치합니다",
+                "open": "편집기 열기",
+                "hide_bar": {
+                    "title": "편집기에서 바 숨기기",
+                    "desc": "편집기 모드에서 위젯을 수정할 때 자동으로 바를 숨깁니다"
+                },
+                "show_distances": {
+                    "title": "거리 표시",
+                    "desc": "편집기에서 위젯을 이동하거나 크기를 조정할 때 위젯 사이의 거리를 표시합니다"
+                },
+                "hide_presets": "프리셋 숨기기",
+                "choose_preset": "프리셋 선택",
+                "presets": {
+                    "title": "위젯 프리셋"
+                },
+                "save_preset": {
+                    "title": "프리셋 저장"
+                },
+                "preset_name_placeholder": "프리셋 이름 입력...",
+                "screen_desc": "바탕화면 위젯 설정 및 편집"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "잠금 화면",
+                    "desc": "잠금 화면의 레이아웃을 맞춤 설정합니다",
+                    "button": "잠금 화면 편집"
+                },
+                "limits": {
+                    "title": "시도 횟수 제한",
+                    "desc": "실패한 시도가 너무 많으면 비밀번호 입력을 일시적으로 차단하고 지문 리더를 비활성화합니다"
+                },
+                "password_attempts": {
+                    "title": "비밀번호 시도 횟수",
+                    "desc": "비밀번호 입력이 30초 동안 차단되기 전까지의 실패 횟수"
+                },
+                "fingerprint_attempts": {
+                    "title": "지문 시도 횟수",
+                    "desc": "다음 잠금 해제 때까지 지문 리더가 비활성화되기 전까지의 실패한 스캔 횟수"
+                },
+                "fingerprint": {
+                    "title": "지문 로그인 사용",
+                    "desc": "지문으로 잠금 화면을 해제할 수 있도록 허용합니다"
+                },
+                "background": {
+                    "select": "배경 선택",
+                    "follow": "배경화면 따라가기",
+                    "custom": "사용자 지정",
+                    "follows_hint": "배경화면을 따라갑니다",
+                    "none": "선택된 배경 없음"
+                }
+            },
+            "txn": {
+                "keep_title": "이 디스플레이 설정을 유지할까요?",
+                "keep_message": "확인하지 않으면 {n}초 후 이전 설정으로 돌아갑니다.",
+                "keep": "유지",
+                "revert": "되돌리기",
+                "reverted": "이전 디스플레이 설정을 복원했습니다.",
+                "reverted_safe": "이전 설정을 복원할 수 없어 안전한 배치를 적용했습니다.",
+                "not_saved": "이번 세션에는 적용되었지만 다음 부팅을 위해 저장하지 못했습니다.",
+                "persist_title": "다시 시작한 후에도 디스플레이 배치 유지",
+                "persist_message": "이 줄을 직접 만든 모니터 규칙 뒤에 hyprland.lua에 추가하세요. Serpantinum은 자체 파일에만 기록하며 사용자의 파일은 절대 수정하지 않습니다.",
+                "persist_managed_message": "Hyprland 설정은 Nix가 관리하므로 직접 편집할 수 없습니다. 모니터 규칙 뒤에 Nix 설정에서 이 줄을 추가하세요. Serpantinum은 자체 파일에만 기록합니다.",
+                "persist_sway_message": "이 줄을 직접 작성한 출력 규칙 뒤에 sway 설정에 추가하세요. Serpantinum은 자체 파일에만 쓰며 사용자의 파일은 절대 수정하지 않습니다.",
+                "persist_sway_managed_message": "sway 설정은 Nix가 관리하므로 직접 편집할 수 없습니다. Nix 설정에서 출력 규칙 뒤에 이 줄을 추가하세요. Serpantinum은 자체 파일에만 씁니다.",
+                "persist_niri_message": "이 줄을 직접 작성한 출력 규칙 뒤에 niri 설정에 추가하세요. Serpantinum은 자체 파일에만 쓰며 사용자의 파일은 절대 수정하지 않습니다.",
+                "persist_niri_managed_message": "niri 설정은 Nix가 관리하므로 직접 편집할 수 없습니다. Nix 설정에서 출력 규칙 뒤에 이 줄을 추가하세요. Serpantinum은 자체 파일에만 씁니다.",
+                "persist_mango_message": "이 줄을 mango 설정(config.conf)에 두 번 추가하세요. 맨 첫 줄과 마지막 줄로 넣으면 시작할 때와 다시 불러온 뒤에도 적용됩니다. Serpantinum은 자체 파일에만 쓰며 사용자의 파일은 수정하지 않습니다.",
+                "persist_mango_managed_message": "mango 설정은 Nix가 관리하므로 직접 편집할 수 없습니다. Nix 설정에서 이 줄을 두 번(처음과 마지막) 추가하세요. Serpantinum은 자체 파일에만 씁니다.",
+                "err_unavailable": "디스플레이 백엔드를 사용할 수 없어 아무것도 변경되지 않았습니다.",
+                "err_generic": "변경 사항을 적용할 수 없습니다.",
+                "err_confirm": "변경 사항을 확인할 수 없습니다.",
+                "err_plan_malformed": "디스플레이 구성이 올바르지 않습니다.",
+                "err_unknown_monitor": "모니터 {a}이(가) 연결되어 있지 않습니다.",
+                "err_duplicate_monitor": "모니터 {a}이(가) 두 번 나타납니다.",
+                "err_monitor_identity_changed": "{a}은(는) 이제 다른 화면입니다. 새로고침 후 다시 시도하세요.",
+                "err_monitor_fields_invalid": "{a}의 일부 설정이 올바르지 않습니다.",
+                "err_mode_unsupported": "{a}은(는) {b}을(를) 지원하지 않습니다.",
+                "err_scale_invalid": "배율 {b}은(는) {a}에 유효하지 않습니다.",
+                "err_transform_invalid": "{a}의 방향이 올바르지 않습니다.",
+                "err_position_out_of_range": "{a}이(가) 너무 멀리 배치되었습니다.",
+                "err_position_negative": "mango에서는 {a}을(를) 음수 위치에 둘 수 없습니다. 대신 다른 모니터를 옮기세요.",
+                "err_wlr_randr_missing": "mango에서 모니터를 관리하려면 wlr-randr를 설치하세요.",
+                "err_monitor_missing_from_plan": "모니터 {a}이(가) 구성에 없습니다.",
+                "err_no_enabled_monitor": "최소 하나의 모니터는 켜져 있어야 합니다.",
+                "err_monitors_overlap": "{a}와(과) {b}이(가) 겹칩니다.",
+                "err_transaction_pending": "먼저 보류 중인 변경을 유지하거나 되돌리세요.",
+                "err_apply_not_verified": "화면이 변경을 받아들이지 않아 이전 설정을 복원했습니다.",
+                "err_layout_overlap": "화면은 서로 겹칠 수 없습니다.",
+                "err_layout_disconnected": "화면은 서로 맞닿아야 합니다.",
+                "err_layout_draft": "먼저 배치 변경을 적용하거나 취소하세요.",
+                "profile_saved": "프로필 {name}을(를) 저장했습니다.",
+                "profile_deleted": "프로필 {name}을(를) 삭제했습니다.",
+                "err_profile_name": "프로필 이름을 입력하세요.",
+                "err_profile_save": "프로필을 저장하기 전에 현재 변경이 끝날 때까지 기다리세요.",
+                "err_profile_missing": "해당 프로필이 더 이상 없습니다."
+            },
+            "resolution": {
+                "title": "해상도",
+                "desc": "디스플레이의 너비와 높이 설정"
+            },
+            "refresh": {
+                "title": "주사율",
+                "desc": "디스플레이 주사율 설정"
+            },
+            "orientation": {
+                "title": "세로 정렬",
+                "desc": "이 모니터의 방향 설정"
+            },
+            "map": {
+                "hint": "화면을 드래그하여 이동하세요. 화면은 다른 화면의 가장자리에 달라붙습니다.",
+                "refresh": "새로고침",
+                "apply": "변경 사항 적용",
+                "discard": "취소",
+                "dirty": "일부 화면을 이동했습니다. 변경 사항을 적용해 보세요. 유지할지 되돌릴지 묻습니다."
+            },
+            "profiles": {
+                "save": "프로필 저장",
+                "load": "불러오기",
+                "delete": "삭제",
+                "name_placeholder": "프로필 이름"
+            }
+        }
+    }
+}

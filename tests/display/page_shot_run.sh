@@ -30,7 +30,7 @@ FloatingWindow {
         property int currentSubTab: 0
         function s(v) { return v }
         Loader { id: ld; anchors.fill: parent
-            Component.onCompleted: setSource("guide/display/DisplayMainTab.qml", { "rootObj": fakeRoot, "tabIndex": 0 }) }
+            Component.onCompleted: setSource("guide/displaymgr/DisplayMainTab.qml", { "rootObj": fakeRoot, "tabIndex": 0 }) }
     }
     Timer {
         interval: 2500; running: true; repeat: true

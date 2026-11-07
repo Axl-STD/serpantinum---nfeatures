@@ -20,7 +20,7 @@ import time
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "display", "display_txn.py")
+SCRIPT = os.path.join(HERE, "..", "..", "src", "quickshell", "guide", "displaymgr", "display_txn.py")
 spec = importlib.util.spec_from_file_location("display_txn_mango", SCRIPT)
 dt = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(dt)

@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Moniteurs"
+        },
+        "display": {
+            "gamma": {
+                "title": "Filtre de lumière bleue",
+                "desc": "Activer l'éclairage chaud de l'écran"
+            },
+            "enable": {
+                "title": "Activer cet écran",
+                "desc": "Désactiver cette option éteindra cet écran"
+            },
+            "schedule": {
+                "title": "Planification automatique",
+                "desc": "Ajuster automatiquement la température de couleur selon le coucher et le lever du soleil à"
+            },
+            "temperature": {
+                "title": "Température de couleur",
+                "desc": "Ajuster l'intensité de la température de couleur"
+            },
+            "uiscale": {
+                "title": "Échelle de l'interface",
+                "desc": "Définir le facteur d'échelle d'affichage pour cet écran"
+            },
+            "widgets": {
+                "title": "Widgets du bureau",
+                "desc": "Configurer et placer les widgets pour cet écran",
+                "open": "Ouvrir l'éditeur",
+                "hide_bar": {
+                    "title": "Masquer la barre dans l'éditeur",
+                    "desc": "Masquer automatiquement la barre lors de l'édition des widgets en mode éditeur"
+                },
+                "show_distances": {
+                    "title": "Afficher les distances",
+                    "desc": "Afficher les distances entre les widgets lors de leur déplacement ou redimensionnement dans l'éditeur"
+                },
+                "hide_presets": "Masquer les préréglages",
+                "choose_preset": "Choisir un préréglage",
+                "presets": {
+                    "title": "Préréglages de widgets"
+                },
+                "save_preset": {
+                    "title": "Enregistrer le préréglage"
+                },
+                "preset_name_placeholder": "Entrez le nom du préréglage...",
+                "screen_desc": "Configurer et modifier les widgets du bureau"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Écran de verrouillage",
+                    "desc": "Personnalisez la disposition de votre écran de verrouillage",
+                    "button": "Modifier l'écran de verrouillage"
+                },
+                "limits": {
+                    "title": "Limites de tentatives",
+                    "desc": "Bloquer temporairement la saisie du mot de passe et désactiver le lecteur d'empreintes après trop de tentatives échouées"
+                },
+                "password_attempts": {
+                    "title": "Tentatives de mot de passe",
+                    "desc": "Tentatives échouées avant que la saisie du mot de passe soit bloquée pendant 30 secondes"
+                },
+                "fingerprint_attempts": {
+                    "title": "Tentatives d'empreinte",
+                    "desc": "Lectures échouées avant que le lecteur d'empreintes soit désactivé jusqu'au prochain déverrouillage"
+                },
+                "fingerprint": {
+                    "title": "Activer la connexion par empreinte digitale",
+                    "desc": "Autoriser le déverrouillage de l'écran avec une empreinte digitale"
+                },
+                "background": {
+                    "select": "Choisir l'arrière-plan",
+                    "follow": "Suivre le fond d'écran",
+                    "custom": "Personnalisé",
+                    "follows_hint": "Suit le fond d'écran",
+                    "none": "Aucun arrière-plan sélectionné"
+                }
+            },
+            "txn": {
+                "keep_title": "Conserver ces paramètres d'affichage ?",
+                "keep_message": "Les anciens paramètres reviendront dans {n} s si vous ne confirmez pas.",
+                "keep": "Conserver",
+                "revert": "Annuler",
+                "reverted": "Les anciens paramètres d'affichage ont été restaurés.",
+                "reverted_safe": "Impossible de restaurer les anciens paramètres, une disposition sûre a donc été appliquée.",
+                "not_saved": "Appliqué pour cette session, mais impossible à enregistrer pour le prochain démarrage.",
+                "persist_title": "Conserver la disposition des écrans après un redémarrage",
+                "persist_message": "Ajoutez cette ligne à hyprland.lua après vos propres règles de moniteur. Serpantinum n'écrit que dans son propre fichier et ne modifie jamais le vôtre.",
+                "persist_managed_message": "Votre configuration Hyprland est gérée par Nix et ne peut pas être modifiée à la main. Ajoutez cette ligne depuis votre configuration Nix, après vos règles de moniteur. Serpantinum n'écrit que dans son propre fichier.",
+                "persist_sway_message": "Ajoutez cette ligne à votre configuration sway après vos propres règles de sortie. Serpantinum n'écrit que dans son propre fichier et ne modifie jamais le vôtre.",
+                "persist_sway_managed_message": "Votre configuration sway est gérée par Nix et ne peut pas être modifiée à la main. Ajoutez cette ligne depuis votre configuration Nix, après vos règles de sortie. Serpantinum n'écrit que dans son propre fichier.",
+                "persist_niri_message": "Ajoutez cette ligne à votre configuration niri après vos propres règles de sortie. Serpantinum n'écrit que dans son propre fichier et ne modifie jamais le vôtre.",
+                "persist_niri_managed_message": "Votre configuration niri est gérée par Nix et ne peut pas être modifiée à la main. Ajoutez cette ligne depuis votre configuration Nix, après vos règles de sortie. Serpantinum n'écrit que dans son propre fichier.",
+                "persist_mango_message": "Ajoutez cette ligne deux fois à votre configuration mango (config.conf) : en toute première ligne et en dernière ligne, pour qu'elle agisse au démarrage et après un rechargement. Serpantinum n'écrit que dans son propre fichier et ne modifie jamais le vôtre.",
+                "persist_mango_managed_message": "Votre configuration mango est gérée par Nix et ne peut pas être modifiée à la main. Ajoutez-y cette ligne depuis votre configuration Nix, deux fois : en premier et en dernier. Serpantinum n'écrit que dans son propre fichier.",
+                "err_unavailable": "Le moteur d'affichage n'est pas disponible, rien n'a été modifié.",
+                "err_generic": "Le changement n'a pas pu être appliqué.",
+                "err_confirm": "Le changement n'a pas pu être confirmé.",
+                "err_plan_malformed": "La configuration d'affichage n'est pas valide.",
+                "err_unknown_monitor": "Le moniteur {a} n'est pas connecté.",
+                "err_duplicate_monitor": "Le moniteur {a} apparaît deux fois.",
+                "err_monitor_identity_changed": "{a} est maintenant un autre écran. Actualisez et réessayez.",
+                "err_monitor_fields_invalid": "Certains paramètres de {a} ne sont pas valides.",
+                "err_mode_unsupported": "{a} ne prend pas en charge {b}.",
+                "err_scale_invalid": "L'échelle {b} n'est pas valide pour {a}.",
+                "err_transform_invalid": "L'orientation de {a} n'est pas valide.",
+                "err_position_out_of_range": "{a} est placé trop loin.",
+                "err_position_negative": "{a} ne peut pas être placé à une position négative dans mango. Déplacez plutôt les autres moniteurs.",
+                "err_wlr_randr_missing": "Installez wlr-randr pour gérer les moniteurs dans mango.",
+                "err_monitor_missing_from_plan": "Le moniteur {a} est absent de la configuration.",
+                "err_no_enabled_monitor": "Au moins un moniteur doit rester activé.",
+                "err_monitors_overlap": "{a} et {b} se chevauchent.",
+                "err_transaction_pending": "Conservez ou annulez d'abord le changement en attente.",
+                "err_apply_not_verified": "L'écran n'a pas accepté le changement, les anciens paramètres ont donc été restaurés.",
+                "err_layout_overlap": "Les écrans ne peuvent pas se chevaucher.",
+                "err_layout_disconnected": "Les écrans doivent se toucher.",
+                "err_layout_draft": "Appliquez ou annulez d'abord les changements de disposition.",
+                "profile_saved": "Profil {name} enregistré.",
+                "profile_deleted": "Profil {name} supprimé.",
+                "err_profile_name": "Donnez un nom au profil.",
+                "err_profile_save": "Attendez la fin du changement en cours avant d'enregistrer un profil.",
+                "err_profile_missing": "Ce profil n'existe plus."
+            },
+            "resolution": {
+                "title": "Résolution",
+                "desc": "Définir la largeur et la hauteur de l'écran"
+            },
+            "refresh": {
+                "title": "Fréquence de rafraîchissement",
+                "desc": "Définir la fréquence de rafraîchissement de l'écran"
+            },
+            "orientation": {
+                "title": "Alignement vertical",
+                "desc": "Définir l'orientation de ce moniteur"
+            },
+            "map": {
+                "hint": "Faites glisser un écran pour le déplacer. Les écrans s'alignent sur les bords des autres.",
+                "refresh": "Actualiser",
+                "apply": "Appliquer les changements",
+                "discard": "Annuler",
+                "dirty": "Vous avez déplacé des écrans. Appliquez les changements pour les essayer ; il vous sera demandé de les conserver ou de les annuler."
+            },
+            "profiles": {
+                "save": "Enregistrer le profil",
+                "load": "Charger",
+                "delete": "Supprimer",
+                "name_placeholder": "Nom du profil"
+            }
+        }
+    }
+}

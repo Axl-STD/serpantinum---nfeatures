@@ -4,7 +4,7 @@ const assert = require("node:assert");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const file = path.join(__dirname, "..", "..", "src", "quickshell", "guide", "display", "DisplayLayoutMath.js");
+const file = path.join(__dirname, "..", "..", "src", "quickshell", "guide", "displaymgr", "DisplayLayoutMath.js");
 const source = fs.readFileSync(file, "utf8").replace(/^\.pragma library\s*$/m, "");
 const LM = new Function(source + "\nreturn { logicalSize, overlaps, touches, connected, snap, pushOut, pullToEdge, resolveDrop };")();
 

@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Monitores"
+        },
+        "display": {
+            "gamma": {
+                "title": "Filtro de luz azul",
+                "desc": "Alterna iluminação quente da tela"
+            },
+            "enable": {
+                "title": "Ativar este monitor",
+                "desc": "Desligar isto desativa o monitor"
+            },
+            "schedule": {
+                "title": "Agendamento automático",
+                "desc": "Ajusta a temperatura de cor automaticamente com base no pôr e nascer do sol em"
+            },
+            "temperature": {
+                "title": "Temperatura de cor",
+                "desc": "Ajusta a intensidade da temperatura de cor"
+            },
+            "uiscale": {
+                "title": "Escala da UI",
+                "desc": "Define o fator de escala deste monitor"
+            },
+            "widgets": {
+                "title": "Widgets do desktop",
+                "desc": "Configure e posicione widgets neste monitor",
+                "open": "Abrir editor",
+                "hide_bar": {
+                    "title": "Ocultar a barra no editor",
+                    "desc": "Oculta a barra automaticamente ao editar widgets no modo editor"
+                },
+                "show_distances": {
+                    "title": "Mostrar distâncias",
+                    "desc": "Mostrar as distâncias entre widgets ao movê-los ou redimensioná-los no editor"
+                },
+                "hide_presets": "Ocultar predefinições",
+                "choose_preset": "Escolher predefinição",
+                "presets": {
+                    "title": "Predefinições de widgets"
+                },
+                "save_preset": {
+                    "title": "Salvar predefinição"
+                },
+                "preset_name_placeholder": "Digite o nome da predefinição...",
+                "screen_desc": "Configurar e editar widgets da área de trabalho"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Tela de bloqueio",
+                    "desc": "Personalize o layout da sua tela de bloqueio",
+                    "button": "Editar tela de bloqueio"
+                },
+                "limits": {
+                    "title": "Limites de tentativas",
+                    "desc": "Bloqueia temporariamente a entrada de senha e desativa o leitor de impressão digital após muitas tentativas falhas"
+                },
+                "password_attempts": {
+                    "title": "Tentativas de senha",
+                    "desc": "Tentativas falhas antes de a entrada de senha ser bloqueada por 30 segundos"
+                },
+                "fingerprint_attempts": {
+                    "title": "Tentativas de impressão digital",
+                    "desc": "Leituras falhas antes de o leitor de impressão digital ser desativado até o próximo desbloqueio"
+                },
+                "fingerprint": {
+                    "title": "Ativar login por impressão digital",
+                    "desc": "Permitir desbloquear a tela de bloqueio com uma impressão digital"
+                },
+                "background": {
+                    "select": "Selecionar plano de fundo",
+                    "follow": "Seguir papel de parede",
+                    "custom": "Personalizado",
+                    "follows_hint": "Segue o papel de parede",
+                    "none": "Nenhum plano de fundo selecionado"
+                }
+            },
+            "txn": {
+                "keep_title": "Manter estas configurações de tela?",
+                "keep_message": "As configurações anteriores voltam em {n} s se você não confirmar.",
+                "keep": "Manter",
+                "revert": "Reverter",
+                "reverted": "As configurações de tela anteriores foram restauradas.",
+                "reverted_safe": "Não foi possível restaurar as configurações anteriores, então um layout seguro foi aplicado.",
+                "not_saved": "Aplicado nesta sessão, mas não foi possível salvar para a próxima inicialização.",
+                "persist_title": "Manter a disposição das telas após reiniciar",
+                "persist_message": "Adicione esta linha ao hyprland.lua depois das suas próprias regras de monitor. O Serpantinum só escreve no próprio arquivo e nunca edita o seu.",
+                "persist_managed_message": "Sua configuração do Hyprland é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha pela sua configuração do Nix, depois das regras de monitor. O Serpantinum só escreve no próprio arquivo.",
+                "persist_sway_message": "Adicione esta linha à sua configuração do sway depois das suas próprias regras de saída. O Serpantinum só escreve no seu próprio arquivo e nunca edita o seu.",
+                "persist_sway_managed_message": "A sua configuração do sway é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha a partir da sua configuração do Nix, depois das suas regras de saída. O Serpantinum só escreve no seu próprio arquivo.",
+                "persist_niri_message": "Adicione esta linha à sua configuração do niri depois das suas próprias regras de saída. O Serpantinum só escreve no seu próprio arquivo e nunca edita o seu.",
+                "persist_niri_managed_message": "A sua configuração do niri é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha a partir da sua configuração do Nix, depois das suas regras de saída. O Serpantinum só escreve no seu próprio arquivo.",
+                "persist_mango_message": "Adicione esta linha duas vezes à sua configuração do mango (config.conf): como primeira e como última linha, para funcionar ao iniciar e após recarregar. O Serpantinum só escreve no próprio arquivo e nunca edita o seu.",
+                "persist_mango_managed_message": "A configuração do mango é gerida pelo Nix e não pode ser editada à mão. Adicione esta linha pela sua configuração do Nix, duas vezes: a primeira e a última. O Serpantinum só escreve no próprio arquivo.",
+                "err_unavailable": "O backend de tela não está disponível, nada foi alterado.",
+                "err_generic": "Não foi possível aplicar a alteração.",
+                "err_confirm": "Não foi possível confirmar a alteração.",
+                "err_plan_malformed": "A configuração de tela não é válida.",
+                "err_unknown_monitor": "O monitor {a} não está conectado.",
+                "err_duplicate_monitor": "O monitor {a} aparece duas vezes.",
+                "err_monitor_identity_changed": "{a} agora é outra tela. Atualize e tente novamente.",
+                "err_monitor_fields_invalid": "Algumas configurações de {a} não são válidas.",
+                "err_mode_unsupported": "{a} não suporta {b}.",
+                "err_scale_invalid": "A escala {b} não é válida para {a}.",
+                "err_transform_invalid": "A orientação de {a} não é válida.",
+                "err_position_out_of_range": "{a} está posicionado longe demais.",
+                "err_position_negative": "{a} não pode ficar numa posição negativa no mango. Mova os outros monitores.",
+                "err_wlr_randr_missing": "Instale o wlr-randr para gerir os monitores no mango.",
+                "err_monitor_missing_from_plan": "O monitor {a} está ausente da configuração.",
+                "err_no_enabled_monitor": "Pelo menos um monitor deve permanecer ativado.",
+                "err_monitors_overlap": "{a} e {b} se sobrepõem.",
+                "err_transaction_pending": "Mantenha ou reverta primeiro a alteração pendente.",
+                "err_apply_not_verified": "A tela não aceitou a alteração, então as configurações anteriores foram restauradas.",
+                "err_layout_overlap": "As telas não podem se sobrepor.",
+                "err_layout_disconnected": "As telas precisam se tocar.",
+                "err_layout_draft": "Aplique ou descarte primeiro as alterações de layout.",
+                "profile_saved": "Perfil {name} salvo.",
+                "profile_deleted": "Perfil {name} excluído.",
+                "err_profile_name": "Dê um nome ao perfil.",
+                "err_profile_save": "Aguarde a alteração atual terminar antes de salvar um perfil.",
+                "err_profile_missing": "Esse perfil não existe mais."
+            },
+            "resolution": {
+                "title": "Resolução",
+                "desc": "Defina a largura e a altura da tela"
+            },
+            "refresh": {
+                "title": "Taxa de atualização",
+                "desc": "Defina a taxa de atualização da tela"
+            },
+            "orientation": {
+                "title": "Alinhamento vertical",
+                "desc": "Defina a orientação deste monitor"
+            },
+            "map": {
+                "hint": "Arraste uma tela para movê-la. As telas se encaixam nas bordas das outras.",
+                "refresh": "Atualizar",
+                "apply": "Aplicar alterações",
+                "discard": "Descartar",
+                "dirty": "Você moveu algumas telas. Aplique as alterações para testá-las; será perguntado se deseja mantê-las ou revertê-las."
+            },
+            "profiles": {
+                "save": "Salvar perfil",
+                "load": "Carregar",
+                "delete": "Excluir",
+                "name_placeholder": "Nome do perfil"
+            }
+        }
+    }
+}

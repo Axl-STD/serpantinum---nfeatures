@@ -1,0 +1,5 @@
+DisplayMainState 1.0 DisplayMainState.qml
+DisplayMonitorCard 1.0 DisplayMonitorCard.qml
+DisplayNotice 1.0 DisplayNotice.qml
+DisplayArrangementMap 1.0 DisplayArrangementMap.qml
+DisplayProfilesBar 1.0 DisplayProfilesBar.qml

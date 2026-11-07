@@ -1,0 +1,12 @@
+[Unit]
+Description=Re-apply the Serpantinum display manager overlay when Serpantinum is updated
+
+[Path]
+# An update rewrites (or a reinstall recreates) these; the service then puts the overlay back.
+PathChanged=%h/.local/share/serpantinum/src/quickshell/guide/GuidePopup.qml
+PathChanged=%h/.local/share/serpantinum/src/assets/languages/en.json
+PathChanged=%h/.local/share/serpantinum/src/assets/languages/es.json
+Unit=serpantinum-display-overlay.service
+
+[Install]
+WantedBy=default.target

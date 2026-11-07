@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Monitor"
+        },
+        "display": {
+            "gamma": {
+                "title": "Filter cahaya biru",
+                "desc": "Alihkan pencahayaan layar hangat"
+            },
+            "enable": {
+                "title": "Aktifkan monitor ini",
+                "desc": "Mematikan ini akan menonaktifkan monitor ini"
+            },
+            "schedule": {
+                "title": "Jadwal otomatis",
+                "desc": "Sesuaikan suhu warna secara otomatis berdasarkan matahari terbenam dan terbit di"
+            },
+            "temperature": {
+                "title": "Suhu warna",
+                "desc": "Sesuaikan kekuatan suhu warna"
+            },
+            "uiscale": {
+                "title": "Skala antarmuka",
+                "desc": "Atur faktor skala tampilan untuk monitor ini"
+            },
+            "widgets": {
+                "title": "Widget desktop",
+                "desc": "Konfigurasikan dan tempatkan widget untuk monitor ini",
+                "open": "Buka redaktur",
+                "hide_bar": {
+                    "title": "Sembunyikan bilah di redaktur",
+                    "desc": "Sembunyikan bilah secara otomatis saat mengedit widget dalam mode redaktur"
+                },
+                "show_distances": {
+                    "title": "Tampilkan jarak",
+                    "desc": "Tampilkan jarak antar widget saat memindahkan atau mengubah ukurannya di redaktur"
+                },
+                "hide_presets": "Sembunyikan prasetel",
+                "choose_preset": "Pilih prasetel",
+                "presets": {
+                    "title": "Prasetel Widget"
+                },
+                "save_preset": {
+                    "title": "Simpan Prasetel"
+                },
+                "preset_name_placeholder": "Masukkan nama prasetel...",
+                "screen_desc": "Konfigurasikan dan edit widget desktop"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Layar kunci",
+                    "desc": "Sesuaikan tata letak layar kunci Anda",
+                    "button": "Edit layar kunci"
+                },
+                "limits": {
+                    "title": "Batas percobaan",
+                    "desc": "Blokir sementara input kata sandi dan nonaktifkan pembaca sidik jari setelah terlalu banyak percobaan gagal"
+                },
+                "password_attempts": {
+                    "title": "Percobaan kata sandi",
+                    "desc": "Percobaan gagal sebelum input kata sandi diblokir selama 30 detik"
+                },
+                "fingerprint_attempts": {
+                    "title": "Percobaan sidik jari",
+                    "desc": "Pemindaian gagal sebelum pembaca sidik jari dinonaktifkan hingga pembukaan kunci berikutnya"
+                },
+                "fingerprint": {
+                    "title": "Aktifkan login sidik jari",
+                    "desc": "Izinkan membuka layar kunci dengan sidik jari"
+                },
+                "background": {
+                    "select": "Pilih latar belakang",
+                    "follow": "Ikuti wallpaper",
+                    "custom": "Kustom",
+                    "follows_hint": "Mengikuti wallpaper",
+                    "none": "Tidak ada latar belakang dipilih"
+                }
+            },
+            "txn": {
+                "keep_title": "Pertahankan pengaturan layar ini?",
+                "keep_message": "Pengaturan sebelumnya kembali dalam {n} dtk jika Anda tidak mengonfirmasi.",
+                "keep": "Pertahankan",
+                "revert": "Kembalikan",
+                "reverted": "Pengaturan layar sebelumnya telah dipulihkan.",
+                "reverted_safe": "Pengaturan sebelumnya tidak dapat dipulihkan, jadi tata letak aman diterapkan.",
+                "not_saved": "Diterapkan untuk sesi ini, tetapi tidak dapat disimpan untuk boot berikutnya.",
+                "persist_title": "Pertahankan tata letak layar setelah restart",
+                "persist_message": "Tambahkan baris ini ke hyprland.lua setelah aturan monitor Anda sendiri. Serpantinum hanya menulis ke filenya sendiri dan tidak pernah mengubah milik Anda.",
+                "persist_managed_message": "Konfigurasi Hyprland Anda dikelola oleh Nix sehingga tidak bisa diedit manual. Tambahkan baris ini dari konfigurasi Nix Anda, setelah aturan monitor. Serpantinum hanya menulis ke filenya sendiri.",
+                "persist_sway_message": "Tambahkan baris ini ke konfigurasi sway Anda setelah aturan output Anda sendiri. Serpantinum hanya menulis ke filenya sendiri dan tidak pernah mengubah file Anda.",
+                "persist_sway_managed_message": "Konfigurasi sway Anda dikelola oleh Nix sehingga tidak dapat diedit secara manual. Tambahkan baris ini dari konfigurasi Nix Anda, setelah aturan output. Serpantinum hanya menulis ke filenya sendiri.",
+                "persist_niri_message": "Tambahkan baris ini ke konfigurasi niri Anda setelah aturan output Anda sendiri. Serpantinum hanya menulis ke filenya sendiri dan tidak pernah mengubah file Anda.",
+                "persist_niri_managed_message": "Konfigurasi niri Anda dikelola oleh Nix sehingga tidak dapat diedit secara manual. Tambahkan baris ini dari konfigurasi Nix Anda, setelah aturan output. Serpantinum hanya menulis ke filenya sendiri.",
+                "persist_mango_message": "Tambahkan baris ini dua kali ke konfigurasi mango Anda (config.conf): sebagai baris paling pertama dan paling terakhir, agar berfungsi saat startup dan setelah dimuat ulang. Serpantinum hanya menulis ke berkasnya sendiri dan tidak pernah mengubah berkas Anda.",
+                "persist_mango_managed_message": "Konfigurasi mango Anda dikelola oleh Nix sehingga tidak bisa diedit manual. Tambahkan baris ini dari konfigurasi Nix Anda dua kali: pertama dan terakhir. Serpantinum hanya menulis ke berkasnya sendiri.",
+                "err_unavailable": "Backend layar tidak tersedia, tidak ada yang diubah.",
+                "err_generic": "Perubahan tidak dapat diterapkan.",
+                "err_confirm": "Perubahan tidak dapat dikonfirmasi.",
+                "err_plan_malformed": "Konfigurasi layar tidak valid.",
+                "err_unknown_monitor": "Monitor {a} tidak terhubung.",
+                "err_duplicate_monitor": "Monitor {a} muncul dua kali.",
+                "err_monitor_identity_changed": "{a} sekarang adalah layar yang berbeda. Segarkan dan coba lagi.",
+                "err_monitor_fields_invalid": "Beberapa pengaturan untuk {a} tidak valid.",
+                "err_mode_unsupported": "{a} tidak mendukung {b}.",
+                "err_scale_invalid": "Skala {b} tidak valid untuk {a}.",
+                "err_transform_invalid": "Orientasi untuk {a} tidak valid.",
+                "err_position_out_of_range": "{a} ditempatkan terlalu jauh.",
+                "err_position_negative": "{a} tidak bisa diletakkan pada posisi negatif di mango. Geser monitor lainnya.",
+                "err_wlr_randr_missing": "Pasang wlr-randr untuk mengelola monitor di mango.",
+                "err_monitor_missing_from_plan": "Monitor {a} tidak ada dalam konfigurasi.",
+                "err_no_enabled_monitor": "Setidaknya satu monitor harus tetap aktif.",
+                "err_monitors_overlap": "{a} dan {b} tumpang tindih.",
+                "err_transaction_pending": "Pertahankan atau kembalikan perubahan yang tertunda terlebih dahulu.",
+                "err_apply_not_verified": "Layar tidak menerima perubahan, jadi pengaturan sebelumnya dipulihkan.",
+                "err_layout_overlap": "Layar tidak boleh tumpang tindih.",
+                "err_layout_disconnected": "Layar harus saling bersentuhan.",
+                "err_layout_draft": "Terapkan atau buang perubahan tata letak terlebih dahulu.",
+                "profile_saved": "Profil {name} disimpan.",
+                "profile_deleted": "Profil {name} dihapus.",
+                "err_profile_name": "Beri nama pada profil.",
+                "err_profile_save": "Tunggu perubahan saat ini selesai sebelum menyimpan profil.",
+                "err_profile_missing": "Profil itu sudah tidak ada."
+            },
+            "resolution": {
+                "title": "Resolusi",
+                "desc": "Atur lebar dan tinggi layar"
+            },
+            "refresh": {
+                "title": "Laju penyegaran",
+                "desc": "Atur laju penyegaran layar"
+            },
+            "orientation": {
+                "title": "Perataan vertikal",
+                "desc": "Atur orientasi monitor ini"
+            },
+            "map": {
+                "hint": "Seret layar untuk memindahkannya. Layar menempel pada tepi layar lain.",
+                "refresh": "Segarkan",
+                "apply": "Terapkan perubahan",
+                "discard": "Buang",
+                "dirty": "Anda memindahkan beberapa layar. Terapkan perubahan untuk mencobanya; Anda akan ditanya apakah ingin mempertahankan atau mengembalikannya."
+            },
+            "profiles": {
+                "save": "Simpan profil",
+                "load": "Muat",
+                "delete": "Hapus",
+                "name_placeholder": "Nama profil"
+            }
+        }
+    }
+}

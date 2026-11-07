@@ -696,8 +696,7 @@
       "reboot": "Uruchom system ponownie",
       "poweroff": "Wyłącz system",
       "redactor": "Otwórz lub przełącz edytor układu widżetów pulpitu",
-      "lock_redactor": "Przełącz, otwórz lub zamknij edytor układu ekranu blokady",
-      "display": "Ustawienia ekranu: ratuj, pokaż stan, cofnij lub potwierdź oczekującą zmianę"
+      "lock_redactor": "Przełącz, otwórz lub zamknij edytor układu ekranu blokady"
     },
     "usage_label": "Użycie:",
     "config_desc": "Odczytaj i zmień ustawienia (get, set, dump, path, edit)",
@@ -713,9 +712,7 @@
     "set_desc": "Zmień ustawienie (notifications, idle, dock, sfx, theme, lang, wallpaper)",
     "trigger_desc": "Uruchom jednorazową akcję (idle, notifications, theme, firstlaunch)",
     "settings_desc": "Otwórz okno ustawień (opcjonalnie na wybranej karcie)",
-    "error_unknown_app": "Błąd: nieznana aplikacja '{ID}'.",
-    "display_usage": "Użycie: serpantinum display <rescue|status|revert|confirm>\n  rescue   przywraca ostatni działający układ ekranów (działa też z TTY)\n  status   pokazuje oczekującą zmianę ekranu, jeśli jest\n  revert   cofa oczekującą zmianę ekranu\n  confirm  zachowuje oczekującą zmianę ekranu",
-    "display_missing": "Moduł ustawień ekranu nie jest zainstalowany."
+    "error_unknown_app": "Błąd: nieznana aplikacja '{ID}'."
   },
   "daemon": {
     "already_running": "Demon jest już uruchomiony. Kończenie pracy...",
@@ -1197,76 +1194,6 @@
           "follows_hint": "Podąża za tapetą",
           "none": "Nie wybrano tła"
         }
-      },
-      "txn": {
-        "keep_title": "Zachować te ustawienia ekranu?",
-        "keep_message": "Poprzednie ustawienia wrócą za {n} s, jeśli nie potwierdzisz.",
-        "keep": "Zachowaj",
-        "revert": "Przywróć",
-        "reverted": "Przywrócono poprzednie ustawienia ekranu.",
-        "reverted_safe": "Nie udało się przywrócić poprzednich ustawień, więc zastosowano bezpieczny układ.",
-        "not_saved": "Zastosowano na tę sesję, ale nie udało się zapisać na następne uruchomienie.",
-        "persist_title": "Zachowaj układ ekranów po ponownym uruchomieniu",
-        "persist_message": "Dodaj tę linię do hyprland.lua po własnych regułach monitorów. Serpantinum zapisuje tylko do własnego pliku i nigdy nie edytuje Twojego.",
-        "persist_managed_message": "Twoja konfiguracja Hyprland jest zarządzana przez Nix i nie można jej edytować ręcznie. Dodaj tę linię w konfiguracji Nix, po własnych regułach monitorów. Serpantinum zapisuje tylko do własnego pliku.",
-        "persist_sway_message": "Dodaj tę linię do konfiguracji sway po własnych regułach wyjść. Serpantinum zapisuje tylko do własnego pliku i nigdy nie edytuje Twojego.",
-        "persist_sway_managed_message": "Twoja konfiguracja sway jest zarządzana przez Nix i nie można jej edytować ręcznie. Dodaj tę linię w konfiguracji Nix, po regułach wyjść. Serpantinum zapisuje tylko do własnego pliku.",
-        "persist_niri_message": "Dodaj tę linię do konfiguracji niri po własnych regułach wyjść. Serpantinum zapisuje tylko do własnego pliku i nigdy nie edytuje Twojego.",
-        "persist_niri_managed_message": "Twoja konfiguracja niri jest zarządzana przez Nix i nie można jej edytować ręcznie. Dodaj tę linię w konfiguracji Nix, po regułach wyjść. Serpantinum zapisuje tylko do własnego pliku.",
-        "persist_mango_message": "Dodaj tę linię dwukrotnie do konfiguracji mango (config.conf): jako pierwszą i jako ostatnią, aby działała przy starcie i po przeładowaniu. Serpantinum zapisuje tylko do własnego pliku i nigdy nie zmienia Twojego.",
-        "persist_mango_managed_message": "Konfiguracją mango zarządza Nix, więc nie można jej edytować ręcznie. Dodaj tę linię w konfiguracji Nix, dwukrotnie: jako pierwszą i ostatnią. Serpantinum zapisuje tylko do własnego pliku.",
-        "err_unavailable": "Moduł obsługi ekranu jest niedostępny, nic nie zmieniono.",
-        "err_generic": "Nie udało się zastosować zmiany.",
-        "err_confirm": "Nie udało się potwierdzić zmiany.",
-        "err_plan_malformed": "Konfiguracja ekranu jest nieprawidłowa.",
-        "err_unknown_monitor": "Monitor {a} nie jest podłączony.",
-        "err_duplicate_monitor": "Monitor {a} występuje dwa razy.",
-        "err_monitor_identity_changed": "{a} to teraz inny ekran. Odśwież i spróbuj ponownie.",
-        "err_monitor_fields_invalid": "Niektóre ustawienia dla {a} są nieprawidłowe.",
-        "err_mode_unsupported": "{a} nie obsługuje {b}.",
-        "err_scale_invalid": "Skala {b} jest nieprawidłowa dla {a}.",
-        "err_transform_invalid": "Orientacja dla {a} jest nieprawidłowa.",
-        "err_position_out_of_range": "{a} jest umieszczony zbyt daleko.",
-        "err_position_negative": "{a} nie może mieć w mango ujemnej pozycji. Przesuń zamiast tego pozostałe monitory.",
-        "err_wlr_randr_missing": "Zainstaluj wlr-randr, aby zarządzać monitorami w mango.",
-        "err_monitor_missing_from_plan": "Monitora {a} brakuje w konfiguracji.",
-        "err_no_enabled_monitor": "Co najmniej jeden monitor musi pozostać włączony.",
-        "err_monitors_overlap": "{a} i {b} nakładają się.",
-        "err_transaction_pending": "Najpierw zachowaj lub przywróć oczekującą zmianę.",
-        "err_apply_not_verified": "Ekran nie przyjął zmiany, więc przywrócono poprzednie ustawienia.",
-        "err_layout_overlap": "Ekrany nie mogą się nakładać.",
-        "err_layout_disconnected": "Ekrany muszą się stykać.",
-        "err_layout_draft": "Najpierw zastosuj lub odrzuć zmiany układu.",
-        "profile_saved": "Zapisano profil {name}.",
-        "profile_deleted": "Usunięto profil {name}.",
-        "err_profile_name": "Nadaj profilowi nazwę.",
-        "err_profile_save": "Poczekaj na zakończenie bieżącej zmiany, zanim zapiszesz profil.",
-        "err_profile_missing": "Ten profil już nie istnieje."
-      },
-      "resolution": {
-        "title": "Rozdzielczość",
-        "desc": "Ustaw szerokość i wysokość ekranu"
-      },
-      "refresh": {
-        "title": "Częstotliwość odświeżania",
-        "desc": "Ustaw częstotliwość odświeżania ekranu"
-      },
-      "orientation": {
-        "title": "Wyrównanie pionowe",
-        "desc": "Ustaw orientację tego monitora"
-      },
-      "map": {
-        "hint": "Przeciągnij ekran, aby go przesunąć. Ekrany przyciągają się do krawędzi innych.",
-        "refresh": "Odśwież",
-        "apply": "Zastosuj zmiany",
-        "discard": "Odrzuć",
-        "dirty": "Przesunięto ekrany. Zastosuj zmiany, aby je wypróbować; zostaniesz zapytany, czy je zachować, czy przywrócić."
-      },
-      "profiles": {
-        "save": "Zapisz profil",
-        "load": "Wczytaj",
-        "delete": "Usuń",
-        "name_placeholder": "Nazwa profilu"
       }
     },
     "bar": {

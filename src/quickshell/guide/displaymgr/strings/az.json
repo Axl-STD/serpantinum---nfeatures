@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Monitorlar"
+        },
+        "display": {
+            "gamma": {
+                "title": "Mavi işıq süzgəci",
+                "desc": "Ekranın isti işıqlandırmasını aç və ya söndür"
+            },
+            "enable": {
+                "title": "Bu monitoru aktivləşdir",
+                "desc": "Bunu söndürsəniz, bu monitor sönəcək"
+            },
+            "schedule": {
+                "title": "Avtomatik cədvəl",
+                "desc": "Rəng temperaturunu bu məkanda günəşin batmasına və doğmasına əsasən avtomatik tənzimlə:"
+            },
+            "temperature": {
+                "title": "Rəng temperaturu",
+                "desc": "Rəng temperaturunun təsir gücünü tənzimlə"
+            },
+            "uiscale": {
+                "title": "İnterfeysin miqyası",
+                "desc": "Bu monitor üçün ekran miqyası əmsalını təyin edin"
+            },
+            "widgets": {
+                "title": "İş masası vidcetləri",
+                "desc": "Bu monitor üçün vidcetləri tənzimlə və yerləşdir",
+                "open": "Düzəliş alətini aç",
+                "hide_bar": {
+                    "title": "Düzəliş alətində zolağı gizlət",
+                    "desc": "Vidcetlərə düzəliş edərkən zolağı avtomatik gizlət"
+                },
+                "show_distances": {
+                    "title": "Məsafələri göstər",
+                    "desc": "Düzəliş alətində vidcetləri köçürərkən və ya ölçüsünü dəyişərkən onlar arasındakı məsafələri göstər"
+                },
+                "hide_presets": "Hazır şablonları gizlət",
+                "choose_preset": "Şablon seçin",
+                "presets": {
+                    "title": "Vidcet şablonları"
+                },
+                "save_preset": {
+                    "title": "Preseti yadda saxla"
+                },
+                "preset_name_placeholder": "Presetin adını daxil edin...",
+                "screen_desc": "Masaüstü vidjetlərini konfiqurasiya edin və redaktə edin"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Kilid ekranı",
+                    "desc": "Kilid ekranınızın düzənini fərdiləşdirin",
+                    "button": "Kilid ekranını redaktə et"
+                },
+                "limits": {
+                    "title": "Cəhd limitləri",
+                    "desc": "Çox sayda uğursuz cəhddən sonra parol daxil etməni müvəqqəti blokla və barmaq izi oxuyucusunu söndür"
+                },
+                "password_attempts": {
+                    "title": "Parol cəhdləri",
+                    "desc": "Parol daxil etmə 30 saniyəlik bloklanana qədər uğursuz cəhdlər"
+                },
+                "fingerprint_attempts": {
+                    "title": "Barmaq izi cəhdləri",
+                    "desc": "Barmaq izi oxuyucusu növbəti kilid açılmasına qədər söndürülənə qədər uğursuz skanlar"
+                },
+                "fingerprint": {
+                    "title": "Barmaq izi ilə girişi aktiv et",
+                    "desc": "Kilid ekranını barmaq izi ilə açmağa icazə ver"
+                },
+                "background": {
+                    "select": "Fon seç",
+                    "follow": "Divar kağızını izlə",
+                    "custom": "Fərdi",
+                    "follows_hint": "Divar kağızını izləyir",
+                    "none": "Fon seçilməyib"
+                }
+            },
+            "txn": {
+                "keep_title": "Bu ekran parametrləri saxlanılsın?",
+                "keep_message": "Təsdiqləməsəniz əvvəlki parametrlər {n} san. sonra qayıdacaq.",
+                "keep": "Saxla",
+                "revert": "Geri qaytar",
+                "reverted": "Əvvəlki ekran parametrləri bərpa edildi.",
+                "reverted_safe": "Əvvəlki parametrləri bərpa etmək mümkün olmadı, ona görə təhlükəsiz yerləşmə tətbiq edildi.",
+                "not_saved": "Bu sessiya üçün tətbiq edildi, lakin növbəti açılış üçün saxlanıla bilmədi.",
+                "persist_title": "Yenidən başladıqdan sonra ekran yerləşməsini saxla",
+                "persist_message": "Bu sətri öz monitor qaydalarınızdan sonra hyprland.lua faylına əlavə edin. Serpantinum yalnız öz faylına yazır və sizinkini heç vaxt dəyişmir.",
+                "persist_managed_message": "Hyprland konfiqurasiyanızı Nix idarə edir və əllə dəyişdirilə bilməz. Bu sətri Nix konfiqurasiyanızdan, monitor qaydalarınızdan sonra əlavə edin. Serpantinum yalnız öz faylına yazır.",
+                "persist_sway_message": "Bu sətri sway konfiqurasiyanıza öz çıxış qaydalarınızdan sonra əlavə edin. Serpantinum yalnız öz faylına yazır və sizinkini heç vaxt dəyişmir.",
+                "persist_sway_managed_message": "Sway konfiqurasiyanız Nix tərəfindən idarə olunur və əllə redaktə edilə bilməz. Bu sətri Nix konfiqurasiyanızdan, çıxış qaydalarınızdan sonra əlavə edin. Serpantinum yalnız öz faylına yazır.",
+                "persist_niri_message": "Bu sətri niri konfiqurasiyanıza öz çıxış qaydalarınızdan sonra əlavə edin. Serpantinum yalnız öz faylına yazır və sizinkini heç vaxt dəyişmir.",
+                "persist_niri_managed_message": "Niri konfiqurasiyanız Nix tərəfindən idarə olunur və əllə redaktə edilə bilməz. Bu sətri Nix konfiqurasiyanızdan, çıxış qaydalarınızdan sonra əlavə edin. Serpantinum yalnız öz faylına yazır.",
+                "persist_mango_message": "Bu sətri mango konfiqurasiyanıza (config.conf) iki dəfə əlavə edin: ən birinci və ən son sətir kimi, beləliklə açılışda və yenidən yükləmədən sonra işləyir. Serpantinum yalnız öz faylına yazır və sizinkini heç vaxt dəyişmir.",
+                "persist_mango_managed_message": "mango konfiqurasiyanızı Nix idarə edir, buna görə əllə redaktə etmək olmur. Bu sətri Nix konfiqurasiyanızdan iki dəfə əlavə edin: birinci və sonuncu. Serpantinum yalnız öz faylına yazır.",
+                "err_unavailable": "Ekran backend-i əlçatan deyil, heç nə dəyişdirilmədi.",
+                "err_generic": "Dəyişiklik tətbiq edilə bilmədi.",
+                "err_confirm": "Dəyişiklik təsdiqlənə bilmədi.",
+                "err_plan_malformed": "Ekran konfiqurasiyası yararsızdır.",
+                "err_unknown_monitor": "{a} monitoru qoşulmayıb.",
+                "err_duplicate_monitor": "{a} monitoru iki dəfə görünür.",
+                "err_monitor_identity_changed": "{a} indi fərqli ekrandır. Yeniləyin və yenidən cəhd edin.",
+                "err_monitor_fields_invalid": "{a} üçün bəzi parametrlər yararsızdır.",
+                "err_mode_unsupported": "{a} {b} dəstəkləmir.",
+                "err_scale_invalid": "{b} miqyası {a} üçün yararsızdır.",
+                "err_transform_invalid": "{a} üçün istiqamət yararsızdır.",
+                "err_position_out_of_range": "{a} çox uzağa yerləşdirilib.",
+                "err_position_negative": "mango-da {a} mənfi mövqeyə yerləşdirilə bilməz. Bunun əvəzinə digər monitorları hərəkət etdirin.",
+                "err_wlr_randr_missing": "mango-da monitorları idarə etmək üçün wlr-randr quraşdırın.",
+                "err_monitor_missing_from_plan": "{a} monitoru konfiqurasiyada yoxdur.",
+                "err_no_enabled_monitor": "Ən azı bir monitor aktiv qalmalıdır.",
+                "err_monitors_overlap": "{a} və {b} üst-üstə düşür.",
+                "err_transaction_pending": "Əvvəlcə gözləyən dəyişikliyi saxlayın və ya geri qaytarın.",
+                "err_apply_not_verified": "Ekran dəyişikliyi qəbul etmədi, ona görə əvvəlki parametrlər bərpa edildi.",
+                "err_layout_overlap": "Ekranlar üst-üstə düşə bilməz.",
+                "err_layout_disconnected": "Ekranlar bir-birinə toxunmalıdır.",
+                "err_layout_draft": "Əvvəlcə yerləşmə dəyişikliklərini tətbiq edin və ya ləğv edin.",
+                "profile_saved": "{name} profili saxlanıldı.",
+                "profile_deleted": "{name} profili silindi.",
+                "err_profile_name": "Profilə ad verin.",
+                "err_profile_save": "Profil saxlamazdan əvvəl cari dəyişikliyin bitməsini gözləyin.",
+                "err_profile_missing": "Bu profil artıq mövcud deyil."
+            },
+            "resolution": {
+                "title": "Ayırdetmə",
+                "desc": "Ekranın eni və hündürlüyünü təyin edin"
+            },
+            "refresh": {
+                "title": "Yeniləmə tezliyi",
+                "desc": "Ekranın yeniləmə tezliyini təyin edin"
+            },
+            "orientation": {
+                "title": "Şaquli düzülüş",
+                "desc": "Bu monitorun istiqamətini təyin edin"
+            },
+            "map": {
+                "hint": "Ekranı daşımaq üçün sürüşdürün. Ekranlar digərlərinin kənarlarına yapışır.",
+                "refresh": "Yenilə",
+                "apply": "Dəyişiklikləri tətbiq et",
+                "discard": "Ləğv et",
+                "dirty": "Bəzi ekranları daşıdınız. Sınamaq üçün dəyişiklikləri tətbiq edin; saxlamaq və ya geri qaytarmaq soruşulacaq."
+            },
+            "profiles": {
+                "save": "Profili saxla",
+                "load": "Yüklə",
+                "delete": "Sil",
+                "name_placeholder": "Profil adı"
+            }
+        }
+    }
+}

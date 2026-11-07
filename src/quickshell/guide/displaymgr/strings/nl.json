@@ -1,0 +1,152 @@
+{
+    "guide": {
+        "tabs": {
+            "display_monitors": "Monitoren"
+        },
+        "display": {
+            "gamma": {
+                "title": "Blauwlichtfilter",
+                "desc": "Warme schermverlichting in-/uitschakelen"
+            },
+            "enable": {
+                "title": "Deze monitor inschakelen",
+                "desc": "Door dit uit te schakelen wordt deze monitor gedeactiveerd"
+            },
+            "schedule": {
+                "title": "Automatisch schema",
+                "desc": "Kleurtemperatuur automatisch aanpassen op basis van zonsopgang en zonsondergang"
+            },
+            "temperature": {
+                "title": "Kleurtemperatuur",
+                "desc": "Pas de sterkte van de kleurtemperatuur aan"
+            },
+            "uiscale": {
+                "title": "UI-schaal",
+                "desc": "Schaalfactor instellen voor deze monitor"
+            },
+            "widgets": {
+                "title": "Bureaubladwidgets",
+                "desc": "Configureer en plaats widgets voor deze monitor",
+                "open": "Editor openen",
+                "hide_bar": {
+                    "title": "Balk verbergen in de editor",
+                    "desc": "Balk automatisch verbergen bij bewerken van widgets in editormodus"
+                },
+                "show_distances": {
+                    "title": "Afstanden tonen",
+                    "desc": "Afstanden tussen widgets tonen tijdens het verplaatsen of schalen in de editor"
+                },
+                "hide_presets": "Voorinstellingen verbergen",
+                "choose_preset": "Kies een voorinstelling",
+                "presets": {
+                    "title": "Widget-voorinstellingen"
+                },
+                "save_preset": {
+                    "title": "Voorinstelling opslaan"
+                },
+                "preset_name_placeholder": "Voer voorinstellingsnaam in...",
+                "screen_desc": "Bureaubladwidgets configureren en bewerken"
+            },
+            "lockscreen": {
+                "edit": {
+                    "title": "Vergrendelscherm",
+                    "desc": "Pas de indeling van je vergrendelscherm aan",
+                    "button": "Vergrendelscherm bewerken"
+                },
+                "limits": {
+                    "title": "Pogingslimieten",
+                    "desc": "Blokkeer wachtwoordinvoer tijdelijk en schakel de vingerafdruklezer uit na te veel mislukte pogingen"
+                },
+                "password_attempts": {
+                    "title": "Wachtwoordpogingen",
+                    "desc": "Mislukte pogingen voordat wachtwoordinvoer 30 seconden wordt geblokkeerd"
+                },
+                "fingerprint_attempts": {
+                    "title": "Vingerafdrukpogingen",
+                    "desc": "Mislukte scans voordat de vingerafdruklezer tot de volgende ontgrendeling wordt uitgeschakeld"
+                },
+                "fingerprint": {
+                    "title": "Inloggen met vingerafdruk inschakelen",
+                    "desc": "Ontgrendelen van het vergrendelscherm met een vingerafdruk toestaan"
+                },
+                "background": {
+                    "select": "Achtergrond selecteren",
+                    "follow": "Achtergrond volgen",
+                    "custom": "Aangepast",
+                    "follows_hint": "Volgt de achtergrond",
+                    "none": "Geen achtergrond geselecteerd"
+                }
+            },
+            "txn": {
+                "keep_title": "Deze beeldscherminstellingen behouden?",
+                "keep_message": "De vorige instellingen komen over {n} s terug als je niet bevestigt.",
+                "keep": "Behouden",
+                "revert": "Terugzetten",
+                "reverted": "De vorige beeldscherminstellingen zijn hersteld.",
+                "reverted_safe": "De vorige instellingen konden niet worden hersteld, dus is een veilige indeling toegepast.",
+                "not_saved": "Toegepast voor deze sessie, maar kon niet worden opgeslagen voor de volgende start.",
+                "persist_title": "Behoud je schermindeling na een herstart",
+                "persist_message": "Voeg deze regel toe aan hyprland.lua na je eigen monitorregels. Serpantinum schrijft alleen naar zijn eigen bestand en past het jouwe nooit aan.",
+                "persist_managed_message": "Je Hyprland-configuratie wordt door Nix beheerd en kan niet met de hand worden bewerkt. Voeg deze regel toe vanuit je Nix-configuratie, na je monitorregels. Serpantinum schrijft alleen naar zijn eigen bestand.",
+                "persist_sway_message": "Voeg deze regel toe aan je sway-configuratie, na je eigen output-regels. Serpantinum schrijft alleen naar zijn eigen bestand en past het jouwe nooit aan.",
+                "persist_sway_managed_message": "Je sway-configuratie wordt door Nix beheerd en kan niet met de hand worden bewerkt. Voeg deze regel toe via je Nix-configuratie, na je output-regels. Serpantinum schrijft alleen naar zijn eigen bestand.",
+                "persist_niri_message": "Voeg deze regel toe aan je niri-configuratie, na je eigen output-regels. Serpantinum schrijft alleen naar zijn eigen bestand en past het jouwe nooit aan.",
+                "persist_niri_managed_message": "Je niri-configuratie wordt door Nix beheerd en kan niet met de hand worden bewerkt. Voeg deze regel toe via je Nix-configuratie, na je output-regels. Serpantinum schrijft alleen naar zijn eigen bestand.",
+                "persist_mango_message": "Voeg deze regel twee keer toe aan je mango-configuratie (config.conf): als allereerste en als laatste regel, zodat hij werkt bij het opstarten en na een herlaadactie. Serpantinum schrijft alleen naar zijn eigen bestand en wijzigt nooit het jouwe.",
+                "persist_mango_managed_message": "Je mango-configuratie wordt beheerd door Nix en kan niet met de hand worden aangepast. Voeg deze regel via je Nix-configuratie twee keer toe: eerst en laatst. Serpantinum schrijft alleen naar zijn eigen bestand.",
+                "err_unavailable": "De weergave-backend is niet beschikbaar, er is niets gewijzigd.",
+                "err_generic": "De wijziging kon niet worden toegepast.",
+                "err_confirm": "De wijziging kon niet worden bevestigd.",
+                "err_plan_malformed": "De beeldschermconfiguratie is ongeldig.",
+                "err_unknown_monitor": "Monitor {a} is niet aangesloten.",
+                "err_duplicate_monitor": "Monitor {a} komt twee keer voor.",
+                "err_monitor_identity_changed": "{a} is nu een ander scherm. Vernieuw en probeer opnieuw.",
+                "err_monitor_fields_invalid": "Sommige instellingen voor {a} zijn ongeldig.",
+                "err_mode_unsupported": "{a} ondersteunt {b} niet.",
+                "err_scale_invalid": "Schaal {b} is ongeldig voor {a}.",
+                "err_transform_invalid": "De oriëntatie van {a} is ongeldig.",
+                "err_position_out_of_range": "{a} staat te ver weg.",
+                "err_position_negative": "{a} kan in mango niet op een negatieve positie staan. Verplaats in plaats daarvan de andere monitoren.",
+                "err_wlr_randr_missing": "Installeer wlr-randr om de monitoren in mango te beheren.",
+                "err_monitor_missing_from_plan": "Monitor {a} ontbreekt in de configuratie.",
+                "err_no_enabled_monitor": "Minstens één monitor moet ingeschakeld blijven.",
+                "err_monitors_overlap": "{a} en {b} overlappen elkaar.",
+                "err_transaction_pending": "Behoud of herstel eerst de openstaande wijziging.",
+                "err_apply_not_verified": "Het scherm accepteerde de wijziging niet, dus zijn de vorige instellingen hersteld.",
+                "err_layout_overlap": "Schermen mogen elkaar niet overlappen.",
+                "err_layout_disconnected": "Schermen moeten elkaar raken.",
+                "err_layout_draft": "Pas de indelingswijzigingen eerst toe of verwerp ze.",
+                "profile_saved": "Profiel {name} opgeslagen.",
+                "profile_deleted": "Profiel {name} verwijderd.",
+                "err_profile_name": "Geef het profiel een naam.",
+                "err_profile_save": "Wacht tot de huidige wijziging klaar is voordat je een profiel opslaat.",
+                "err_profile_missing": "Dat profiel bestaat niet meer."
+            },
+            "resolution": {
+                "title": "Resolutie",
+                "desc": "Stel de breedte en hoogte van het scherm in"
+            },
+            "refresh": {
+                "title": "Vernieuwingsfrequentie",
+                "desc": "Stel de vernieuwingsfrequentie van het scherm in"
+            },
+            "orientation": {
+                "title": "Verticale uitlijning",
+                "desc": "Stel de oriëntatie van deze monitor in"
+            },
+            "map": {
+                "hint": "Sleep een scherm om het te verplaatsen. Schermen klikken vast aan de randen van andere.",
+                "refresh": "Vernieuwen",
+                "apply": "Wijzigingen toepassen",
+                "discard": "Verwerpen",
+                "dirty": "Je hebt schermen verplaatst. Pas de wijzigingen toe om ze te proberen; er wordt gevraagd of je ze wilt behouden of terugzetten."
+            },
+            "profiles": {
+                "save": "Profiel opslaan",
+                "load": "Laden",
+                "delete": "Verwijderen",
+                "name_placeholder": "Profielnaam"
+            }
+        }
+    }
+}

@@ -14,7 +14,7 @@ if os.environ.get("SANDBOX") != "1" or os.environ.get("SERPANTINUM_DISPLAY_VIRTU
     sys.exit("refusing to run outside tests/display/sandbox.sh")
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-TXN = os.path.join(ROOT, "src", "quickshell", "guide", "display", "display_txn.py")
+TXN = os.path.join(ROOT, "src", "quickshell", "guide", "displaymgr", "display_txn.py")
 FAILS = []
 
 

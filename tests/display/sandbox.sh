@@ -25,7 +25,7 @@ BACKEND=$1; CID=$2; WDISP=$3; shift 3
 case "$BACKEND" in hyprland|sway|niri|mango) ;; *) die "unknown backend '$BACKEND'";; esac
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-TXN="$ROOT/src/quickshell/guide/display/display_txn.py"
+TXN="$ROOT/src/quickshell/guide/displaymgr/display_txn.py"
 RUNTIME="${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR is not set}"
 
 # --- the test compositor must not be the session this shell belongs to

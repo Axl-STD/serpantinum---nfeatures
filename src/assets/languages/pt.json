@@ -342,76 +342,6 @@
           "follows_hint": "Segue o papel de parede",
           "none": "Nenhum plano de fundo selecionado"
         }
-      },
-      "txn": {
-        "keep_title": "Manter estas configurações de tela?",
-        "keep_message": "As configurações anteriores voltam em {n} s se você não confirmar.",
-        "keep": "Manter",
-        "revert": "Reverter",
-        "reverted": "As configurações de tela anteriores foram restauradas.",
-        "reverted_safe": "Não foi possível restaurar as configurações anteriores, então um layout seguro foi aplicado.",
-        "not_saved": "Aplicado nesta sessão, mas não foi possível salvar para a próxima inicialização.",
-        "persist_title": "Manter a disposição das telas após reiniciar",
-        "persist_message": "Adicione esta linha ao hyprland.lua depois das suas próprias regras de monitor. O Serpantinum só escreve no próprio arquivo e nunca edita o seu.",
-        "persist_managed_message": "Sua configuração do Hyprland é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha pela sua configuração do Nix, depois das regras de monitor. O Serpantinum só escreve no próprio arquivo.",
-        "persist_sway_message": "Adicione esta linha à sua configuração do sway depois das suas próprias regras de saída. O Serpantinum só escreve no seu próprio arquivo e nunca edita o seu.",
-        "persist_sway_managed_message": "A sua configuração do sway é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha a partir da sua configuração do Nix, depois das suas regras de saída. O Serpantinum só escreve no seu próprio arquivo.",
-        "persist_niri_message": "Adicione esta linha à sua configuração do niri depois das suas próprias regras de saída. O Serpantinum só escreve no seu próprio arquivo e nunca edita o seu.",
-        "persist_niri_managed_message": "A sua configuração do niri é gerenciada pelo Nix e não pode ser editada à mão. Adicione esta linha a partir da sua configuração do Nix, depois das suas regras de saída. O Serpantinum só escreve no seu próprio arquivo.",
-        "persist_mango_message": "Adicione esta linha duas vezes à sua configuração do mango (config.conf): como primeira e como última linha, para funcionar ao iniciar e após recarregar. O Serpantinum só escreve no próprio arquivo e nunca edita o seu.",
-        "persist_mango_managed_message": "A configuração do mango é gerida pelo Nix e não pode ser editada à mão. Adicione esta linha pela sua configuração do Nix, duas vezes: a primeira e a última. O Serpantinum só escreve no próprio arquivo.",
-        "err_unavailable": "O backend de tela não está disponível, nada foi alterado.",
-        "err_generic": "Não foi possível aplicar a alteração.",
-        "err_confirm": "Não foi possível confirmar a alteração.",
-        "err_plan_malformed": "A configuração de tela não é válida.",
-        "err_unknown_monitor": "O monitor {a} não está conectado.",
-        "err_duplicate_monitor": "O monitor {a} aparece duas vezes.",
-        "err_monitor_identity_changed": "{a} agora é outra tela. Atualize e tente novamente.",
-        "err_monitor_fields_invalid": "Algumas configurações de {a} não são válidas.",
-        "err_mode_unsupported": "{a} não suporta {b}.",
-        "err_scale_invalid": "A escala {b} não é válida para {a}.",
-        "err_transform_invalid": "A orientação de {a} não é válida.",
-        "err_position_out_of_range": "{a} está posicionado longe demais.",
-        "err_position_negative": "{a} não pode ficar numa posição negativa no mango. Mova os outros monitores.",
-        "err_wlr_randr_missing": "Instale o wlr-randr para gerir os monitores no mango.",
-        "err_monitor_missing_from_plan": "O monitor {a} está ausente da configuração.",
-        "err_no_enabled_monitor": "Pelo menos um monitor deve permanecer ativado.",
-        "err_monitors_overlap": "{a} e {b} se sobrepõem.",
-        "err_transaction_pending": "Mantenha ou reverta primeiro a alteração pendente.",
-        "err_apply_not_verified": "A tela não aceitou a alteração, então as configurações anteriores foram restauradas.",
-        "err_layout_overlap": "As telas não podem se sobrepor.",
-        "err_layout_disconnected": "As telas precisam se tocar.",
-        "err_layout_draft": "Aplique ou descarte primeiro as alterações de layout.",
-        "profile_saved": "Perfil {name} salvo.",
-        "profile_deleted": "Perfil {name} excluído.",
-        "err_profile_name": "Dê um nome ao perfil.",
-        "err_profile_save": "Aguarde a alteração atual terminar antes de salvar um perfil.",
-        "err_profile_missing": "Esse perfil não existe mais."
-      },
-      "resolution": {
-        "title": "Resolução",
-        "desc": "Defina a largura e a altura da tela"
-      },
-      "refresh": {
-        "title": "Taxa de atualização",
-        "desc": "Defina a taxa de atualização da tela"
-      },
-      "orientation": {
-        "title": "Alinhamento vertical",
-        "desc": "Defina a orientação deste monitor"
-      },
-      "map": {
-        "hint": "Arraste uma tela para movê-la. As telas se encaixam nas bordas das outras.",
-        "refresh": "Atualizar",
-        "apply": "Aplicar alterações",
-        "discard": "Descartar",
-        "dirty": "Você moveu algumas telas. Aplique as alterações para testá-las; será perguntado se deseja mantê-las ou revertê-las."
-      },
-      "profiles": {
-        "save": "Salvar perfil",
-        "load": "Carregar",
-        "delete": "Excluir",
-        "name_placeholder": "Nome do perfil"
       }
     },
     "bar": {
@@ -1848,8 +1778,7 @@
       "reboot": "Reiniciar o sistema",
       "poweroff": "Desligar o sistema",
       "redactor": "Abrir ou alternar o editor de layout de widgets da área de trabalho",
-      "lock_redactor": "Alternar, abrir ou fechar o editor de layout da tela de bloqueio",
-      "display": "Configurações de tela: recuperar, ver o estado, reverter ou confirmar uma alteração pendente"
+      "lock_redactor": "Alternar, abrir ou fechar o editor de layout da tela de bloqueio"
     },
     "usage_label": "Uso:",
     "config_desc": "Ler e alterar as configurações (get, set, dump, path, edit)",
@@ -1865,9 +1794,7 @@
     "set_desc": "Alterar uma configuração (notifications, idle, dock, sfx, theme, lang, wallpaper)",
     "trigger_desc": "Executar uma ação pontual (idle, notifications, theme, firstlaunch)",
     "settings_desc": "Abre a janela de configurações (opcionalmente num separador)",
-    "error_unknown_app": "Erro: aplicativo desconhecido '{ID}'.",
-    "display_usage": "Uso: serpantinum display <rescue|status|revert|confirm>\n  rescue   restaura a última disposição de telas que funcionava (também a partir de um TTY)\n  status   mostra a alteração de tela pendente, se houver\n  revert   desfaz a alteração de tela pendente\n  confirm  mantém a alteração de tela pendente",
-    "display_missing": "O módulo de configurações de tela não está instalado."
+    "error_unknown_app": "Erro: aplicativo desconhecido '{ID}'."
   },
   "daemon": {
     "already_running": "O daemon já está em execução. Saindo...",

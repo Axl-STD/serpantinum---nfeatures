@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Local display manager CLI. Works from a TTY with no shell running, so a black screen can
+# be repaired with `serpantinum-display rescue`.
+set -euo pipefail
+
+PAYLOAD="${XDG_DATA_HOME:-$HOME/.local/share}/serpantinum-overlay/display-manager"
+INSTALLED="${XDG_DATA_HOME:-$HOME/.local/share}/serpantinum/src/quickshell/guide/displaymgr/display_txn.py"
+
+txn_script() {
+    # Prefer the installed copy (the one the shell runs); fall back to the payload, which
+    # survives a Serpantinum reinstall.
+    if [[ -f "$INSTALLED" ]]; then echo "$INSTALLED"; else echo "$PAYLOAD/displaymgr/display_txn.py"; fi
+}
+
+usage() {
+    cat <<'EOF'
+Usage: serpantinum-display <command>
+
+  rescue    restore the last layout that worked (or a safe one with every monitor on)
+  status    show the pending change, if any
+  revert    undo the pending change now
+  confirm   keep the pending change
+  reapply   put the display manager back into Serpantinum (after an update)
+  log       show the overlay log
+EOF
+}
+
+case "${1:-}" in
+    rescue|status|revert|confirm)
+        exec python3 "$(txn_script)" "$1"
+        ;;
+    reapply)
+        exec "$PAYLOAD/apply.sh"
+        ;;
+    log)
+        exec tail -n 40 "${XDG_STATE_HOME:-$HOME/.local/state}/serpantinum-overlay/display-manager.log"
+        ;;
+    ""|-h|--help|help)
+        usage
+        ;;
+    *)
+        usage >&2
+        exit 1
+        ;;
+esac

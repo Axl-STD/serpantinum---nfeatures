@@ -1,0 +1,12 @@
+[Unit]
+Description=Re-apply the Serpantinum display manager overlay
+
+[Service]
+Type=oneshot
+# Let the updater finish copying files before checking.
+ExecStartPre=/usr/bin/sleep 5
+ExecStart=%h/.local/share/serpantinum-overlay/display-manager/apply.sh --quiet
+
+[Install]
+# Also checked once per login.
+WantedBy=default.target
